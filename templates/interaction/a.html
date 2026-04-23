@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CLE BCA Chatbot</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root{
+      --cle-primary:#1e3a8a;
+      --cle-accent:#f59e0b;
+      --cle-bg:#f4f7fb;
+      --cle-card:#ffffff;
+    }
+    body{background:var(--cle-bg);}
+    .app-wrap{max-width:1000px;margin:32px auto;}
+    .hero{background:linear-gradient(135deg,var(--cle-primary),#0f172a);color:#fff;border-radius:18px;padding:22px 20px;}
+    .pill{border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.25rem .75rem;display:inline-flex;gap:.5rem;align-items:center;background:rgba(255,255,255,.08);}
+    .chat-card{background:var(--cle-card);border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.06);}
+    .chat-body{height:56vh;min-height:420px;overflow:auto;padding:16px;scroll-behavior:smooth;}
+    .message{display:flex;gap:10px;margin-bottom:14px;}
+    .message .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+    .bot .avatar{background:var(--cle-primary);color:#fff;}
+    .user .avatar{background:#e9ecef;color:#333;}
+    .bubble{max-width:72%;padding:.75rem .9rem;border-radius:14px;}
+    .bot .bubble{background:#eef2ff;border:1px solid #c7d2fe;}
+    .user .bubble{background:#f3f4f6;border:1px solid #e5e7eb;margin-left:auto;}
+  </style>
+</head>
+<body>
+<div class="app-wrap px-3">
+  <div class="hero mb-3">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <div class="pill"><i class="bi bi-mortarboard"></i> CLE BCA – Info Assistant</div>
+        <div class="pill"><i class="bi bi-geo-alt"></i> Chikodi, Karnataka</div>
+        <div class="pill"><i class="bi bi-laptop"></i> Admissions • Courses • Careers</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-card">
+    <div id="chatBody" class="chat-body"></div>
+    <div class="p-3 border-top">
+      <div class="input-group">
+        <input id="userInput" type="text" class="form-control" placeholder="Ask about BCA admissions, fees, syllabus…">
+        <button id="sendBtn" class="btn btn-primary"><i class="bi bi-send"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const knowledgeBase = {
+  college: {
+    name: "C.L.E. Society's Degree College",
+    city: "Chikodi, Karnataka",
+    affiliation: "Affiliated to Rani Channamma University, Belagavi",
+    program: "Bachelor of Computer Applications (BCA)"
+  },
+  intents: {
+    admissions: {
+      keywords: ["admission","apply","application"],
+      answer: () => `
+      <strong>BCA Admissions</strong><br>
+      • Admission based on merit (PUC/12th marks).<br>
+      • Reservation as per Karnataka Govt norms.<br>
+      • Apply directly at college office during admission period.<br>`
+    },
+    eligibility: {
+      keywords: ["eligibility","criteria"],
+      answer: () => `
+      <strong>Eligibility</strong><br>
+      • 10+2 / PUC from recognized board.<br>
+      • Commerce / Science background preferred.<br>
+      • Basic Mathematics or Computer knowledge helpful but not mandatory.<br>`
+    },
+    duration: {
+      keywords: ["duration","years","semester"],
+      answer: () => `
+      <strong>Duration</strong><br>
+      • 3 Years (6 Semesters) undergraduate program.<br>`
+    },
+    fees: {
+      keywords: ["fees","fee","cost"],
+      answer: () => `
+      <strong>Fees (Indicative)</strong><br>
+      • Tuition + University + Lab fees.<br>
+      • Varies by category (General/SC/ST/OBC).<br>
+      • Contact college office for latest fee structure.<br>`
+    },
+    syllabus: {
+      keywords: ["syllabus","subjects","curriculum"],
+      answer: () => `
+      <strong>BCA Syllabus Highlights</strong><br>
+      • Programming in C, C++, Java, Python<br>
+      • Data Structures<br>
+      • DBMS & SQL<br>
+      • Web Technologies (HTML, CSS, JS)<br>
+      • Software Engineering<br>
+      • Computer Networks<br>
+      • Final Year Project<br>`
+    },
+    placements: {
+      keywords: ["placement","job","career"],
+      answer: () => `
+      <strong>Career Opportunities</strong><br>
+      • Software Developer<br>
+      • Web Developer<br>
+      • System Administrator<br>
+      • Data Analyst<br>
+      • Higher Studies: MCA, MBA, MSc IT<br>`
+    },
+    contact: {
+      keywords: ["contact","phone","address"],
+      answer: () => `
+      <strong>Contact</strong><br>
+      C.L.E. Society's Degree College<br>
+      Chikodi, Belagavi District, Karnataka<br>
+      Visit college office for admission queries.<br>`
+    }
+  }
+};
+
+const chatBody = document.getElementById('chatBody');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+
+function addMessage(role, html){
+  const row = document.createElement('div');
+  row.className = `message ${role}`;
+  row.innerHTML = `
+    <div class="avatar">${role==='bot' ? '<i class="bi bi-robot"></i>' : '<i class="bi bi-person"></i>'}</div>
+    <div class="bubble">${html}</div>`;
+  chatBody.appendChild(row);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function detectIntent(text){ 
+  const t = (text || '').toLowerCase().replace(/s$/,''); // remove trailing s
+  for(const [intent, cfg] of Object.entries(knowledgeBase.intents)){
+    if(cfg.keywords.some(k => t.includes(k))) return intent;
+  }
+  return 'unknown';
+}
+
+function handleSend(){
+  const query = userInput.value.trim();
+  if(!query) return;
+  addMessage('user', query);
+  userInput.value = "";
+
+  const intent = detectIntent(query);
+  const response = `
+  <strong>${knowledgeBase.college.name}</strong><br>
+  ${knowledgeBase.college.program}<br>
+  ${knowledgeBase.college.affiliation}<br><br>
+  ${knowledgeBase.intents[intent].answer()}`;
+
+  addMessage('bot', response);
+}
+
+sendBtn.addEventListener('click', handleSend);
+userInput.addEventListener('keydown', e => { if(e.key==='Enter') handleSend(); });
+
+addMessage('bot', `<strong>Welcome to CLE BCA Info Assistant!</strong><br>
+Ask about admissions, eligibility, fees, syllabus, duration or placements.`);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

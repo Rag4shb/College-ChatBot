@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rani Channamma University, Belagavi (RCU) — Official Website</title>
+  <meta name="description" content="Rani Channamma University (RCU), Belagavi — admissions, academics, research, departments, events, and contact." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    :root{
+      --rcu-primary:#2b4c7e; --rcu-accent:#f2a365; --rcu-bg:#f7f9fc; --rcu-card:#ffffff; --rcu-text:#1d2a44;
+    }
+    body{background:var(--rcu-bg); color:var(--rcu-text);}  
+    .rcu-shadow{box-shadow:0 10px 25px rgba(0,0,0,.08)}
+    .hero{background:radial-gradient(80% 60% at 10% 10%, rgba(242,163,101,.15), transparent 60%),
+                   radial-gradient(75% 55% at 90% -10%, rgba(43,76,126,.25), transparent 60%),
+                   linear-gradient(135deg, #1d2a44 0%, #2b4c7e 50%, #1d2a44 100%);
+          color:#fff; border-radius:20px;}
+    .hero .badge{background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.35)}
+    .glass{backdrop-filter: blur(10px); background:rgba(255,255,255,.6)}
+    .section-title{font-weight:800; letter-spacing:.3px}
+    .quick-link{transition:transform .15s ease}
+    .quick-link:hover{transform:translateY(-3px)}
+    .dept-card:hover{transform:translateY(-4px)}
+    .dept-card{transition:transform .18s ease}
+    .pill{border:1px solid rgba(255,255,255,.35); border-radius:999px; padding:.45rem .75rem;}
+    .nav-link{font-weight:600}
+    .rcu-footer{background:#0f1724; color:#c9d3e5}
+    .rcu-footer a{color:#e6edf7; text-decoration:none}
+    .rcu-footer a:hover{text-decoration:underline}
+    .event{border-left:4px solid var(--rcu-accent)}
+    .news-badge{background:#eef3ff; color:#1d2a44; border:1px solid #d5ddf0}
+    .btn-rcu{background:var(--rcu-accent); border:none}
+    .btn-rcu:hover{filter:brightness(.95)}
+    .stat{border-radius:16px; background:linear-gradient(180deg,#fff, #f5f8ff)}
+    .scroll-top{position:fixed; right:18px; bottom:18px; z-index:999}
+    .navbar .nav-link.active{color:var(--rcu-accent)!important}
+    /* Dark mode */
+    [data-theme="dark"] body{background:#0b0f17; color:#dbe5ff}
+    [data-theme="dark"] .hero{background:linear-gradient(135deg, #0b0f17, #1a2030)}
+    [data-theme="dark"] .rcu-footer{background:#070b11}
+    [data-theme="dark"] .glass{background:rgba(13,17,26,.5)}
+  </style>
+</head>
+<body>
+  <!-- ======= Top Bar ======= -->
+  <div class="bg-dark text-light small py-1">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-geo-alt me-1"></i> Belagavi, Karnataka
+        <span class="ms-3"><i class="bi bi-telephone me-1"></i> +91-0000-000000</span>
+        <span class="ms-3"><i class="bi bi-envelope me-1"></i> info@rcub.ac.in</span>
+      </div>
+      <div class="d-none d-sm-flex align-items-center gap-3">
+        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= Navbar ======= -->
+    <nav class="navbar navbar-expand-lg bg-white sticky-top rcu-shadow" aria-label="Main navigation">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+        <img alt="RCU Logo" src="https://dummyimage.com/40x40/2b4c7e/ffffff.png&text=R" width="40" height="40" class="me-2 rounded"/>
+        RCU Belagavi
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navMain" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">More</a>
+            <ul class="dropdown-menu" aria-labelledby="moreDropdown">
+                <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a class="dropdown-item" href="{% url 'user_list' %}">Message</a></li>
+            </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'feedback' %}">Feedback</a></li>
+        </ul>
+
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" class="d-inline ms-lg-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+            </form>
+        {% else %}
+            <div class="dropdown ms-lg-3">
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="loginDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</button>
+            <ul class="dropdown-menu" aria-labelledby="loginDropdown">
+                <li><a class="dropdown-item" href="{% url 'login' %}">User Login</a></li>
+                <!-- <li><a class="dropdown-item" href="/admin/">Admin Login</a></li> -->
+            </ul>
+            </div>
+            <a href="{% url 'signup' %}" class="btn btn-success btn-sm ms-lg-2">Signup</a>
+        {% endif %}
+
+        <button class="btn btn-sm btn-outline-secondary ms-lg-3" id="themeToggle" type="button" aria-label="Toggle dark mode"><i class="bi bi-moon-stars"></i></button>
+        </div>
+    </div>
+    </nav>
+    {% block content %}
+        <main id="home" class="app-wrap container py-4">
+
+            <!-- ======= Hero ======= -->
+            <section class="hero p-4 p-md-5 mb-4 rcu-shadow">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                <div class="d-flex gap-2 mb-3 flex-wrap">
+                    <span class="badge rounded-pill pill text-white"><i class="bi bi-trophy me-1"></i> NAAC Accredited</span>
+                    <span class="badge rounded-pill pill text-white"><i class="bi bi-mortarboard me-1"></i> UG & PG Programs</span>
+                    <span class="badge rounded-pill pill text-white"><i class="bi bi-globe2 me-1"></i> 100+ Affiliations</span>
+                </div>
+                <h1 class="display-5 fw-bold">Rani Channamma University, Belagavi</h1>
+                <p class="lead mb-4">Shaping futures with excellence in teaching, research and community engagement across North Karnataka.</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="#admissions" class="btn btn-rcu text-dark fw-semibold"><i class="bi bi-clipboard-check me-1"></i> Apply Now</a>
+                    <a href="#programs" class="btn btn-outline-light"><i class="bi bi-journal-text me-1"></i> Explore Programs</a>
+                </div>
+                </div>
+                <div class="col-lg-5">
+                <div class="glass rounded-4 p-3 p-md-4 rcu-shadow">
+                    <h2 class="h5 fw-bold mb-3">Announcements</h2>
+                    <ul class="list-unstyled m-0" id="annList" aria-live="polite">
+                    <li class="d-flex align-items-start gap-2 mb-3">
+                        <span class="badge news-badge">Exam</span>
+                        <div>
+                        <a href="#" class="link-light text-decoration-underline">MCA Semester Timetable – Nov 2025</a>
+                        <div class="small opacity-75">Published: 10 Oct 2025</div>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start gap-2 mb-3">
+                        <span class="badge news-badge">Recruitment</span>
+                        <div>
+                        <a href="#" class="link-light text-decoration-underline">Assistant Professor Positions (CS, ECE)</a>
+                        <div class="small opacity-75">Published: 05 Oct 2025</div>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start gap-2">
+                        <span class="badge news-badge">Notice</span>
+                        <div>
+                        <a href="#" class="link-light text-decoration-underline">Holiday on 15 Oct for Valmiki Jayanti</a>
+                        <div class="small opacity-75">Published: 03 Oct 2025</div>
+                        </div>
+                    </li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+            <div class="row g-3 mt-2 mt-md-4">
+                <div class="col-6 col-md-3">
+                <a class="quick-link d-flex align-items-center justify-content-between rcu-shadow rounded-3 p-3 bg-white" href="#results">
+                    <div>
+                    <div class="fw-bold">Results</div>
+                    <div class="small text-muted">Latest exam results</div>
+                    </div>
+                    <i class="bi bi-arrow-right-circle fs-4"></i>
+                </a>
+                </div>
+                <div class="col-6 col-md-3">
+                <a class="quick-link d-flex align-items-center justify-content-between rcu-shadow rounded-3 p-3 bg-white" href="#admissions">
+                    <div>
+                    <div class="fw-bold">Admissions</div>
+                    <div class="small text-muted">2025-26</div>
+                    </div>
+                    <i class="bi bi-journal-check fs-4"></i>
+                </a>
+                </div>
+                <div class="col-6 col-md-3">
+                <a class="quick-link d-flex align-items-center justify-content-between rcu-shadow rounded-3 p-3 bg-white" href="#programs">
+                    <div>
+                    <div class="fw-bold">Programs</div>
+                    <div class="small text-muted">UG | PG | PhD</div>
+                    </div>
+                    <i class="bi bi-mortarboard fs-4"></i>
+                </a>
+                </div>
+                <div class="col-6 col-md-3">
+                <a class="quick-link d-flex align-items-center justify-content-between rcu-shadow rounded-3 p-3 bg-white" href="#contact">
+                    <div>
+                    <div class="fw-bold">Contact</div>
+                    <div class="small text-muted">Get in touch</div>
+                    </div>
+                    <i class="bi bi-envelope-paper fs-4"></i>
+                </a>
+                </div>
+            </div>
+            </section>
+
+            <!-- ======= About ======= -->
+            <section id="about" class="py-4 py-md-5">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6">
+                <img class="w-100 rounded-4 rcu-shadow" src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=1600&auto=format&fit=crop" alt="RCU campus building"/>
+                </div>
+                <div class="col-lg-6">
+                <span class="badge text-bg-light border">About RCU</span>
+                <h2 class="section-title mt-2">Learning that transforms lives</h2>
+                <p>Rani Channamma University (RCU), Belagavi, serves the higher education needs of North Karnataka with a growing network of affiliated colleges. RCU offers a broad portfolio of programs and actively promotes research and innovation.</p>
+                <div class="row g-3 mt-2">
+                    <div class="col-6">
+                    <div class="stat p-3 rcu-shadow h-100">
+                        <div class="h3 mb-1">180+</div>
+                        <div class="small text-muted">Affiliated Colleges</div>
+                    </div>
+                    </div>
+                    <div class="col-6">
+                    <div class="stat p-3 rcu-shadow h-100">
+                        <div class="h3 mb-1">12K+</div>
+                        <div class="small text-muted">Students</div>
+                    </div>
+                    </div>
+                </div>
+                <a href="#contact" class="btn btn-outline-primary mt-3"><i class="bi bi-people me-1"></i> Visit / Enquire</a>
+                </div>
+            </div>
+            </section>
+
+            <!-- ======= Academics / Departments ======= -->
+            <section id="academics" class="py-4 py-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-title m-0">Departments</h2>
+                <a href="#programs" class="link-primary">View programs</a>
+            </div>
+            <div class="row g-3">
+                <div class="col-6 col-md-4 col-lg-3">
+                <div class="dept-card bg-white p-3 rounded-3 rcu-shadow h-100">
+                    <i class="bi bi-cpu fs-3 text-primary"></i>
+                    <h3 class="h6 mt-2">Computer Science</h3>
+                    <p class="small text-muted">MCA, BCA, B.Sc (CS), Research</p>
+                </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                <div class="dept-card bg-white p-3 rounded-3 rcu-shadow h-100">
+                    <i class="bi bi-graph-up fs-3 text-primary"></i>
+                    <h3 class="h6 mt-2">Commerce & Management</h3>
+                    <p class="small text-muted">MBA, M.Com, BBA</p>
+                </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                <div class="dept-card bg-white p-3 rounded-3 rcu-shadow h-100">
+                    <i class="bi bi-bezier2 fs-3 text-primary"></i>
+                    <h3 class="h6 mt-2">Engineering & Technology</h3>
+                    <p class="small text-muted">BE, M.Tech (Affiliated)</p>
+                </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                <div class="dept-card bg-white p-3 rounded-3 rcu-shadow h-100">
+                    <i class="bi bi-book fs-3 text-primary"></i>
+                    <h3 class="h6 mt-2">Arts & Humanities</h3>
+                    <p class="small text-muted">BA, MA</p>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- ======= Programs ======= -->
+            <section id="programs" class="py-4 py-md-5">
+            <h2 class="section-title">Programs</h2>
+            <div class="row g-3">
+                <div class="col-md-6 col-lg-4">
+                <div class="card rcu-shadow h-100">
+                    <div class="card-body">
+                    <span class="badge text-bg-primary mb-2">UG</span>
+                    <h3 class="h5">Bachelor of Computer Applications (BCA)</h3>
+                    <p class="small text-muted">3-year program focused on programming, networks and databases for industry readiness.</p>
+                    <a href="#admissions" class="btn btn-sm btn-outline-primary">Admission details</a>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                <div class="card rcu-shadow h-100">
+                    <div class="card-body">
+                    <span class="badge text-bg-success mb-2">PG</span>
+                    <h3 class="h5">Master of Computer Applications (MCA)</h3>
+                    <p class="small text-muted">2-year AI/ML, web & cloud oriented professional curriculum with labs.</p>
+                    <a href="#admissions" class="btn btn-sm btn-outline-success">Admission details</a>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                <div class="card rcu-shadow h-100">
+                    <div class="card-body">
+                    <span class="badge text-bg-warning mb-2">Research</span>
+                    <h3 class="h5">Ph.D. (Computer Science)</h3>
+                    <p class="small text-muted">Research areas: Data Science, Networks, Cybersecurity, IoT.</p>
+                    <a href="#research" class="btn btn-sm btn-outline-warning">Explore research</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- ======= Admissions ======= -->
+            <section id="admissions" class="py-4 py-md-5">
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-7">
+                <h2 class="section-title">Admissions 2025–26</h2>
+                <ol class="list-group list-group-numbered rcu-shadow">
+                    <li class="list-group-item">Check eligibility & program prerequisites</li>
+                    <li class="list-group-item">Fill the online application form</li>
+                    <li class="list-group-item">Upload documents & pay fees</li>
+                    <li class="list-group-item">Appear for counseling / interview</li>
+                </ol>
+                <a href="#" class="btn btn-rcu mt-3"><i class="bi bi-clipboard2-check me-1"></i> Start Application</a>
+                </div>
+                <div class="col-lg-5">
+                <div class="bg-white rounded-4 p-3 p-md-4 rcu-shadow">
+                    <h3 class="h6 fw-bold">Important dates</h3>
+                    <ul class="list-unstyled m-0 small">
+                    <li class="d-flex justify-content-between py-2 border-bottom"><span>Applications Open</span><span>01 May 2025</span></li>
+                    <li class="d-flex justify-content-between py-2 border-bottom"><span>Last Date to Apply</span><span>30 Jun 2025</span></li>
+                    <li class="d-flex justify-content-between py-2"><span>Counseling</span><span>15–25 Jul 2025</span></li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- ======= Research ======= -->
+            <section id="research" class="py-4 py-md-5">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                <h2 class="section-title">Research & Innovation</h2>
+                <p>RCU promotes quality research through funded projects, labs and industry collaborations. Faculty and scholars contribute to publications, patents and community impact.</p>
+                <ul class="small">
+                    <li>Centers: Data Science, Renewable Energy, Local Languages</li>
+                    <li>Consultancy & MoUs with industry</li>
+                    <li>Annual Research Symposium</li>
+                </ul>
+                </div>
+                <div class="col-lg-7">
+                <div class="row g-3">
+                    <div class="col-md-6"><div class="bg-white p-3 rounded-4 rcu-shadow h-100"><i class="bi bi-cpu me-2"></i> AI & ML Lab</div></div>
+                    <div class="col-md-6"><div class="bg-white p-3 rounded-4 rcu-shadow h-100"><i class="bi bi-shield-lock me-2"></i> Cybersecurity Lab</div></div>
+                    <div class="col-md-6"><div class="bg-white p-3 rounded-4 rcu-shadow h-100"><i class="bi bi-cloud-arrow-up me-2"></i> Cloud Computing</div></div>
+                    <div class="col-md-6"><div class="bg-white p-3 rounded-4 rcu-shadow h-100"><i class="bi bi-diagram-3 me-2"></i> Networks & IoT</div></div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- ======= Events & News ======= -->
+            <section id="events" class="py-4 py-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-title m-0">Events</h2>
+                <div class="input-group w-auto">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input id="eventSearch" type="search" class="form-control" placeholder="Search events…" aria-label="Search events"/>
+                </div>
+            </div>
+            <div class="row g-3" id="eventList">
+                <div class="col-md-6">
+                <div class="bg-white p-3 rounded-3 rcu-shadow h-100 event">
+                    <div class="small text-muted">20 Oct 2025</div>
+                    <h3 class="h6">Tech Fest 2025</h3>
+                    <p class="small m-0">Hackathon, workshops and keynote on GenAI.</p>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="bg-white p-3 rounded-3 rcu-shadow h-100 event">
+                    <div class="small text-muted">05 Nov 2025</div>
+                    <h3 class="h6">Research Symposium</h3>
+                    <p class="small m-0">Doctoral colloquium and poster sessions.</p>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="bg-white p-3 rounded-3 rcu-shadow h-100 event">
+                    <div class="small text-muted">15 Dec 2025</div>
+                    <h3 class="h6">Convocation</h3>
+                    <p class="small m-0">Annual convocation ceremony.</p>
+                </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- ======= Gallery ======= -->
+            <section id="gallery" class="py-4 py-md-5">
+            <h2 class="section-title">Campus Gallery</h2>
+            <div class="row g-3">
+                <div class="col-6 col-md-4"><img class="w-100 rounded-3 rcu-shadow" src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=800&auto=format&fit=crop" alt="Campus lawn"/></div>
+                <div class="col-6 col-md-4"><img class="w-100 rounded-3 rcu-shadow" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800&auto=format&fit=crop" alt="Library"/></div>
+                <div class="col-6 col-md-4"><img class="w-100 rounded-3 rcu-shadow" src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=800&auto=format&fit=crop" alt="Students"/></div>
+            </div>
+            </section>
+
+            <!-- ======= Contact ======= -->
+            <section id="contact" class="py-4 py-md-5">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                <h2 class="section-title">Contact Us</h2>
+                <form class="bg-white p-3 p-md-4 rounded-4 rcu-shadow" onsubmit="event.preventDefault(); alert('Form submitted. Replace with backend.');">
+                    <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="name">Full name</label>
+                        <input id="name" type="text" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="email">Email</label>
+                        <input id="email" type="email" class="form-control" required />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="msg">Message</label>
+                        <textarea id="msg" rows="4" class="form-control" required></textarea>
+                    </div>
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="consent" required>
+                        <label class="form-check-label small" for="consent">I consent to receive updates from RCU.</label>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Send</button>
+                    </div>
+                    </div>
+                </form>
+                </div>
+                <div class="col-lg-6">
+                <div class="bg-white rounded-4 p-3 p-md-4 rcu-shadow h-100">
+                    <h3 class="h6 fw-bold">Address</h3>
+                    <p class="small mb-1">Rani Channamma University, Belagavi – 591156</p>
+                    <p class="small m-0">Karnataka, India</p>
+                    <hr />
+                    <h3 class="h6 fw-bold">Map</h3>
+                    <div class="ratio ratio-16x9 rounded-3 rcu-shadow">
+                    <iframe title="RCU Location" src="https://maps.google.com/maps?q=belagavi%20university&t=&z=12&ie=UTF8&iwloc=&output=embed" loading="lazy" style="border:0"></iframe>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </section>
+
+        </main>
+    {% endblock %}
+  <!-- ======= Footer ======= -->
+  <footer class="rcu-footer pt-5 pb-4 mt-4">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <h5 class="mb-3">RCU Belagavi</h5>
+          <p class="small">Committed to quality education, research and inclusive growth in North Karnataka.</p>
+          <div class="d-flex gap-3">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-2">
+          <h6 class="text-uppercase small">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#about">About</a></li>
+            <li><a href="#academics">Departments</a></li>
+            <li><a href="#programs">Programs</a></li>
+            <li><a href="#admissions">Admissions</a></li>
+            <li><a href="#research">Research</a></li>
+          </ul>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <h6 class="text-uppercase small">Student Links</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#results">Results</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#contact">Grievance</a></li>
+            <li><a href="#">Anti-Ragging</a></li>
+          </ul>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <h6 class="text-uppercase small">Newsletter</h6>
+          <form class="d-flex gap-2" onsubmit="event.preventDefault(); alert('Subscribed!');">
+            <input type="email" class="form-control form-control-sm" placeholder="Email" required />
+            <button class="btn btn-sm btn-light" type="submit">Join</button>
+          </form>
+        </div>
+      </div>
+      <hr class="border-secondary-subtle"/>
+      <div class="d-flex flex-column flex-md-row justify-content-between small">
+        <div>© <span id="y"></span> Rani Channamma University, Belagavi</div>
+        <div>Crafted with <i class="bi bi-heart-fill"></i> • <a href="#">Privacy</a> • <a href="#">RTI</a> • <a href="#">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <a class="btn btn-dark rounded-circle scroll-top d-none" id="toTop" href="#home" aria-label="Back to top"><i class="bi bi-arrow-up"></i></a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Active link highlighting on scroll
+    const sections = document.querySelectorAll('main section[id]');
+    const navLinks = document.querySelectorAll('.navbar .nav-link');
+    const toTop = document.getElementById('toTop');
+    const year = document.getElementById('y'); year.textContent = new Date().getFullYear();
+
+    function onScroll(){
+      const pos = window.scrollY + 120;
+      sections.forEach(sec => {
+        if (pos >= sec.offsetTop && pos < sec.offsetTop + sec.offsetHeight){
+          navLinks.forEach(l => l.classList.remove('active'));
+          const a = document.querySelector(`.navbar .nav-link[href="#${sec.id}"]`);
+          if(a) a.classList.add('active');
+        }
+      });
+      toTop.classList.toggle('d-none', window.scrollY < 300);
+    }
+    document.addEventListener('scroll', onScroll);
+
+    // Event search filter
+    const search = document.getElementById('eventSearch');
+    const eventCards = [...document.querySelectorAll('#eventList .col-md-6')];
+    search?.addEventListener('input', (e)=>{
+      const q = e.target.value.toLowerCase();
+      eventCards.forEach(c=>{
+        const text = c.textContent.toLowerCase();
+        c.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+
+    // Simple dark mode toggle (persists in localStorage)
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem('rcu-theme');
+    if(savedTheme==='dark'){ document.documentElement.setAttribute('data-theme','dark'); }
+    themeToggle?.addEventListener('click', ()=>{
+      const nowDark = root.getAttribute('data-theme') !== 'dark';
+      root.setAttribute('data-theme', nowDark ? 'dark':'light');
+      localStorage.setItem('rcu-theme', nowDark ? 'dark':'light');
+    });
+  </script>
+</body>
+</html>

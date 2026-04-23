@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+
+.emblem-box{
+width:200px;
+height:200px;
+border-radius:30%;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:auto;
+}
+
+.emblem-img{
+width:40%;
+height:30%;
+border-radius:70%;
+object-fit:cover;
+}
+/* Zoom effect */
+.emblem-img:hover{
+transform:scale(1.08);
+}
+
+/* Content card */
+.emblem-card{
+background:var(--card-bg);
+color:var(--text);
+border-radius:30px;
+padding:60px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+@media (max-width: 768px) {
+    .emblem-img-box{
+        text-align: center !important; /* centers logo on mobile */
+        margin-top: 15px; /* optional spacing */
+    }
+}
+
+</style>
+
+<div class="container py-4">
+
+<div class="emblem-card">
+
+<!-- Title + Image Row -->
+<div class="row align-items-center mb-4">
+
+<!-- Title -->
+<div class="col-lg-6">
+<h1 class="fw-bold display-5">
+Our College Emblem
+</h1>
+</div>
+
+<!-- Image -->
+<div class="col-lg-4 emblem-img-box text-end">
+
+<img src="https://lh4.googleusercontent.com/proxy/U-nmjFhNDYKnjaNGw1LGcqhN-5snHZ_GdqS9iAaaDnMiP_LCscM4eLIFGAe4AlqFUde7m8Cfdy4kw6FIxGIcOOfVMvlyRfbKaeAEWlw"
+class="emblem-img">
+
+</div>
+
+</div>
+
+<!-- Full Width Content -->
+
+<p>
+The <strong>Chikodi Liberal Education Society</strong> has come up to this present state of glory and magnitude as a result of its immense stress on the education of the surrounding rural masses. The society was founded by the sincere efforts of the patrons of the locality in <strong>1962</strong>. Ever since it has been graced as the premier society of Chikodi and its surrounding region.
+</p>
+
+<p>
+Today the society through a single campus is providing education from <strong>pre-primary to graduation</strong> along with Teacher Training courses. At present, the society has <strong>thirteen educational institutions</strong> to its credit with more than <strong>8,500 students</strong> studying on the campus annually.
+</p>
+
+<p>
+The glorious institution <strong>C.L.E. Society's Shri B. C. Gangal College of Education (B.Ed.), Chikodi</strong> has been a source of inspiration for a bright future for students and has maintained reputation, quality, and academic standards.
+</p>
+
+<p>
+The college is recognized by the <strong>National Council for Teacher Education (NCTE), New Delhi</strong> and was affiliated with <strong>Karnatak University, Dharwad</strong> from the academic year <strong>2004-05</strong>. From the academic year <strong>2010-11 onwards</strong>, the institution is affiliated with <strong>Rani Channamma University, Belagavi</strong>.
+</p>
+
+<p>
+The institution is also recognized under <strong>Section 2(f) of the UGC Act, 1956</strong>. It is a <strong>co-educational teacher training institution</strong> with the motto of providing educational training facilities to the rural masses.
+</p>
+
+</div>
+
+</div>
+
+{% endblock %}

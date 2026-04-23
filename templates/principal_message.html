@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+
+/* Content card */
+.emblem-card {
+    background: var(--card-bg);
+    color: var(--text);
+    height: 100%;
+    border-radius: 30px;
+    padding: 60px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Image Style */
+.college-img {
+    width: 400px;
+    height: 350px;
+    float:right;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    border-radius: 70px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    transition: transform 0.4s ease;
+}
+
+/* Zoom effect */
+.college-img:hover {
+    transform: scale(1.1);
+}
+
+.content-text {
+    text-align: justify;
+    line-height: 1.8;
+}
+
+</style>
+
+<div class="container py-5">
+
+    <!-- Content Card Wrapper -->
+    <div class="emblem-card">
+
+        <h1 class="fw-bold -8">
+            Principal's Message
+        </h1>
+
+        <!-- College Image -->
+        <img src=""
+        class="Administrator">
+
+        <h3 class="mb-9"> Shri Sidaling Metagud</h3>
+
+        <div class="content-text">
+            <p style="text-align: justify; line-height:1.8;"> The College is recognized by the <strong>National Council for Teacher Education (NCTE), New Delhi</strong> and approved by the <strong>Government of Karnataka</strong>. From the academic year <strong>2004–05 to 2009–10</strong>, the college was affiliated with <strong>Karnatak University, Dharwad</strong>. From the academic year <strong>2010–11 onwards</strong>, the institution has been affiliated with <strong>Rani Channamma University, Belagavi</strong>. </p> <p style="text-align: justify; line-height:1.8;"> The <strong>Chikodi Liberal Education Society’s College of Education, Chikodi, Dist. Belagavi, Karnataka</strong> is a co-educational institution established by the <strong>Chikodi Liberal Education Society (Regd.), Chikodi</strong>, which was founded in <strong>1962</strong>. The college itself was established in the year <strong>2004</strong> with the noble motto of providing quality educational opportunities and teacher training facilities to students, especially those belonging to rural areas. </p> <p style="text-align: justify; line-height:1.8;"> The management has taken sincere efforts to provide excellent infrastructure and academic facilities as per the norms of the NCTE. These include a spacious building, highly qualified and experienced faculty members, a well-equipped library, and various resource centres such as the <strong>Educational Technology Resource Centre, Science Resource Centre, Computer Resource Centre, Language Resource Centre,</strong> and the <strong>Educational Psychology Resource Centre</strong>. The institution was established with the vision of developing it into one of the best and model teacher training institutes in the state, focusing on enhancing the professional competence of future teachers. </p> <p style="text-align: justify; line-height:1.8;"> We are proud to state that many students admitted to our institution come from rural backgrounds and have consistently shown excellent performance in their studies. They actively participate in academic and co-curricular activities. Since its establishment, our college students have secured <strong>University ranks every year</strong>, bringing pride and recognition to the institution. </p> <p style="text-align: justify; line-height:1.8;"> As a result of these achievements, the college has earned a good reputation for providing quality teacher education in this educational district. To further support the growth and development of student teachers, the college has also established several academic and support cells that guide them toward future success and professional advancement. </p>
+        </div>
+
+    </div> <!-- end emblem-card -->
+
+</div> <!-- end container -->
+
+{% endblock %}

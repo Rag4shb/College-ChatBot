@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content1 %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+<div class="card shadow-lg border-0 rounded-4 bg-light bg-opacity-75">
+
+<div class="card-body">
+
+<h2 class="text-center mb-4 text-primary fw-bold" style="font-family: 'Orbitron', sans-serif;">
+💬 All Feedback
+</h2>
+
+<form method="POST" action="{% url 'delete_selected_feedbacks' %}">
+{% csrf_token %}
+
+<div class="mb-3">
+<button type="submit" id="deleteBtn" class="btn btn-danger" style="display:none;">
+🗑 Delete Selected
+</button>
+</div>
+
+<div class="table-responsive">
+
+<table class="table table-bordered table-hover align-middle rounded overflow-hidden">
+
+<thead class="table-dark text-center">
+<tr>
+
+<th>
+<input type="checkbox" id="selectAll">
+</th>
+
+<th>👤 User</th>
+<th>📝 Message</th>
+<th>📅 Submitted On</th>
+<th>⚙ Action</th>
+
+</tr>
+</thead>
+
+<tbody>
+
+{% for fb in feedbacks %}
+<tr>
+
+<td class="text-center">
+<input type="checkbox" name="selected_feedbacks" value="{{ fb.id }}">
+</td>
+
+<td class="fw-semibold">
+{{ fb.user.name }}
+</td>
+
+<td class="text-wrap" style="max-width:350px; word-break:break-word;">
+{{ fb.message }}
+</td>
+
+<td>
+{{ fb.created_at|date:"d M Y, h:i A" }}
+</td>
+
+<td class="text-center">
+
+<a href="{% url 'delete_feedback' fb.id %}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Delete this feedback?');">
+
+🗑 Delete
+
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="5" class="text-center text-muted py-4">
+🚫 No feedback submitted yet.
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</form>
+
+</div>
+
+<div class="card-footer text-center text-muted small">
+Showing {{ feedbacks|length }} feedback entries
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+// Select All
+document.getElementById("selectAll").onclick = function() {
+
+let checkboxes = document.getElementsByName("selected_feedbacks");
+
+for (let checkbox of checkboxes) {
+checkbox.checked = this.checked;
+}
+
+toggleDeleteButton();
+};
+
+
+// Show delete button only when selected
+function toggleDeleteButton(){
+
+let checkboxes = document.getElementsByName("selected_feedbacks");
+let deleteBtn = document.getElementById("deleteBtn");
+
+let checked = false;
+
+for(let checkbox of checkboxes){
+if(checkbox.checked){
+checked = true;
+break;
+}
+}
+
+deleteBtn.style.display = checked ? "inline-block" : "none";
+
+}
+
+
+// Detect checkbox change
+let checkboxes = document.getElementsByName("selected_feedbacks");
+
+for(let checkbox of checkboxes){
+checkbox.addEventListener("change", toggleDeleteButton);
+}
+
+</script>
+
+{% endblock %}

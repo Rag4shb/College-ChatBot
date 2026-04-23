@@ -1,0 +1,397 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root{
+      --rcu-primary:#2b4c7e; --rcu-accent:#f2a365; --rcu-bg:#f7f9fc; --rcu-card:#ffffff;
+    }
+    body{background:var(--rcu-bg);}  
+    .app-wrap{max-width:1000px;margin:32px auto;}
+    .hero{background:linear-gradient(135deg,var(--rcu-primary),#1d2a44);color:#fff;border-radius:18px;padding:22px 20px;}
+    .pill{border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.25rem .75rem;display:inline-flex;gap:.5rem;align-items:center;background:rgba(255,255,255,.08);}
+    .chat-card{background:var(--rcu-card);border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.06);} 
+    .chat-body{height:56vh;min-height:420px;overflow:auto;padding:16px;scroll-behavior:smooth;}
+    .message{display:flex;gap:10px;margin-bottom:14px;}
+    .message .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+    .bot .avatar{background:var(--rcu-primary);color:#fff;}
+    .user .avatar{background:#e9ecef;color:#333;}
+    .bubble{max-width:72%;padding:.75rem .9rem;border-radius:14px;}
+    .bot .bubble{background:#eef3ff;border:1px solid #dbe4ff;}
+    .user .bubble{background:#f3f4f6;border:1px solid #e5e7eb;margin-left:auto;}
+    .quickchips{display:flex;flex-wrap:wrap;gap:.5rem}
+    .quickchips .btn{border-radius:999px}
+    .sidebar{border-left:1px dashed #e6e6e6;background:#fafbff}
+    .divider{height:1px;background:linear-gradient(90deg,transparent,#e9ecef,transparent);margin:8px 0}
+    .small-note{font-size:.85rem;color:#6c757d}
+  </style>
+
+  <div class="app-wrap px-2 px-md-3">
+    <div class="hero mb-3">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <div class="d-flex align-items-center gap-3">
+          <div class="pill"><i class="bi bi-mortarboard"></i> RCU MCA – Info Assistant</div>
+          <div class="pill"><i class="bi bi-geo-alt"></i> Belagavi (Belgaum)</div>
+          <div class="pill"><i class="bi bi-megaphone"></i> Admissions • Courses • Services</div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <div class="form-check form-switch text-white me-2">
+            <input class="form-check-input" type="checkbox" role="switch" id="ttsToggle">
+            <label class="form-check-label" for="ttsToggle">Read aloud</label>
+          </div>
+          <button id="speakLast" class="btn btn-light btn-sm" title="Read last response"><i class="bi bi-soundwave"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <!-- Chat Panel -->
+      <div class="col-lg-8">
+        <div class="chat-card">
+          <div id="chatBody" class="chat-body">
+            <!-- Welcome message -->
+          </div>
+          <div class="px-3 pb-2">
+            <div class="divider"></div>
+            <div class="quickchips mb-2">
+              <button class="btn btn-outline-primary btn-sm" data-intent="admissions">Admissions</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="eligibility">Eligibility</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="how_apply">How to Apply</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="documents">Documents</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="fees">Fees</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="syllabus">MCA Syllabus</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="duration">Duration</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="seats">Intake/Seats</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="placements">Placements</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="facilities">Facilities</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="hostel">Hostel</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="scholarships">Scholarships</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="contact">Contact</button>
+              <button class="btn btn-outline-primary btn-sm" data-intent="location">Location</button>
+            </div>
+            <div class="input-group mb-3">
+              <input id="userInput" type="text" class="form-control" placeholder="Ask about admissions, eligibility, fees, services…"/>
+              <button id="sendBtn" class="btn btn-primary"><i class="bi bi-send"></i></button>
+            </div>
+            <div class="small-note pb-2">
+              <i class="bi bi-info-circle"></i> This assistant uses a local knowledge base you can edit in the code. Always verify dates/fees on the official RCU website.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Points Builder -->
+      <div class="col-lg-4">
+        <div class="chat-card p-3 sidebar h-100">
+          <h6 class="mb-2"><i class="bi bi-list-check me-1"></i> Build your question</h6>
+          <div class="small text-muted mb-2">Select key points and click "Ask" to auto‑compose a query.</div>
+          <div class="row g-2">
+            <div class="col-12">
+              <label class="form-label">Topic</label>
+              <select id="kpTopic" class="form-select form-select-sm">
+                <option value="admissions">Admissions</option>
+                <option value="eligibility">Eligibility</option>
+                <option value="how_apply">How to Apply</option>
+                <option value="documents">Documents</option>
+                <option value="fees">Fees</option>
+                <option value="syllabus">MCA Syllabus</option>
+                <option value="duration">Duration</option>
+                <option value="seats">Intake/Seats</option>
+                <option value="placements">Placements</option>
+                <option value="facilities">Facilities</option>
+                <option value="hostel">Hostel</option>
+                <option value="scholarships">Scholarships</option>
+                <option value="contact">Contact</option>
+                <option value="location">Location</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Academic Year</label>
+              <input id="kpYear" type="text" class="form-control form-control-sm" placeholder="2025-26" />
+            </div>
+            <div class="col-6">
+              <label class="form-label">Category</label>
+              <select id="kpCategory" class="form-select form-select-sm">
+                <option value="general">General</option>
+                <option value="sc_st">SC/ST</option>
+                <option value="obc">OBC</option>
+                <option value="ews">EWS</option>
+                <option value="management">Management quota</option>
+                <option value="nri">NRI</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Extras</label>
+              <div class="d-flex flex-wrap gap-2">
+                <div class="form-check"><input id="kpDates" class="form-check-input" type="checkbox"><label class="form-check-label" for="kpDates">Important dates</label></div>
+                <div class="form-check"><input id="kpSteps" class="form-check-input" type="checkbox"><label class="form-check-label" for="kpSteps">Step-by-step</label></div>
+                <div class="form-check"><input id="kpDocs" class="form-check-input" type="checkbox"><label class="form-check-label" for="kpDocs">Required documents</label></div>
+                <div class="form-check"><input id="kpFees" class="form-check-input" type="checkbox"><label class="form-check-label" for="kpFees">Fee breakdown</label></div>
+              </div>
+            </div>
+          </div>
+          <div class="d-grid mt-3">
+            <button id="kpAsk" class="btn btn-outline-primary"><i class="bi bi-magic"></i> Ask</button>
+          </div>
+
+          <div class="divider mt-3"></div>
+          <h6 class="mb-2"><i class="bi bi-speaker me-1"></i> Voice</h6>
+          <div class="row g-2">
+            <div class="col-8"><select id="voiceSelect" class="form-select form-select-sm"></select></div>
+            <div class="col-4"><input id="rateRange" type="range" min=".7" max="1.3" step=".1" value="1" class="form-range"/></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -------------------- LOCAL KNOWLEDGE BASE (Edit as needed) --------------------
+    const knowledgeBase = {
+      university: {
+        name: "Rani Channamma University (RCU)",
+        city: "Belagavi (Belgaum), Karnataka",
+        program: "Master of Computer Applications (MCA)",
+      },
+      intents: {
+        admissions: {
+          keywords: ["admission","admissions","apply","application","entrance"],
+          answer: () => `\n<strong>Admissions – MCA @ RCU (Overview)</strong><br>
+          • Mode: Typically based on state/central guidelines (e.g., CET/PGCET or merit).<br>
+          • Timeline: Applications usually open once the university releases the notification for the academic year.<br>
+          • Seats: Limited; category‑wise reservation applies as per Govt. of Karnataka rules.<br>
+          • Tip: Check the latest notification, eligibility and schedule on the official RCU website / Dept. of Computer Science.\n`
+        },
+        eligibility: {
+          keywords: ["eligibility","criteria","prerequisite","qualifications"],
+          answer: () => `\n<strong>Eligibility (Typical)</strong><br>
+          • Bachelor's degree (e.g., BCA/BCS/Science/Engineering) with mathematics background in 10+2 or graduation.<br>
+          • Minimum aggregate as notified for the year; relaxations as per reservation norms.<br>
+          • If applicable, valid qualifying exam/PGCET score.\n`
+        },
+        how_apply: {
+          keywords: ["how to apply","procedure","process","steps"],
+          answer: () => `\n<strong>How to Apply</strong><br>
+          1) Watch for the admission notification on RCU's official site.<br>
+          2) Register online, fill the MCA application form, upload documents.<br>
+          3) Pay the application fee, submit, and download the acknowledgement.<br>
+          4) Track merit/PGCET counseling and attend document verification as scheduled.\n`
+        },
+        documents: {
+          keywords: ["documents","docs","certificate","verification"],
+          answer: () => `\n<strong>Documents (Common List)</strong><br>
+          • SSLC/10th & PUC/12th marks cards<br>
+          • UG degree marks cards & provisional/degree certificate<br>
+          • Caste/Category/Income certificates (if applicable)<br>
+          • Transfer/Migration certificate, Aadhaar ID<br>
+          • Entrance score card (PGCET/other, if applicable)<br>
+          • Photos and signatures as specified\n`
+        },
+        fees: {
+          keywords: ["fees","fee","tuition","cost","scholarship"],
+          answer: ({category,year}) => `\n<strong>Fee (Indicative)</strong><br>
+          • Structure can vary by category (${category || 'general'}) and year (${year || 'latest notified'}).<br>
+          • Components typically include: tuition, exam, library, laboratory, university fees.<br>
+          • <em>Note:</em> Refer to the official fee notification for exact figures before paying.\n`
+        },
+        syllabus: {
+          keywords: ["syllabus","curriculum","subjects","course structure"],
+          answer: () => `\n<strong>MCA Syllabus (Typical Highlights)</strong><br>
+          • Core: DSA, OS, DBMS, Computer Networks, OOP/Java, Web Tech, Software Engineering, Algorithms
+          • Labs: Programming, DBMS, Web/Mobile, AI/ML (as offered)
+          • Electives: Data Science, Cloud, Cybersecurity, IoT, etc.
+          • Project/Internship: Final‑semester capstone with viva.\n`
+        },
+        duration: {
+          keywords: ["duration","years","semesters"],
+          answer: () => `\n<strong>Program Duration</strong><br>
+          • MCA is typically a 2‑year (4‑semester) full‑time program under NEP guidelines.\n`
+        },
+        seats: {
+          keywords: ["seats","intake","capacity"],
+          answer: () => `\n<strong>Intake/Seats</strong><br>
+          • Intake is fixed by the university; reservation as per state norms. Check the current year's notification.\n`
+        },
+        placements: {
+          keywords: ["placements","internship","career","jobs"],
+          answer: () => `\n<strong>Placements & Internships</strong><br>
+          • Support via the university's placement cell and department coordination.<br>
+          • Roles commonly include Software Developer, Data Analyst, QA, Network/Cloud roles, etc.<br>
+          • Keep your resume, Git/GitHub and project portfolio updated.\n`
+        },
+        facilities: {
+          keywords: ["facilities","labs","library","wifi","campus"],
+          answer: () => `\n<strong>Campus Facilities (Common)</strong><br>
+          • Computer labs, Library & e‑resources, Wi‑Fi, Classrooms<br>
+          • Student services, Sports, Clubs (varies by campus)\n`
+        },
+        hostel: {
+          keywords: ["hostel","accommodation","mess"],
+          answer: () => `\n<strong>Hostel (General)</strong><br>
+          • Limited seats; separate hostels (subject to availability).<br>
+          • Mess facilities and basic amenities; rules per hostel office.\n`
+        },
+        scholarships: {
+          keywords: ["scholarship","fee concession","freeship"],
+          answer: () => `\n<strong>Scholarships</strong><br>
+          • State/central schemes, social welfare scholarships, and university‑specific assistance where applicable.<br>
+          • Apply through the relevant portals within notified timelines.\n`
+        },
+        contact: {
+          keywords: ["contact","phone","email","office"],
+          answer: () => `\n<strong>Contact (General)</strong><br>
+          • Department of Computer Science / MCA Program Office – Rani Channamma University, Belagavi.<br>
+          • Check the official website's directory for current phone/email.\n`
+        },
+        location: {
+          keywords: ["location","address","map","how to reach"],
+          answer: () => `\n<strong>Location</strong><br>
+          • RCU main campus is in <em>Belagavi (Belgaum), Karnataka</em>.<br>
+          • Reach via Belagavi railway station/bus stand; airport connectivity available.\n`
+        }
+      }
+    };
+
+    // -------------------- UI HELPERS --------------------
+    const chatBody = document.getElementById('chatBody');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function addMessage(role, html){
+      const row = document.createElement('div');
+      row.className = `message ${role}`;
+      row.innerHTML = `
+        <div class="avatar">${role==='bot' ? '<i class="bi bi-robot"></i>' : '<i class="bi bi-person"></i>'}</div>
+        <div class="bubble">${html}</div>
+      `;
+      chatBody.appendChild(row);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      if(role==='bot' && document.getElementById('ttsToggle').checked){
+        speak(stripHtml(html));
+      }
+    }
+
+    function stripHtml(html){
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html; return tmp.textContent || tmp.innerText || '';
+    }
+
+    // -------------------- INTENT MATCHING --------------------
+    function detectIntent(text){
+      const t = (text||'').toLowerCase();
+      for(const [intent, cfg] of Object.entries(knowledgeBase.intents)){
+        if(cfg.keywords.some(k => t.includes(k))) return intent;
+      }
+      // fallback heuristics
+      if(/fee|tuition|cost/.test(t)) return 'fees';
+      if(/seat|intake/.test(t)) return 'seats';
+      if(/hostel|accommodation/.test(t)) return 'hostel';
+      if(/place|job|intern/.test(t)) return 'placements';
+      if(/document|certificate/.test(t)) return 'documents';
+      if(/apply|procedure|process/.test(t)) return 'how_apply';
+      if(/syllabus|subject|curriculum/.test(t)) return 'syllabus';
+      if(/eligib|criteria/.test(t)) return 'eligibility';
+      if(/contact|phone|email/.test(t)) return 'contact';
+      if(/where|location|address|map|reach/.test(t)) return 'location';
+      return 'admissions';
+    }
+
+    function answerForIntent(intent, ctx={}){
+      const cfg = knowledgeBase.intents[intent] || knowledgeBase.intents['admissions'];
+      const content = (typeof cfg.answer === 'function') ? cfg.answer(ctx) : cfg.answer;
+      const title = `<strong>${knowledgeBase.university.name} – ${knowledgeBase.university.program}</strong><br>`;
+      return title + content + `<div class="small-note mt-1">Always confirm via the official RCU website for ${new Date().getFullYear()}‑${(new Date().getFullYear()+1).toString().slice(2)} updates.</div>`;
+    }
+
+    // -------------------- SEND / RECEIVE --------------------
+    function handleSend(text){
+      const query = text?.trim() || userInput.value.trim();
+      if(!query) return;
+      addMessage('user', query);
+      userInput.value = '';
+
+      const intent = detectIntent(query);
+      const answer = answerForIntent(intent, {year: extractYear(query), category: detectCategory(query)});
+      addMessage('bot', answer);
+      lastBotText = stripHtml(answer);
+    }
+
+    function extractYear(t){
+      const m = (t||'').match(/20\d{2}(?:-\d{2})?/); return m?m[0]:null;
+    }
+    function detectCategory(t){
+      t = (t||'').toLowerCase();
+      if(/sc|st/.test(t)) return 'SC/ST';
+      if(/obc/.test(t)) return 'OBC';
+      if(/ews/.test(t)) return 'EWS';
+      if(/management/.test(t)) return 'Management';
+      if(/nri/.test(t)) return 'NRI';
+      return 'General';
+    }
+
+    sendBtn.addEventListener('click', ()=>handleSend());
+    userInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') handleSend(); });
+
+    // Quick chips
+    document.querySelectorAll('.quickchips .btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const intent = btn.dataset.intent; 
+        addMessage('user', btn.textContent);
+        const answer = answerForIntent(intent, {});
+        addMessage('bot', answer);
+        lastBotText = stripHtml(answer);
+      });
+    });
+
+    // Key Points Builder
+    document.getElementById('kpAsk').addEventListener('click', ()=>{
+      const topic = document.getElementById('kpTopic').value;
+      const year = document.getElementById('kpYear').value.trim();
+      const cat  = document.getElementById('kpCategory').value;
+      const wantDates = document.getElementById('kpDates').checked;
+      const wantSteps = document.getElementById('kpSteps').checked;
+      const wantDocs  = document.getElementById('kpDocs').checked;
+      const wantFees  = document.getElementById('kpFees').checked;
+
+      let query = `${topic.replace('_',' ')} for ${year||'current year'} ${cat}`;
+      if(wantDates) query += ' with important dates';
+      if(wantSteps) query += ' and step by step';
+      if(wantDocs)  query += ' including documents';
+      if(wantFees)  query += ' and fee breakdown';
+
+      handleSend(query);
+    });
+
+    // -------------------- TEXT TO SPEECH --------------------
+    let voices = [], lastBotText = '';
+    const voiceSelect = document.getElementById('voiceSelect');
+    const rateRange = document.getElementById('rateRange');
+
+    function loadVoices(){
+      voices = speechSynthesis.getVoices().filter(v=>/en|hi|kn|multi/i.test(v.lang));
+      voiceSelect.innerHTML = voices.map((v,i)=>`<option value="${i}">${v.name} (${v.lang})</option>`).join('');
+    }
+    window.speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
+
+    function speak(text){
+      if(!('speechSynthesis' in window)) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      const v = voices[voiceSelect.value] || voices[0];
+      if(v) u.voice = v; u.rate = parseFloat(rateRange.value||'1');
+      speechSynthesis.speak(u);
+    }
+
+    document.getElementById('speakLast').addEventListener('click', ()=>{
+      if(lastBotText) speak(lastBotText);
+    });
+
+    // -------------------- SEED GREETING --------------------
+    addMessage('bot', `<strong>Hi! I'm the RCU MCA Info Assistant.</strong><br>
+    Ask me about <em>admissions, eligibility, fees, syllabus, placements, hostel, scholarships</em> and more. Use the quick buttons or build a question from key points on the right.`);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

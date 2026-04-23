@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+
+/* Content card */
+.emblem-card {
+    background: var(--card-bg);
+    color: var(--text);
+    margin-top:2.5;
+    margin-bottom: 2.5;
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Image Style */
+.college-img {
+    width: 400px;
+    height: 250px;
+    float: right;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.4s ease;
+}
+
+/* Zoom effect */
+.college-img:hover {
+    transform: scale(1.1);
+}
+
+.content-text {
+    text-align: justify;
+    line-height: 1.8;
+}
+
+</style>
+
+<div class="container py-5">
+
+    <!-- Content Card Wrapper -->
+    <div class="emblem-card">
+
+        <h1 class="fw-bold -8">
+            Our Society & Institution
+        </h1>
+
+        <h3 class="mb-9">Introduction of the Society</h3>
+
+        <!-- College Image -->
+        <img src="https://content3.jdmagicbox.com/comp/belgaum/a8/9999px831.x831.170927030901.x7a8/catalogue/c-l-e-pu-college-chikodi-belgaum-colleges-w3qnw.jpg"
+        class="college-img">
+
+        <div class="content-text">
+            <p>
+            The <strong>Chikodi Liberal Education Society</strong> has come up to this present state of glory and magnitude as a result of its immense stress on the education of the surrounding rural masses. The society was founded by the sincere efforts of the patrons of the locality in <strong>1962</strong>. Ever since it has been graced as the premier society of Chikodi and its surrounding region.
+            </p>
+
+            <p>
+            Today the society through a single campus is providing education from <strong>pre-primary to graduation</strong> along with Teacher Training courses. At present, the society has <strong>thirteen educational institutions</strong> with more than <strong>8,500 students</strong> studying on the campus annually.
+            </p>
+
+            <p>
+            The glorious institution <strong>C.L.E. Society's Shri B. C. Gangal College of Education (B.Ed.), Chikodi</strong> has been a source of inspiration for a bright future of students and has maintained reputation, quality, and academic standards.
+            </p>
+
+            <p>
+            The college is recognized by the <strong>National Council for Teacher Education (NCTE)</strong>, Government of Karnataka and was affiliated with <strong>Karnatak University, Dharwad</strong> from the academic year <strong>2004-05</strong>. From the academic year <strong>2010-11 onwards</strong>, the institution is affiliated with <strong>Rani Channamma University, Belagavi</strong>.
+            </p>
+
+        </div>
+
+    </div> <!-- end emblem-card -->
+
+</div> <!-- end container -->
+
+{% endblock %}
