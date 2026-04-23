@@ -21,6 +21,7 @@ conda_package_streaming @ file:///C:/miniconda3/conda-bld/conda-package-streamin
 cryptography @ file:///C:/miniconda3/conda-bld/cryptography-split_1761932023265/work
 distro @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/distro_1729059153117/work
 Django==6.0.2
+django-crispy-forms==2.6
 frozendict @ file:///C:/miniconda3/conda-bld/frozendict_1761750728192/work
 idna @ file:///C:/miniconda3/conda-bld/idna_1761912043388/work
 jaraco.classes @ file:///C:/b/abs_6erueoob1v/croot/jaraco.classes_1755516340851/work
