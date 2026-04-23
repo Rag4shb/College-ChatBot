@@ -18,6 +18,7 @@ conda-content-trust @ file:///C:/Users/dev-admin/perseverance-python-buildout/cr
 conda-libmamba-solver @ file:///C:/miniconda3/conda-bld/conda-libmamba-solver_1764245615235/work/src
 conda-package-handling @ file:///C:/miniconda3/conda-bld/conda-package-handling_1762366515145/work
 conda_package_streaming @ file:///C:/miniconda3/conda-bld/conda-package-streaming_1762361689679/work
+crispy-bootstrap5==2026.3
 cryptography @ file:///C:/miniconda3/conda-bld/cryptography-split_1761932023265/work
 distro @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/distro_1729059153117/work
 Django==6.0.2
