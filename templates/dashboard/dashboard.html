@@ -1,514 +1,1508 @@
+html
+
 {% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <style>
-:root{
-  --rcu-primary:#2b4c7e;
-  --rcu-accent:#f2a365;
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ================================================================
+   TOKENS
+================================================================ */
+:root {
+  --bot-primary:    #1a56db;
+  --bot-primary-2:  #1446b8;
+  --bot-accent:     #06b6d4;
+  --bot-accent-2:   #0891b2;
+  --bot-success:    #10b981;
+  --bot-warning:    #f59e0b;
+  --bot-danger:     #ef4444;
+
+  --bot-bg:         #f0f4ff;
+  --bot-surface:    #ffffff;
+  --bot-surface-2:  #f8faff;
+  --bot-border:     rgba(26,86,219,0.1);
+  --bot-border-2:   rgba(0,0,0,0.07);
+
+  --bot-text:       #0f172a;
+  --bot-muted:      #64748b;
+  --bot-light:      #94a3b8;
+
+  --bot-shadow-sm:  0 2px 8px rgba(26,86,219,0.08);
+  --bot-shadow-md:  0 8px 32px rgba(26,86,219,0.12);
+  --bot-shadow-lg:  0 20px 60px rgba(26,86,219,0.16);
+
+  --bot-radius:     18px;
+  --bot-radius-sm:  10px;
+  --bot-radius-pill:999px;
+
+  --bot-font:       'Plus Jakarta Sans', sans-serif;
+  --bot-mono:       'JetBrains Mono', monospace;
+  --bot-transition: 0.2s cubic-bezier(0.4,0,0.2,1);
 }
 
-.app-wrap{
-  max-width:1000px;
-  margin:32px auto;
+[data-theme="dark"] {
+  --bot-primary:    #4f8ef7;
+  --bot-primary-2:  #3b7de8;
+  --bot-accent:     #22d3ee;
+
+  --bot-bg:         #080d1a;
+  --bot-surface:    #0f1629;
+  --bot-surface-2:  #141e35;
+  --bot-border:     rgba(79,142,247,0.12);
+  --bot-border-2:   rgba(255,255,255,0.06);
+
+  --bot-text:       #e8edf8;
+  --bot-muted:      #7c8db5;
+  --bot-light:      #4a5878;
+
+  --bot-shadow-sm:  0 2px 8px rgba(0,0,0,0.3);
+  --bot-shadow-md:  0 8px 32px rgba(0,0,0,0.4);
+  --bot-shadow-lg:  0 20px 60px rgba(0,0,0,0.5);
 }
 
-.hero{
-  background:linear-gradient(135deg,var(--rcu-primary),#1d2a44);
-  color:#fff;
-  border-radius:18px;
-  padding:22px 20px;
+/* ================================================================
+   PAGE SHELL
+================================================================ */
+.bot-page {
+  font-family: var(--bot-font);
+  background: var(--bot-bg);
+  min-height: calc(100vh - 70px);
+  padding: 1.5rem 1rem 2rem;
 }
 
-.pill{
-  border:1px solid rgba(255,255,255,.3);
-  border-radius:999px;
-  padding:.25rem .75rem;
-  display:inline-flex;
-  gap:.5rem;
-  align-items:center;
-  background:rgba(255,255,255,.08);
+.bot-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.chat-card{
-  background:var(--bs-body-bg);
-  border-radius:18px;
-  box-shadow:0 8px 24px rgba(0,0,0,.06);
+/* ================================================================
+   HERO HEADER
+================================================================ */
+.bot-hero {
+  background: linear-gradient(135deg, #0f2666 0%, #1a56db 55%, #0891b2 100%);
+  border-radius: var(--bot-radius);
+  padding: 1.5rem 1.75rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.chat-body{
-  height:56vh;
-  min-height:420px;
-  overflow:auto;
-  padding:16px;
-  scroll-behavior:smooth;
-  background:var(--bs-body-bg);
-  color:var(--bs-body-color);
+.bot-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(6,182,212,0.25) 0%, transparent 60%);
+  pointer-events: none;
 }
 
-.message{
-  display:flex;
-  gap:10px;
-  margin-bottom:14px;
+.bot-hero::after {
+  content: '';
+  position: absolute; right: -40px; top: -40px;
+  width: 220px; height: 220px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-.message .avatar{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+[data-theme="dark"] .bot-hero {
+  background: linear-gradient(135deg, #040a1a 0%, #0f2666 55%, #065a78 100%);
 }
 
-.bot .avatar{
-  background:var(--rcu-primary);
-  color:#fff;
+.bot-hero__left { display: flex; align-items: center; gap: 1rem; position: relative; z-index: 1; }
+
+.bot-hero__icon {
+  width: 52px; height: 52px;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: #fff;
+  flex-shrink: 0;
 }
 
-.user .avatar{
-  background:var(--bs-secondary-bg);
-  color:var(--bs-body-color);
+.bot-hero__title {
+  font-size: 1.15rem; font-weight: 800;
+  color: #fff; line-height: 1.2; margin: 0;
 }
 
-.bubble{
-  max-width:72%;
-  padding:.75rem .9rem;
-  border-radius:14px;
+.bot-hero__sub {
+  font-size: 0.75rem; color: rgba(255,255,255,0.7);
+  margin-top: 2px;
 }
 
-.bot .bubble{
-  background:var(--bs-tertiary-bg);
-  border:1px solid var(--bs-border-color);
+.bot-hero__pills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  position: relative; z-index: 1;
 }
 
-.user .bubble{
-  background:var(--bs-secondary-bg);
-  border:1px solid var(--bs-border-color);
-  margin-left:auto;
+.bot-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: var(--bot-radius-pill);
+  padding: 5px 12px;
+  font-size: 0.72rem; font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.02em;
 }
 
-.quickchips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.5rem;
+/* Status dot */
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 2px rgba(16,185,129,0.3);
+  animation: pulse-dot 2s infinite;
+  display: inline-block;
+}
+@keyframes pulse-dot {
+  0%,100% { box-shadow: 0 0 0 2px rgba(16,185,129,0.3); }
+  50%      { box-shadow: 0 0 0 5px rgba(16,185,129,0.1); }
 }
 
-.quickchips .btn{
-  border-radius:999px;
+/* ================================================================
+   MAIN LAYOUT
+================================================================ */
+.bot-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.25rem;
+  align-items: start;
 }
 
-.sidebar{
-  border-left:1px dashed var(--bs-border-color);
-  background:var(--bs-body-bg);
+@media (max-width: 900px) {
+  .bot-layout { grid-template-columns: 1fr; }
+  .bot-sidebar { order: -1; }
 }
 
-.divider{
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--bs-border-color),transparent);
-  margin:8px 0;
+/* ================================================================
+   CHAT CARD
+================================================================ */
+.chat-card {
+  background: var(--bot-surface);
+  border: 1px solid var(--bot-border);
+  border-radius: var(--bot-radius);
+  box-shadow: var(--bot-shadow-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.small-note{
-  font-size:.85rem;
-  color:var(--bs-secondary-color);
+/* Chat header */
+.chat-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--bot-border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bot-surface);
 }
 
-.typing{
-  font-style:italic;
-  color:var(--bs-secondary-color);
+.chat-header__info { display: flex; align-items: center; gap: 10px; }
+
+.chat-header__avatar {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg, #1a56db, #06b6d4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #fff; flex-shrink: 0;
 }
+
+.chat-header__name {
+  font-size: 0.9rem; font-weight: 700; color: var(--bot-text); margin: 0;
+}
+
+.chat-header__status {
+  font-size: 0.72rem; color: var(--bot-success);
+  display: flex; align-items: center; gap: 4px; margin-top: 1px;
+}
+
+.chat-header__actions { display: flex; gap: 6px; }
+
+.chat-header__btn {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--bot-border-2);
+  background: var(--bot-surface-2);
+  color: var(--bot-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px;
+  transition: background var(--bot-transition), color var(--bot-transition);
+}
+.chat-header__btn:hover { background: var(--bot-border); color: var(--bot-primary); }
+.chat-header__btn.active { background: var(--bot-primary); color: #fff; border-color: var(--bot-primary); }
+
+/* Chat body */
+.chat-body {
+  height: 52vh;
+  min-height: 380px;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  scroll-behavior: smooth;
+  background: var(--bot-surface);
+}
+
+.chat-body::-webkit-scrollbar { width: 4px; }
+.chat-body::-webkit-scrollbar-track { background: transparent; }
+.chat-body::-webkit-scrollbar-thumb { background: var(--bot-border); border-radius: 4px; }
+
+/* Messages */
+.msg-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  animation: msg-in 0.28s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.msg-row.user-row { flex-direction: row-reverse; }
+
+.msg-avatar {
+  width: 32px; height: 32px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+
+.bot-row .msg-avatar {
+  background: linear-gradient(135deg, #1a56db, #06b6d4);
+  color: #fff;
+}
+
+.user-row .msg-avatar {
+  background: var(--bot-surface-2);
+  border: 1px solid var(--bot-border-2);
+  color: var(--bot-muted);
+}
+
+.msg-bubble {
+  max-width: 75%;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--bot-text);
+  position: relative;
+}
+
+.bot-row .msg-bubble {
+  background: var(--bot-surface-2);
+  border: 1px solid var(--bot-border);
+  border-bottom-left-radius: 4px;
+}
+
+.user-row .msg-bubble {
+  background: linear-gradient(135deg, #1a56db, #1446b8);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+  border: none;
+}
+
+.msg-bubble strong { color: var(--bot-primary); font-weight: 700; }
+.user-row .msg-bubble strong { color: rgba(255,255,255,0.9); }
+
+.msg-bubble ul { padding-left: 1.1rem; margin: 0.4rem 0 0; }
+.msg-bubble ul li { margin-bottom: 3px; }
+
+.msg-bubble a {
+  color: var(--bot-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+.msg-bubble a:hover { text-decoration: underline; }
+
+.msg-time {
+  font-size: 0.65rem; color: var(--bot-light);
+  margin-top: 4px;
+  text-align: right;
+}
+
+.user-row .msg-time { text-align: left; }
+
+/* Typing indicator */
+.typing-row .msg-bubble {
+  padding: 0.65rem 1rem;
+}
+.typing-dots {
+  display: flex; gap: 4px; align-items: center;
+}
+.typing-dots span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--bot-primary);
+  opacity: 0.4;
+  animation: bounce-dot 1.2s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce-dot {
+  0%,80%,100% { transform: translateY(0); opacity:0.4; }
+  40%          { transform: translateY(-6px); opacity:1; }
+}
+
+/* Feedback buttons */
+.msg-feedback {
+  display: flex; gap: 4px; margin-top: 6px;
+}
+.msg-feedback button {
+  background: none; border: 1px solid var(--bot-border-2);
+  border-radius: 6px; padding: 2px 8px;
+  font-size: 12px; cursor: pointer; color: var(--bot-muted);
+  transition: all var(--bot-transition);
+}
+.msg-feedback button:hover { border-color: var(--bot-primary); color: var(--bot-primary); }
+.msg-feedback button.active { background: var(--bot-primary); color: #fff; border-color: var(--bot-primary); }
+
+/* ================================================================
+   QUICK CHIPS
+================================================================ */
+.chips-section {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--bot-border);
+  background: var(--bot-surface-2);
+}
+
+.chips-label {
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--bot-muted); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.chips-grid {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--bot-surface);
+  border: 1px solid var(--bot-border);
+  border-radius: var(--bot-radius-pill);
+  padding: 5px 12px;
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--bot-text);
+  cursor: pointer;
+  transition: background var(--bot-transition), color var(--bot-transition),
+              border-color var(--bot-transition), transform var(--bot-transition);
+  white-space: nowrap;
+  font-family: var(--bot-font);
+}
+
+.chip:hover {
+  background: var(--bot-primary);
+  color: #fff; border-color: var(--bot-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26,86,219,0.25);
+}
+
+.chip i { font-size: 13px; opacity: 0.8; }
+
+/* ================================================================
+   INPUT BAR
+================================================================ */
+.chat-input-section {
+  padding: 0.85rem 1.25rem 1rem;
+  border-top: 1px solid var(--bot-border);
+  background: var(--bot-surface);
+}
+
+.input-bar {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bot-surface-2);
+  border: 1.5px solid var(--bot-border);
+  border-radius: var(--bot-radius-pill);
+  padding: 6px 6px 6px 16px;
+  transition: border-color var(--bot-transition), box-shadow var(--bot-transition);
+}
+.input-bar:focus-within {
+  border-color: var(--bot-primary);
+  box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+}
+
+#userInput {
+  flex: 1; border: none; background: none;
+  font-family: var(--bot-font);
+  font-size: 0.875rem; color: var(--bot-text);
+  outline: none; min-width: 0;
+}
+#userInput::placeholder { color: var(--bot-light); }
+
+.input-actions { display: flex; gap: 5px; align-items: center; }
+
+.input-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  transition: all var(--bot-transition);
+}
+
+.input-btn--ghost {
+  background: none; color: var(--bot-muted);
+}
+.input-btn--ghost:hover { background: var(--bot-border); color: var(--bot-primary); }
+
+.input-btn--send {
+  background: linear-gradient(135deg, var(--bot-primary), var(--bot-accent));
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(26,86,219,0.3);
+}
+.input-btn--send:hover {
+  transform: scale(1.08);
+  box-shadow: 0 5px 16px rgba(26,86,219,0.4);
+}
+
+.input-hint {
+  font-size: 0.68rem; color: var(--bot-light);
+  text-align: center; margin-top: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+
+/* ================================================================
+   SIDEBAR
+================================================================ */
+.bot-sidebar {
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+.side-card {
+  background: var(--bot-surface);
+  border: 1px solid var(--bot-border);
+  border-radius: var(--bot-radius);
+  box-shadow: var(--bot-shadow-sm);
+  padding: 1.1rem;
+}
+
+.side-card__title {
+  font-size: 0.78rem; font-weight: 800;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--bot-muted); margin-bottom: 0.85rem;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.side-card__title i { color: var(--bot-primary); font-size: 14px; }
+
+/* Quick Action Buttons */
+.quick-actions { display: flex; flex-direction: column; gap: 6px; }
+
+.qa-btn {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bot-surface-2);
+  border: 1px solid var(--bot-border);
+  border-radius: var(--bot-radius-sm);
+  padding: 9px 12px;
+  font-family: var(--bot-font);
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--bot-text); cursor: pointer;
+  text-align: left; width: 100%;
+  transition: all var(--bot-transition);
+}
+.qa-btn:hover {
+  background: var(--bot-primary);
+  color: #fff; border-color: var(--bot-primary);
+  transform: translateX(3px);
+}
+.qa-btn i { font-size: 15px; color: var(--bot-primary); flex-shrink: 0; width: 18px; }
+.qa-btn:hover i { color: rgba(255,255,255,0.85); }
+
+/* Smart Form */
+.form-row { display: flex; flex-direction: column; gap: 8px; }
+
+.form-field label {
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--bot-muted); letter-spacing: 0.05em;
+  text-transform: uppercase; display: block; margin-bottom: 3px;
+}
+
+.form-field select,
+.form-field input {
+  width: 100%;
+  background: var(--bot-surface-2);
+  border: 1px solid var(--bot-border);
+  border-radius: var(--bot-radius-sm);
+  padding: 7px 10px;
+  font-family: var(--bot-font);
+  font-size: 0.82rem; color: var(--bot-text);
+  outline: none;
+  transition: border-color var(--bot-transition);
+}
+.form-field select:focus,
+.form-field input:focus { border-color: var(--bot-primary); }
+
+.checkbox-grid { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+.check-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.8rem; color: var(--bot-muted); cursor: pointer;
+}
+.check-item input { accent-color: var(--bot-primary); width: 14px; height: 14px; cursor: pointer; }
+
+.btn-compose {
+  width: 100%; padding: 10px;
+  background: linear-gradient(135deg, var(--bot-primary), var(--bot-accent));
+  color: #fff; border: none; border-radius: var(--bot-radius-sm);
+  font-family: var(--bot-font);
+  font-size: 0.85rem; font-weight: 700;
+  cursor: pointer; margin-top: 10px;
+  transition: opacity var(--bot-transition), transform var(--bot-transition);
+  box-shadow: 0 4px 14px rgba(26,86,219,0.25);
+}
+.btn-compose:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* Voice */
+.voice-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.voice-row select {
+  flex: 1;
+  background: var(--bot-surface-2);
+  border: 1px solid var(--bot-border);
+  border-radius: var(--bot-radius-sm);
+  padding: 6px 8px;
+  font-size: 0.78rem; color: var(--bot-text);
+  outline: none;
+  font-family: var(--bot-font);
+}
+.voice-row input[type=range] {
+  width: 60px; accent-color: var(--bot-primary);
+}
+
+.tts-btns { display: flex; gap: 6px; margin-top: 8px; }
+.tts-btn {
+  flex: 1; padding: 7px; border-radius: var(--bot-radius-sm);
+  border: 1px solid var(--bot-border);
+  background: var(--bot-surface-2);
+  font-family: var(--bot-font);
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--bot-text); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  transition: all var(--bot-transition);
+}
+.tts-btn:hover { border-color: var(--bot-primary); color: var(--bot-primary); }
+
+/* Stats bar */
+.stats-row {
+  display: flex; gap: 6px;
+}
+.stat-mini {
+  flex: 1; text-align: center;
+  background: var(--bot-surface-2);
+  border: 1px solid var(--bot-border);
+  border-radius: var(--bot-radius-sm);
+  padding: 8px 4px;
+}
+.stat-mini__num {
+  font-size: 1.1rem; font-weight: 800;
+  color: var(--bot-primary); font-family: var(--bot-mono);
+  line-height: 1;
+}
+.stat-mini__label {
+  font-size: 0.6rem; font-weight: 600;
+  color: var(--bot-light); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-top: 2px;
+}
+
+/* ================================================================
+   WELCOME SCREEN
+================================================================ */
+.welcome-screen {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 100%; gap: 1rem; text-align: center;
+  padding: 2rem 1rem;
+}
+
+.welcome-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, #1a56db, #06b6d4);
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; color: #fff;
+  box-shadow: 0 8px 24px rgba(26,86,219,0.25);
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.welcome-title {
+  font-size: 1.1rem; font-weight: 800; color: var(--bot-text); margin: 0;
+}
+.welcome-sub {
+  font-size: 0.83rem; color: var(--bot-muted); max-width: 320px; line-height: 1.6; margin: 0;
+}
+
+.welcome-cards {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  width: 100%; max-width: 380px;
+}
+.welcome-card {
+  background: var(--bot-surface-2);
+  border: 1px solid var(--bot-border);
+  border-radius: var(--bot-radius-sm);
+  padding: 10px 12px;
+  cursor: pointer; text-align: left;
+  transition: all var(--bot-transition);
+}
+.welcome-card:hover {
+  border-color: var(--bot-primary);
+  background: rgba(26,86,219,0.05);
+  transform: translateY(-2px);
+}
+.welcome-card__icon { font-size: 18px; margin-bottom: 4px; }
+.welcome-card__text { font-size: 0.78rem; font-weight: 600; color: var(--bot-text); }
+.welcome-card__sub { font-size: 0.68rem; color: var(--bot-muted); margin-top: 1px; }
 </style>
 
-  <div class="app-wrap px-2 px-md-3">
-    <div class="hero mb-3">
-      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-        <div class="d-flex align-items-center gap-3">
-          <div class="pill"><i class="bi bi-mortarboard"></i> RCU BCA – Info Assistant</div>
-          <div class="pill"><i class="bi bi-geo-alt"></i> Belagavi (Belgaum)</div>
-          <div class="pill"><i class="bi bi-megaphone"></i> Admissions • Courses • Services</div>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <div class="form-check form-switch text-white me-2">
-            <input class="form-check-input" type="checkbox" role="switch" id="ttsToggle">
-            <label class="form-check-label" for="ttsToggle">Read aloud</label>
-          </div>
-          <button id="speakLast" class="btn btn-light btn-sm" title="Read last response"><i class="bi bi-soundwave"></i></button>
-        </div>
+<div class="bot-page">
+<div class="bot-wrap">
+
+  <!-- HERO -->
+  <div class="bot-hero">
+    <div class="bot-hero__left">
+      <div class="bot-hero__icon">🎓</div>
+      <div>
+        <div class="bot-hero__title">CLE BCA — AI Info Assistant</div>
+        <div class="bot-hero__sub">C.L.E. Society's BCA College, Chikodi · Rani Channamma University</div>
       </div>
     </div>
-
-    <div class="row g-3">
-      <!-- Chat Panel -->
-      <div class="col-lg-8">
-        <div class="chat-card">
-          <div id="chatBody" class="chat-body">
-            <!-- Welcome message -->
-          </div>
-          <div class="px-3 pb-2">
-            <div class="divider"></div>
-            <div class="quickchips mb-2">
-              <button class="btn btn-outline-primary btn-sm" data-intent="admissions">Admissions</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="eligibility">Eligibility</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="how_apply">How to Apply</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="documents">Documents</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="fees">Fees</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="syllabus">Syllabus</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="duration">Duration</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="seats">Intake/Seats</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="placements">Placements</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="facilities">Facilities</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="hostel">Hostel</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="scholarships">Scholarships</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="contact">Contact</button>
-              <button class="btn btn-outline-primary btn-sm" data-intent="location">Location</button>
-            </div>
-            <div class="input-group mb-3">
-              <input id="userInput" type="text" class="form-control" placeholder="Ask about admissions, eligibility, fees, services…"/>
-              <button id="sendBtn" class="btn btn-primary"><i class="bi bi-send"></i></button>
-            </div>
-            <div class="small-note pb-2">
-              <i class="bi bi-info-circle"></i> This assistant uses a local knowledge base you can edit in the code. Always verify dates/fees on the official RCU website.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Key Points Builder -->
-      <div class="col-lg-4">
-        <div class="chat-card p-3 sidebar h-100">
-          <h6 class="mb-2"><i class="bi bi-list-check me-1"></i> Build your question</h6>
-          <div class="small text-muted mb-2">Select key points and click "Ask" to auto‑compose a query.</div>
-          <div class="row g-2">
-            <div class="col-12">
-              <label class="form-label">Topic</label>
-              <select id="kpTopic" class="form-select form-select-sm">
-                <option value="admissions">Admissions</option>
-                <option value="eligibility">Eligibility</option>
-                <option value="how_apply">How to Apply</option>
-                <option value="documents">Documents</option>
-                <option value="fees">Fees</option>
-                <option value="syllabus">Syllabus</option>
-                <option value="duration">Duration</option>
-                <option value="seats">Intake/Seats</option>
-                <option value="placements">Placements</option>
-                <option value="facilities">Facilities</option>
-                <option value="hostel">Hostel</option>
-                <option value="scholarships">Scholarships</option>
-                <option value="contact">Contact</option>
-                <option value="location">Location</option>
-              </select>
-            </div>
-            <div class="col-6">
-              <label class="form-label">Academic Year</label>
-              <input id="kpYear" type="text" class="form-control form-control-sm" placeholder="2025-26" />
-            </div>
-            <div class="col-6">
-              <label class="form-label">Category</label>
-              <select id="kpCategory" class="form-select form-select-sm">
-                <option value="general">General</option>
-                <option value="sc_st">SC/ST</option>
-                <option value="obc">OBC</option>
-                <option value="ews">EWS</option>
-                <option value="management">Management quota</option>
-                <option value="nri">NRI</option>
-              </select>
-            </div>
-            <div class="col-12">
-              <label class="form-label">Extras</label>
-              <div class="d-flex flex-wrap gap-2">
-                <div class="form-check"><input id="kpDates" class="form-check-input" type="checkbox"><label class="form-check-label" for="kpDates">Important dates</label></div>
-                <div class="form-check"><input id="kpSteps" class="form-check-input" type="checkbox"><label class="form-check-label" for="kpSteps">Step-by-step</label></div>
-                <div class="form-check"><input id="kpDocs" class="form-check-input" type="checkbox"><label class="form-check-label" for="kpDocs">Required documents</label></div>
-                <div class="form-check"><input id="kpFees" class="form-check-input" type="checkbox"><label class="form-check-label" for="kpFees">Fee breakdown</label></div>
-              </div>
-            </div>
-          </div>
-          <div class="d-grid mt-3">
-            <button id="kpAsk" class="btn btn-outline-primary"><i class="bi bi-magic"></i> Ask</button>
-          </div>
-
-          <div class="divider mt-3"></div>
-          <h6 class="mb-2"><i class="bi bi-speaker me-1"></i> Voice</h6>
-          <div class="row g-2">
-            <div class="col-8"><select id="voiceSelect" class="form-select form-select-sm"></select></div>
-            <div class="col-4"><input id="rateRange" type="range" min=".7" max="1.3" step=".1" value="1" class="form-range"/></div>
-          </div>
-        </div>
-      </div>
+    <div class="bot-hero__pills">
+      <span class="bot-pill"><span class="status-dot"></span> Online</span>
+      <span class="bot-pill"><i class="bi bi-mortarboard"></i> BCA 2025–26</span>
+      <span class="bot-pill"><i class="bi bi-geo-alt"></i> Chikodi, Karnataka</span>
     </div>
   </div>
-  
-  <script>
-    // -------------------- LOCAL KNOWLEDGE BASE (Edit as needed) --------------------
-    const knowledgeBase = {
-      college: {
-        name: "C.L.E. Society’s BCA College",
-        city: "Chikodi, Karnataka, India",
-        program: "Bachelor of Computer Applications (BCA)",
-        affiliation: "Rani Channamma University, Belagavi",
-        },
-      intents: {
-        admissions: {
-          keywords: ["admission","admissions","apply","application","entrance"],
-          answer: () => `\n<strong>Admissions – BCA @ CLE BCA College (Overview)</strong><br>
-          • Mode: Direct admission based on eligibility (PUC/12th).<br>
-          • Timeline: Applications open annually, usually in May-June.<br>
-          • Seats: Limited, first-come-first-serve basis; reservation rules apply.<br>
-          `
-        },
-        eligibility: {
-          keywords: ["eligibility","criteria","prerequisite","qualifications"],
-          answer: () => `\n<strong>Eligibility</strong><br>
-          • Must have completed 12th standard / PUC .<br>
-          • Minimum aggregate as notified by the college; relaxations as per category.<br>
-          • Open for students of all streams satisfying eligibility.\n`
-        },
-        how_apply: {
-  keywords: ["how to apply","procedure","process","steps"],
-  answer: () => `\n<strong>How to Apply</strong><br>
-  1) Visit the official CLE BCA College admissions page:
-  <a href="https://salahlo.in/university/C-53517" target="_blank">Apply Here</a><br>
-  2) Fill the online/offline application form.<br>
-  3) Submit required documents and application fee.<br>
-  4) Wait for confirmation and follow college instructions for admission.\n`
-},
-        documents: {
-          keywords: ["documents","docs","certificate","verification"],
-          answer: () => `\n<strong>Required Documents</strong><br>
-          • 10th & 12th marks cards<br>
-          • Transfer/Migration Certificate<br>
-          • Passport size photographs<br>
-          • Caste/Category certificate (if applicable)<br>
-          • Any other documents as required by the college\n`
-        },
-        fees: {
-          keywords: ["fees","fee","tuition","cost","scholarship"],
-          answer: ({category,year}) => `\n<strong>Fee (Indicative)</strong><br>
-          • Fee structure varies by category (${category || 'general'}) and academic year (${year || '2026-27'}).<br>
-          • Components: Tuition, Library, Lab, Exam, and University Affiliation Fees.<br>
-          • College fees for academic year 2026-27 is 48000\n`
-        },
-        syllabus: {
-          keywords: ["syllabus","curriculum","subjects","course structure"],
-          answer: () => `\n<strong>BCA Syllabus (Highlights)</strong><br>
-          • Core: Programming, Data Structures, Database Management, Web Development, Networking, OOP (Java), Software Engineering<br>
-          • Labs: Programming, DBMS, Web & Mobile App Development, AI/ML basics<br>
-          • Electives: Cloud Computing, Cybersecurity, Data Science fundamentals<br>
-          • Project/Internship: Final-year project and industrial internship.\n`
-        },
-        duration: {
-          keywords: ["duration","years","semesters"],
-          answer: () => `\n<strong>Program Duration</strong><br>
-          • BCA is a 3-year undergraduate program, divided into 6 semesters.\n`
-        },
-        seats: {
-          keywords: ["seats","intake","capacity"],
-          answer: () => `\n<strong>Intake/Seats</strong><br>
-          • Total seats: 60-120 (as per college guidelines).<br>
-          • Reservations apply as per Karnataka state rules.\n`
-        },
-        placements: {
-          keywords: ["placements","internship","career","jobs"],
-          answer: () => `\n<strong>Placements & Internships</strong><br>
-          • CLE BCA College provides placement guidance and industry internships.<br>
-          • Career roles: Software Developer, Web Developer, Data Analyst, IT support.<br>
-          • Students are encouraged to build project portfolios and participate in workshops.\n`
-        },
-        facilities: {
-          keywords: ["facilities","labs","library","wifi","campus"],
-          answer: () => `\n<strong>Campus Facilities</strong><br>
-          • Computer labs with latest software & hardware<br>
-          • Wi-Fi enabled campus, Library with e-resources<br>
-          • Classrooms, Student Clubs, Sports, Workshops<br>
-          • Industry-oriented training and project labs\n`
-        },
-        hostel: {
-          keywords: ["hostel","accommodation","mess"],
-          answer: () => `\n<strong>Hostel</strong><br>
-          • Limited seats; shared and separate hostels for boys & girls<br>
-          • Mess facilities and basic amenities available<br>
-          • Rules as per hostel office\n`
-        },
-        scholarships: {
-          keywords: ["scholarship","fee concession","freeship"],
-          answer: () => `\n<strong>Scholarships</strong><br>
-          • Merit-based and state/central scholarships available<br>
-          • Social welfare and need-based assistance may apply\n`
-        },
-        contact: {
-          keywords: ["contact","phone","email","office"],
-          answer: () => `\n<strong>Contact</strong><br>
-          • C.L.E. Society’s BCA College, Chikodi, Karnataka, India<br>
-          • Email: Clebcacollegechikodi@gmail.com | Phone: +917022775224 <br>
-          • Check the website for latest contact info\n`
-        },
-        unknown: {
-         keywords: [],
-         answer: () => "Sorry, I don't understand that question."
-        },
-        
-        location: {
-          keywords: ["location","address","map","how to reach"],
-          answer: () => `\n<strong>Location</strong><br>
-          • Located in Chikodi, Belgaum District, Karnataka, India.<br>
-          • Nearby Basava circle.\n`
-          
-        
-        }
 
-      }
-    };
+  <!-- LAYOUT -->
+  <div class="bot-layout">
 
-    // -------------------- UI HELPERS --------------------
-    const chatBody = document.getElementById('chatBody');
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
+    <!-- CHAT PANEL -->
+    <div class="chat-card">
 
-    function addMessage(role, html){
-      const row = document.createElement('div');
-      row.className = `message ${role}`;
-      row.innerHTML = `
-      ${role==='bot' ? '<div class="avatar"><i class="bi bi-robot"></i></div>' : ''}
-      <div class="bubble">${html}</div>
-      `;
-      chatBody.appendChild(row);
-      chatBody.scrollTop = chatBody.scrollHeight;
-      if(role==='bot' && document.getElementById('ttsToggle').checked){
-        speak(stripHtml(html));
-      }
-    }
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="chat-header__info">
+          <div class="chat-header__avatar"><i class="bi bi-robot"></i></div>
+          <div>
+            <div class="chat-header__name">CLE Assistant</div>
+            <div class="chat-header__status">
+              <span class="status-dot" style="width:6px;height:6px;"></span> Ready to help
+            </div>
+          </div>
+        </div>
+        <div class="chat-header__actions">
+          <button class="chat-header__btn" id="ttsToggleBtn" title="Toggle read-aloud" onclick="toggleTTS(this)">
+            <i class="bi bi-volume-up"></i>
+          </button>
+          <button class="chat-header__btn" id="clearBtn" title="Clear chat" onclick="clearChat()">
+            <i class="bi bi-trash3"></i>
+          </button>
+          <button class="chat-header__btn" id="exportBtn" title="Export chat" onclick="exportChat()">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+      </div>
 
-    function stripHtml(html){
-      const tmp = document.createElement('div');
-      tmp.innerHTML = html; return tmp.textContent || tmp.innerText || '';
-    }
+      <!-- Body -->
+      <div class="chat-body" id="chatBody">
+        <!-- Populated by JS -->
+      </div>
 
-    // -------------------- INTENT MATCHING --------------------
-    function detectIntent(text){
-      const t = (text||'').toLowerCase();
-      for(const [intent, cfg] of Object.entries(knowledgeBase.intents)){
-        if(cfg.keywords.some(k => t.includes(k))) return intent;
-      }
-      // fallback heuristics
-      if(/fee|tuition|cost/.test(t)) return 'fees';
-      if(/seat|intake/.test(t)) return 'seats';
-      if(/hostel|accommodation/.test(t)) return 'hostel';
-      if(/place|job|intern/.test(t)) return 'placements';
-      if(/document|certificate/.test(t)) return 'documents';
-      if(/apply|procedure|process/.test(t)) return 'how_apply';
-      if(/syllabus|subject|curriculum/.test(t)) return 'syllabus';
-      if(/eligib|criteria/.test(t)) return 'eligibility';
-      if(/contact|phone|email/.test(t)) return 'contact';
-      if(/where|location|address|map|reach/.test(t)) return 'location';
-      return 'unknown';
-    }
+      <!-- Chips -->
+      <div class="chips-section">
+        <div class="chips-label"><i class="bi bi-lightning-charge-fill"></i> Quick Questions</div>
+        <div class="chips-grid" id="chipsGrid">
+          <button class="chip" data-intent="admissions"><i class="bi bi-door-open"></i> Admissions</button>
+          <button class="chip" data-intent="eligibility"><i class="bi bi-check-circle"></i> Eligibility</button>
+          <button class="chip" data-intent="fees"><i class="bi bi-cash-stack"></i> Fees</button>
+          <button class="chip" data-intent="syllabus"><i class="bi bi-book"></i> Syllabus</button>
+          <button class="chip" data-intent="placements"><i class="bi bi-briefcase"></i> Placements</button>
+          <button class="chip" data-intent="yuvamytra"><i class="bi bi-award"></i> Yuvamytra</button>
+          <button class="chip" data-intent="facilities"><i class="bi bi-building"></i> Facilities</button>
+          <button class="chip" data-intent="scholarships"><i class="bi bi-piggy-bank"></i> Scholarships</button>
+          <button class="chip" data-intent="documents"><i class="bi bi-file-earmark-text"></i> Documents</button>
+          <button class="chip" data-intent="hostel"><i class="bi bi-house-heart"></i> Hostel</button>
+          <button class="chip" data-intent="contact"><i class="bi bi-telephone"></i> Contact</button>
+          <button class="chip" data-intent="location"><i class="bi bi-geo-alt"></i> Location</button>
+          <button class="chip" data-intent="duration"><i class="bi bi-calendar3"></i> Duration</button>
+          <button class="chip" data-intent="seats"><i class="bi bi-people"></i> Seats</button>
+          <button class="chip" data-intent="affiliation"><i class="bi bi-bank"></i> University</button>
+          <button class="chip" data-intent="principal"><i class="bi bi-person-badge"></i> Principal</button>
+        </div>
+      </div>
 
-    function answerForIntent(intent, ctx={}) {
-  const cfg = knowledgeBase.intents[intent] || knowledgeBase.intents['unknown'];
-  const content = (typeof cfg.answer === 'function') ? cfg.answer(ctx) : cfg.answer;
+      <!-- Input -->
+      <div class="chat-input-section">
+        <div class="input-bar">
+          <input id="userInput" type="text" placeholder="Ask anything about CLE BCA College…" autocomplete="off">
+          <div class="input-actions">
+            <button class="input-btn input-btn--ghost" id="micBtn" title="Voice input" onclick="startVoice()">
+              <i class="bi bi-mic"></i>
+            </button>
+            <button class="input-btn input-btn--send" id="sendBtn" title="Send">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+        </div>
+        <div class="input-hint">
+          <i class="bi bi-info-circle"></i>
+          Powered by a local knowledge base · Always verify on the official college website
+        </div>
+      </div>
+    </div>
 
-  if(intent === 'unknown') return content;  // ✅ don't add footer
+    <!-- SIDEBAR -->
+    <div class="bot-sidebar">
 
-  return content + `<div class="small-note mt-1">
-    Always confirm via the official website for latest updates.
-  </div>`;
+      <!-- Stats -->
+      <div class="side-card">
+        <div class="side-card__title"><i class="bi bi-graph-up"></i> Session Stats</div>
+        <div class="stats-row">
+          <div class="stat-mini">
+            <div class="stat-mini__num" id="statMessages">0</div>
+            <div class="stat-mini__label">Messages</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini__num" id="statQuestions">0</div>
+            <div class="stat-mini__label">Questions</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini__num" id="statTopics">0</div>
+            <div class="stat-mini__label">Topics</div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Quick Actions -->
+      <div class="side-card">
+        <div class="side-card__title"><i class="bi bi-lightning-charge"></i> Quick Actions</div>
+        <div class="quick-actions">
+          <button class="qa-btn" onclick="askIntent('admissions')"><i class="bi bi-door-open"></i> Admission Process</button>
+          <button class="qa-btn" onclick="askIntent('fees')"><i class="bi bi-cash-stack"></i> Fee Structure</button>
+          <button class="qa-btn" onclick="askIntent('syllabus')"><i class="bi bi-book-half"></i> BCA Syllabus</button>
+          <button class="qa-btn" onclick="askIntent('placements')"><i class="bi bi-briefcase-fill"></i> Career & Placements</button>
+          <button class="qa-btn" onclick="askIntent('yuvamytra')"><i class="bi bi-award-fill"></i> Yuvamytra Partnership</button>
+          <button class="qa-btn" onclick="askIntent('contact')"><i class="bi bi-telephone-fill"></i> Contact Info</button>
+        </div>
+      </div>
+
+      <!-- Smart Composer -->
+      <div class="side-card">
+        <div class="side-card__title"><i class="bi bi-magic"></i> Smart Composer</div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Topic</label>
+            <select id="kpTopic">
+              <option value="admissions">Admissions</option>
+              <option value="eligibility">Eligibility</option>
+              <option value="how_apply">How to Apply</option>
+              <option value="documents">Documents</option>
+              <option value="fees">Fees</option>
+              <option value="syllabus">Syllabus</option>
+              <option value="placements">Placements</option>
+              <option value="yuvamytra">Yuvamytra</option>
+              <option value="facilities">Facilities</option>
+              <option value="scholarships">Scholarships</option>
+              <option value="hostel">Hostel</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Academic Year</label>
+            <input id="kpYear" type="text" placeholder="2025-26">
+          </div>
+          <div class="form-field">
+            <label>Category</label>
+            <select id="kpCategory">
+              <option value="General">General</option>
+              <option value="SC/ST">SC/ST</option>
+              <option value="OBC">OBC</option>
+              <option value="EWS">EWS</option>
+              <option value="Management">Management Quota</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Include</label>
+            <div class="checkbox-grid">
+              <label class="check-item"><input type="checkbox" id="kpDates"> Important dates</label>
+              <label class="check-item"><input type="checkbox" id="kpSteps"> Step-by-step guide</label>
+              <label class="check-item"><input type="checkbox" id="kpDocs"> Required documents</label>
+              <label class="check-item"><input type="checkbox" id="kpFees"> Fee breakdown</label>
+            </div>
+          </div>
+        </div>
+        <button class="btn-compose" id="kpAsk">
+          <i class="bi bi-send me-1"></i> Compose & Ask
+        </button>
+      </div>
+
+      <!-- Voice -->
+      <div class="side-card">
+        <div class="side-card__title"><i class="bi bi-soundwave"></i> Voice Settings</div>
+        <div class="voice-row">
+          <select id="voiceSelect"></select>
+          <input id="rateRange" type="range" min=".6" max="1.4" step=".1" value="1" title="Speed">
+        </div>
+        <div class="tts-btns">
+          <button class="tts-btn" onclick="speakLast()"><i class="bi bi-play-fill"></i> Play Last</button>
+          <button class="tts-btn" onclick="stopSpeech()"><i class="bi bi-stop-fill"></i> Stop</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ================================================================
+//  KNOWLEDGE BASE — CLE BCA College, Chikodi
+// ================================================================
+const KB = {
+  admissions: {
+    label: 'Admissions',
+    icon: '🚪',
+    keywords: ['admission','admissions','apply','application','enroll','join','intake','registration'],
+    answer: (ctx) => `
+<strong>📋 Admissions – BCA 2025–26</strong><br><br>
+<strong>Mode:</strong> Direct admission based on merit (no entrance exam required).<br>
+<strong>Timeline:</strong> Applications typically open in <em>May–June</em> each year.<br>
+<strong>Seats:</strong> Limited — first-come, first-served. Reservation norms of Karnataka apply.<br><br>
+<strong>Steps to Apply:</strong>
+<ul>
+  <li>Visit the college office or official website</li>
+  <li>Fill and submit the application form</li>
+  <li>Attach all required documents</li>
+  <li>Pay the application fee</li>
+  <li>Await confirmation & merit list</li>
+</ul>
+<a href="https://salahlo.in/university/C-53517" target="_blank">🔗 Apply Online Here</a>`
+  },
+
+  eligibility: {
+    label: 'Eligibility',
+    icon: '✅',
+    keywords: ['eligible','eligibility','qualify','qualification','criteria','12th','puc','requirement'],
+    answer: () => `
+<strong>✅ Eligibility Criteria</strong><br><br>
+<ul>
+  <li>Must have passed <strong>12th Standard / PUC</strong> from a recognized board</li>
+  <li>Minimum aggregate: as per university & college norms</li>
+  <li>All streams (Science, Commerce, Arts) are eligible</li>
+  <li>Category-based relaxation applicable (SC/ST/OBC/EWS)</li>
+  <li>No specific entrance exam required for direct admission</li>
+</ul>`
+  },
+
+  how_apply: {
+    label: 'How to Apply',
+    icon: '📝',
+    keywords: ['how to apply','procedure','steps','process','register','how do i'],
+    answer: () => `
+<strong>📝 How to Apply – Step by Step</strong><br><br>
+<ol style="padding-left:1.1rem;margin:0.5rem 0;">
+  <li>Visit CLE BCA College, Chikodi or go to <a href="https://salahlo.in/university/C-53517" target="_blank">Apply Online</a></li>
+  <li>Collect / fill the BCA Admission Form</li>
+  <li>Attach: 10th & 12th marks cards, ID proof, passport photos, caste certificate (if applicable)</li>
+  <li>Pay the application fee at the office counter</li>
+  <li>Submit and collect your acknowledgement receipt</li>
+  <li>Check the merit list on the notice board / college website</li>
+  <li>Complete fee payment to confirm your seat</li>
+</ol>`
+  },
+
+  documents: {
+    label: 'Documents',
+    icon: '📄',
+    keywords: ['document','documents','certificate','marksheet','photo','id proof','tc','transfer'],
+    answer: () => `
+<strong>📄 Required Documents</strong><br><br>
+<ul>
+  <li>10th Standard Marks Card & Certificate</li>
+  <li>12th / PUC Marks Card & Certificate</li>
+  <li>Transfer Certificate (TC) from previous institution</li>
+  <li>Migration Certificate (if applicable)</li>
+  <li>4–6 Passport size photographs</li>
+  <li>Aadhar Card / Valid ID Proof</li>
+  <li>Caste / Category Certificate (SC/ST/OBC/EWS)</li>
+  <li>Income Certificate (for scholarship/fee waiver)</li>
+</ul>`
+  },
+
+  fees: {
+    label: 'Fees',
+    icon: '💰',
+    keywords: ['fee','fees','tuition','cost','amount','payment','structure','how much','price','charges'],
+    answer: (ctx) => `
+<strong>💰 Fee Structure (2025–26)</strong><br><br>
+<strong>Total Annual Fee:</strong> ₹48,000<br>
+<strong>Category:</strong> ${ctx?.category || 'General'}<br><br>
+<strong>Fee Breakdown (Indicative):</strong>
+<ul>
+  <li>Tuition Fee</li>
+  <li>Library Fee</li>
+  <li>Computer Lab Fee</li>
+  <li>Examination Fee</li>
+  <li>University Affiliation Fee</li>
+</ul>
+<strong>Note:</strong> SC/ST/OBC students may be eligible for government fee reimbursement and scholarships. Contact the office for exact category-wise breakdowns.`
+  },
+
+  syllabus: {
+    label: 'Syllabus',
+    icon: '📚',
+    keywords: ['syllabus','curriculum','subject','subjects','course','topics','what do i study','what will i learn'],
+    answer: () => `
+<strong>📚 BCA Syllabus Overview</strong><br><br>
+<strong>Core Subjects:</strong>
+<ul>
+  <li>Programming in C, C++, Java, Python</li>
+  <li>Data Structures & Algorithms</li>
+  <li>Database Management Systems (DBMS)</li>
+  <li>Web Development (HTML, CSS, JavaScript, PHP)</li>
+  <li>Computer Networks & Cyber Security</li>
+  <li>Operating Systems & Software Engineering</li>
+  <li>Mathematics & Statistics for Computing</li>
+</ul>
+<strong>Labs:</strong> Programming, DBMS, Web Dev, Mobile App Development<br>
+<strong>Electives:</strong> Cloud Computing, Data Science, AI/ML Basics<br>
+<strong>Final Year:</strong> Major Project + Industrial Internship`
+  },
+
+  duration: {
+    label: 'Duration',
+    icon: '📅',
+    keywords: ['duration','years','year','semester','semesters','how long','length'],
+    answer: () => `
+<strong>📅 Program Duration</strong><br><br>
+<ul>
+  <li><strong>Duration:</strong> 3 Years (6 Semesters)</li>
+  <li><strong>Each semester:</strong> approximately 6 months</li>
+  <li><strong>Degree awarded:</strong> Bachelor of Computer Applications (BCA)</li>
+  <li><strong>Affiliated to:</strong> Rani Channamma University, Belagavi</li>
+</ul>`
+  },
+
+  seats: {
+    label: 'Seats',
+    icon: '🪑',
+    keywords: ['seats','intake','capacity','total students','how many seats','vacancies'],
+    answer: () => `
+<strong>🪑 Intake & Seats</strong><br><br>
+<ul>
+  <li><strong>Total Seats:</strong> 60 (as per university approval)</li>
+  <li>Reservation norms as per Karnataka Govt. (SC/ST/OBC/EWS/General)</li>
+  <li>Management quota seats available separately</li>
+  <li>Admission on merit + first-come basis</li>
+</ul>`
+  },
+
+  placements: {
+    label: 'Placements',
+    icon: '💼',
+    keywords: ['placement','placements','job','jobs','career','internship','company','companies','hired','recruit','salary','package'],
+    answer: () => `
+<strong>💼 Placements & Career Support</strong><br><br>
+<strong>Placement Cell Services:</strong>
+<ul>
+  <li>Resume building & interview preparation workshops</li>
+  <li>Campus recruitment drives with IT companies</li>
+  <li>Internship opportunities in software & IT firms</li>
+  <li>Career counseling and aptitude training</li>
+</ul>
+<strong>Career Roles After BCA:</strong>
+<ul>
+  <li>Software Developer / Web Developer</li>
+  <li>Data Analyst / System Analyst</li>
+  <li>Database Administrator</li>
+  <li>IT Support & Network Engineer</li>
+  <li>Higher Studies: MCA, MBA-IT, M.Sc CS</li>
+</ul>`
+  },
+
+  yuvamytra: {
+    label: 'Yuvamytra',
+    icon: '🏆',
+    keywords: ['yuvamytra','yuvamitra','online class','online course','certificate','language course','partner','collaboration','coding class'],
+    answer: () => `
+<strong>🏆 Collaboration with Yuvamytra</strong><br><br>
+CLE BCA College has an exciting partnership with <strong>Yuvamytra</strong> — a professional institution that conducts <strong>live online classes</strong> for our students.<br><br>
+<strong>What Yuvamytra Offers:</strong>
+<ul>
+  <li>🖥️ Online classes in various programming languages (Python, Java, C++, Web Dev, etc.)</li>
+  <li>📜 Certified courses with industry-recognized certificates</li>
+  <li>👨‍🏫 Expert instructors with real-world industry experience</li>
+  <li>🕐 Flexible timings designed around college schedule</li>
+  <li>📈 Skill-building that complements the BCA curriculum</li>
+</ul>
+<strong>Benefit:</strong> Students get dual advantage — college degree education <em>plus</em> certified skill training through Yuvamytra, making them more competitive in the job market.`
+  },
+
+  facilities: {
+    label: 'Facilities',
+    icon: '🏫',
+    keywords: ['facilities','infrastructure','lab','labs','library','wifi','campus','internet','computer','classroom'],
+    answer: () => `
+<strong>🏫 Campus Facilities</strong><br><br>
+<ul>
+  <li>💻 <strong>Computer Labs:</strong> Latest hardware & software, high-speed internet</li>
+  <li>📶 <strong>Wi-Fi Campus:</strong> Internet access across the college</li>
+  <li>📖 <strong>Library:</strong> Physical & digital resources, e-journals</li>
+  <li>🎓 <strong>Classrooms:</strong> Well-equipped, projector-enabled</li>
+  <li>🤝 <strong>Seminar Hall:</strong> For workshops, guest lectures & events</li>
+  <li>🏃 <strong>Sports:</strong> Indoor & outdoor sports facilities</li>
+  <li>🏆 <strong>Yuvamytra Online Lab:</strong> Dedicated online learning sessions</li>
+</ul>`
+  },
+
+  hostel: {
+    label: 'Hostel',
+    icon: '🏠',
+    keywords: ['hostel','accommodation','room','mess','stay','boarding','dorm'],
+    answer: () => `
+<strong>🏠 Hostel & Accommodation</strong><br><br>
+<ul>
+  <li>Separate hostels for boys and girls</li>
+  <li>Mess/canteen with daily meals</li>
+  <li>Basic amenities: beds, study desks, storage</li>
+  <li>Warden supervision & security</li>
+  <li>Hostel fee separate from tuition</li>
+</ul>
+<strong>Note:</strong> Contact the college office for current availability and hostel fees.`
+  },
+
+  scholarships: {
+    label: 'Scholarships',
+    icon: '🎓',
+    keywords: ['scholarship','scholarships','concession','freeship','financial aid','fee waiver','stipend'],
+    answer: () => `
+<strong>🎓 Scholarships & Financial Aid</strong><br><br>
+<strong>Government Schemes:</strong>
+<ul>
+  <li>SC/ST Scholarship (State & Central Govt.)</li>
+  <li>OBC Post-Matric Scholarship</li>
+  <li>EWS Fee Concession</li>
+  <li>Minority Scholarship</li>
+</ul>
+<strong>Merit-Based:</strong>
+<ul>
+  <li>College merit awards for top performers</li>
+  <li>Fee waivers for financially needy students</li>
+</ul>
+<strong>How to Apply:</strong> Submit relevant certificates (caste/income) at the time of admission.`
+  },
+
+  contact: {
+    label: 'Contact',
+    icon: '📞',
+    keywords: ['contact','phone','mobile','email','office','reach','call','message','helpline'],
+    answer: () => `
+<strong>📞 Contact Information</strong><br><br>
+<ul>
+  <li>🏫 <strong>College:</strong> C.L.E. Society's BCA College, Chikodi – 591201, Karnataka</li>
+  <li>📧 <strong>Email:</strong> <a href="mailto:Clebcacollegechikodi@gmail.com">Clebcacollegechikodi@gmail.com</a></li>
+  <li>📱 <strong>Phone:</strong> <a href="tel:+917022775224">+91 7022 775 224</a></li>
+  <li>💬 <strong>WhatsApp:</strong> <a href="https://wa.me/917022775224" target="_blank">Chat on WhatsApp</a></li>
+  <li>👤 <strong>Principal:</strong> Sir Sidaling Metagudd</li>
+  <li>📧 <strong>Principal Email:</strong> <a href="mailto:sidalingmetagudd@gmail.com">sidalingmetagudd@gmail.com</a></li>
+</ul>`
+  },
+
+  location: {
+    label: 'Location',
+    icon: '📍',
+    keywords: ['location','address','map','where','how to reach','directions','near','chikodi','belgaum'],
+    answer: () => `
+<strong>📍 Location & How to Reach</strong><br><br>
+<ul>
+  <li><strong>Address:</strong> C.L.E. Society's BCA College, Chikodi – 591201, Belagavi District, Karnataka, India</li>
+  <li><strong>Landmark:</strong> Near Basava Circle, Chikodi</li>
+  <li><strong>District:</strong> Belagavi (Belgaum)</li>
+  <li><strong>Nearest City:</strong> Belgaum (~65 km)</li>
+</ul>
+<a href="https://www.google.com/maps/place/CLE+Degree+College+Chikkodi/" target="_blank">🗺️ Open in Google Maps</a>`
+  },
+
+  affiliation: {
+    label: 'University',
+    icon: '🏛️',
+    keywords: ['affiliation','affiliated','university','rcu','rani channamma','belagavi','belgaum','recognized'],
+    answer: () => `
+<strong>🏛️ University Affiliation</strong><br><br>
+<ul>
+  <li><strong>Affiliated to:</strong> Rani Channamma University (RCU), Belagavi</li>
+  <li><strong>Recognized by:</strong> Government of Karnataka</li>
+  <li><strong>Degree:</strong> Bachelor of Computer Applications (BCA) — Government Recognized</li>
+  <li>All examinations, results, and degree certificates are issued by RCU, Belagavi</li>
+</ul>`
+  },
+
+  principal: {
+    label: 'Principal',
+    icon: '👨‍💼',
+    keywords: ['principal','hod','head','faculty','teacher','staff','professor','who is','administrator','administration'],
+    answer: () => `
+<strong>👨‍💼 College Leadership</strong><br><br>
+<ul>
+  <li>🎓 <strong>Principal:</strong> Sir Sidaling Metagudd<br>
+    <span style="font-size:0.82rem;color:var(--bot-muted);">Academic leadership, discipline & institutional development</span></li>
+  <li>🏫 <strong>HOD:</strong> Shridhana Mali<br>
+    <span style="font-size:0.82rem;color:var(--bot-muted);">Head of BCA Dept · Specialization: Programming, DBMS, Web Dev</span></li>
+  <li>⚙️ <strong>Administrator:</strong> Managing admissions, student services & operations</li>
+</ul>`
+  },
+
+  unknown: {
+    label: 'Unknown',
+    icon: '🤔',
+    keywords: [],
+    answer: () => `I'm not sure about that. Try asking about <strong>admissions, fees, syllabus, placements, Yuvamytra, faculty, hostel, scholarships,</strong> or <strong>contact details</strong> — or use the quick chips below! 😊`
+  }
+};
+
+// ================================================================
+//  STATE
+// ================================================================
+let ttsEnabled = false;
+let lastBotText = '';
+let voices = [];
+let sessionStats = { messages: 0, questions: 0, topics: new Set() };
+
+// ================================================================
+//  UI HELPERS
+// ================================================================
+const chatBody = document.getElementById('chatBody');
+
+function getTime() {
+  return new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
 }
 
-    // -------------------- SEND / RECEIVE --------------------
-    function handleSend(text){
-      const query = text?.trim() || userInput.value.trim();
-      if(!query) return;
-      addMessage('user', query);
-      userInput.value = '';
+function addMessage(role, html, showFeedback = false) {
+  // Remove welcome screen if present
+  const ws = document.getElementById('welcomeScreen');
+  if (ws) ws.remove();
 
-      const intent = detectIntent(query);
-      const answer = answerForIntent(intent, {year: extractYear(query), category: detectCategory(query)});
-      addMessage('bot', answer);
-      lastBotText = stripHtml(answer);
-    }
+  const row = document.createElement('div');
+  row.className = `msg-row ${role === 'bot' ? 'bot-row' : 'user-row'}`;
 
-    function extractYear(t){
-      const m = (t||'').match(/20\d{2}(?:-\d{2})?/); return m?m[0]:null;
-    }
-    function detectCategory(t){
-      t = (t||'').toLowerCase();
-      if(/sc|st/.test(t)) return 'SC/ST';
-      if(/obc/.test(t)) return 'OBC';
-      if(/ews/.test(t)) return 'EWS';
-      if(/management/.test(t)) return 'Management';
-      if(/nri/.test(t)) return 'NRI';
-      return 'General';
-    }
+  const avatarHtml = role === 'bot'
+    ? `<div class="msg-avatar"><i class="bi bi-robot"></i></div>`
+    : `<div class="msg-avatar"><i class="bi bi-person"></i></div>`;
 
-    sendBtn.addEventListener('click', ()=>handleSend());
-    userInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') handleSend(); });
+  const feedbackHtml = (showFeedback && role === 'bot') ? `
+    <div class="msg-feedback">
+      <button onclick="feedback(this,'👍')" title="Helpful">👍</button>
+      <button onclick="feedback(this,'👎')" title="Not helpful">👎</button>
+    </div>` : '';
 
-    // Quick chips
-    document.querySelectorAll('.quickchips .btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const intent = btn.dataset.intent; 
-        addMessage('user', btn.textContent);
-        const answer = answerForIntent(intent, {});
-        addMessage('bot', answer);
-        lastBotText = stripHtml(answer);
-      });
-    });
+  row.innerHTML = `
+    ${role === 'bot' ? avatarHtml : ''}
+    <div>
+      <div class="msg-bubble">${html}</div>
+      <div class="msg-time">${getTime()}</div>
+      ${feedbackHtml}
+    </div>
+    ${role === 'user' ? avatarHtml : ''}
+  `;
 
-    // Key Points Builder
-    document.getElementById('kpAsk').addEventListener('click', ()=>{
-      const topic = document.getElementById('kpTopic').value;
-      const year = document.getElementById('kpYear').value.trim();
-      const cat  = document.getElementById('kpCategory').value;
-      const wantDates = document.getElementById('kpDates').checked;
-      const wantSteps = document.getElementById('kpSteps').checked;
-      const wantDocs  = document.getElementById('kpDocs').checked;
-      const wantFees  = document.getElementById('kpFees').checked;
+  chatBody.appendChild(row);
+  chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
 
-      let query = `${topic.replace('_',' ')} for ${year||'current year'} ${cat}`;
-      if(wantDates) query += ' with important dates';
-      if(wantSteps) query += ' and step by step';
-      if(wantDocs)  query += ' including documents';
-      if(wantFees)  query += ' and fee breakdown';
+  // Stats
+  sessionStats.messages++;
+  if (role === 'user') sessionStats.questions++;
+  updateStats();
 
-      handleSend(query);
-    });
+  if (role === 'bot' && ttsEnabled) speak(stripHtml(html));
+}
 
-    // -------------------- TEXT TO SPEECH --------------------
-    let voices = [], lastBotText = '';
-    const voiceSelect = document.getElementById('voiceSelect');
-    const rateRange = document.getElementById('rateRange');
+function showTyping() {
+  const row = document.createElement('div');
+  row.className = 'msg-row bot-row typing-row';
+  row.id = 'typingIndicator';
+  row.innerHTML = `
+    <div class="msg-avatar"><i class="bi bi-robot"></i></div>
+    <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+  `;
+  chatBody.appendChild(row);
+  chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+}
 
-    function loadVoices(){
-      voices = speechSynthesis.getVoices().filter(v=>/en|hi|kn|multi/i.test(v.lang));
-      voiceSelect.innerHTML = voices.map((v,i)=>`<option value="${i}">${v.name} (${v.lang})</option>`).join('');
-    }
-    window.speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
+function removeTyping() {
+  const t = document.getElementById('typingIndicator');
+  if (t) t.remove();
+}
 
-    function speak(text){
-      if(!('speechSynthesis' in window)) return;
-      speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      const v = voices[voiceSelect.value] || voices[0];
-      if(v) u.voice = v; u.rate = parseFloat(rateRange.value||'1');
-      speechSynthesis.speak(u);
-    }
+function stripHtml(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  return d.textContent || d.innerText || '';
+}
 
-    document.getElementById('speakLast').addEventListener('click', ()=>{
-      if(lastBotText) speak(lastBotText);
-    });
+function feedback(btn, emoji) {
+  btn.classList.toggle('active');
+  btn.textContent = emoji + (btn.classList.contains('active') ? ' ✓' : '');
+}
 
-    // -------------------- SEED GREETING --------------------
-    addMessage('bot', `
-    <strong>Hi! I'm the CLE Chikodi BCA Info Assistant.</strong><br>
-    Ask me about admissions, fees, syllabus, facilities and more.
-    `); 
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+function updateStats() {
+  document.getElementById('statMessages').textContent = sessionStats.messages;
+  document.getElementById('statQuestions').textContent = sessionStats.questions;
+  document.getElementById('statTopics').textContent = sessionStats.topics.size;
+}
 
+// ================================================================
+//  INTENT DETECTION
+// ================================================================
+function detectIntent(text) {
+  const t = (text || '').toLowerCase();
+  for (const [key, cfg] of Object.entries(KB)) {
+    if (key === 'unknown') continue;
+    if (cfg.keywords.some(k => t.includes(k))) return key;
+  }
+  // Extra heuristics
+  if (/₹|rupee|cost|how much/.test(t)) return 'fees';
+  if (/where|map|address|reach|come/.test(t)) return 'location';
+  if (/who|staff|faculty|hod|sir|madam/.test(t)) return 'principal';
+  if (/how long|year|year|sem/.test(t)) return 'duration';
+  if (/seat|capacity|vacant/.test(t)) return 'seats';
+  if (/yuvam/.test(t)) return 'yuvamytra';
+  if (/rcu|rani channamma|belgaum|belagavi/.test(t)) return 'affiliation';
+  return 'unknown';
+}
+
+function extractYear(t) {
+  const m = (t||'').match(/20\d{2}(?:-\d{2})?/);
+  return m ? m[0] : null;
+}
+
+function detectCategory(t) {
+  t = (t||'').toLowerCase();
+  if (/\bsc\b|\bst\b/.test(t)) return 'SC/ST';
+  if (/obc/.test(t)) return 'OBC';
+  if (/ews/.test(t)) return 'EWS';
+  if (/management/.test(t)) return 'Management';
+  return 'General';
+}
+
+function getAnswer(intent, ctx = {}) {
+  const cfg = KB[intent] || KB['unknown'];
+  return typeof cfg.answer === 'function' ? cfg.answer(ctx) : cfg.answer;
+}
+
+// ================================================================
+//  SEND / RECEIVE
+// ================================================================
+function handleSend(text) {
+  const query = (text || document.getElementById('userInput').value || '').trim();
+  if (!query) return;
+
+  document.getElementById('userInput').value = '';
+  addMessage('user', query);
+
+  showTyping();
+
+  setTimeout(() => {
+    removeTyping();
+    const intent = detectIntent(query);
+    const ctx = { year: extractYear(query), category: detectCategory(query) };
+    const answer = getAnswer(intent, ctx);
+
+    sessionStats.topics.add(intent);
+    addMessage('bot', answer, true);
+    lastBotText = stripHtml(answer);
+  }, 600 + Math.random() * 400);
+}
+
+function askIntent(intent) {
+  const cfg = KB[intent];
+  if (!cfg) return;
+  const label = cfg.label || intent;
+  addMessage('user', `Tell me about ${label}`);
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    const answer = getAnswer(intent, {});
+    sessionStats.topics.add(intent);
+    addMessage('bot', answer, true);
+    lastBotText = stripHtml(answer);
+  }, 500 + Math.random() * 300);
+}
+
+// ================================================================
+//  EVENTS
+//================================================================ 
+document.getElementById('sendBtn').addEventListener('click', () => handleSend());
+document.getElementById('userInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) handleSend();
+});
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => askIntent(chip.dataset.intent));
+});
+
+document.querySelectorAll('.welcome-card').forEach(card => {
+  card.addEventListener('click', () => askIntent(card.dataset.intent));
+});
+
+document.getElementById('kpAsk').addEventListener('click', () => {
+  const topic    = document.getElementById('kpTopic').value;
+  const year     = document.getElementById('kpYear').value.trim();
+  const cat      = document.getElementById('kpCategory').value;
+  const wDates   = document.getElementById('kpDates').checked;
+  const wSteps   = document.getElementById('kpSteps').checked;
+  const wDocs    = document.getElementById('kpDocs').checked;
+  const wFees    = document.getElementById('kpFees').checked;
+
+  let query = `${(KB[topic]?.label || topic)} info${year ? ' for ' + year : ''} [${cat}]`;
+  if (wDates) query += ' with important dates';
+  if (wSteps) query += ' step by step';
+  if (wDocs)  query += ' and required documents';
+  if (wFees)  query += ' with fee breakdown';
+
+  handleSend(query);
+});
+
+// ================================================================
+//  CONTROLS
+// ================================================================
+function clearChat() {
+  chatBody.innerHTML = '';
+  sessionStats = { messages: 0, questions: 0, topics: new Set() };
+  updateStats();
+  showWelcome();
+}
+
+function exportChat() {
+  const msgs = [...chatBody.querySelectorAll('.msg-bubble')].map((b, i) =>
+    `[${i % 2 === 0 ? 'Bot' : 'You'}] ${b.textContent.trim()}`
+  ).join('\n\n');
+  const blob = new Blob([`CLE BCA Chat Export\n${'='.repeat(30)}\n\n${msgs}`], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'cle-bca-chat.txt';
+  a.click();
+}
+
+function toggleTTS(btn) {
+  ttsEnabled = !ttsEnabled;
+  btn.classList.toggle('active', ttsEnabled);
+  btn.title = ttsEnabled ? 'Read-aloud ON' : 'Read-aloud OFF';
+}
+
+// ================================================================
+//  VOICE INPUT
+// ================================================================
+function startVoice() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    addMessage('bot', '🎤 Voice input is not supported in your browser. Try Chrome.');
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const rec = new SR();
+  rec.lang = 'en-IN';
+  rec.start();
+  const micBtn = document.getElementById('micBtn');
+  micBtn.style.background = '#ef4444';
+  micBtn.style.color = '#fff';
+  rec.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    document.getElementById('userInput').value = text;
+    handleSend(text);
+    micBtn.style.background = '';
+    micBtn.style.color = '';
+  };
+  rec.onerror = () => {
+    micBtn.style.background = '';
+    micBtn.style.color = '';
+  };
+  rec.onend = () => {
+    micBtn.style.background = '';
+    micBtn.style.color = '';
+  };
+}
+
+// ================================================================
+//  TEXT TO SPEECH
+// ================================================================
+function loadVoices() {
+  voices = speechSynthesis.getVoices().filter(v => /en|hi|kn/i.test(v.lang));
+  const sel = document.getElementById('voiceSelect');
+  sel.innerHTML = voices.map((v, i) =>
+    `<option value="${i}">${v.name.substring(0, 22)} (${v.lang})</option>`
+  ).join('');
+}
+window.speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const idx = document.getElementById('voiceSelect').value;
+  if (voices[idx]) u.voice = voices[idx];
+  u.rate = parseFloat(document.getElementById('rateRange').value || '1');
+  speechSynthesis.speak(u);
+}
+
+function speakLast() { if (lastBotText) speak(lastBotText); }
+function stopSpeech() { speechSynthesis.cancel(); }
+
+// ================================================================
+//  WELCOME SCREEN
+// ================================================================
+function showWelcome() {
+  const ws = document.createElement('div');
+  ws.className = 'welcome-screen';
+  ws.id = 'welcomeScreen';
+  ws.innerHTML = `
+    <div class="welcome-icon">🎓</div>
+    <h3 class="welcome-title">Hi! I'm the CLE BCA Assistant</h3>
+    <p class="welcome-sub">Ask me anything about C.L.E. Society's BCA College, Chikodi — admissions, fees, syllabus, placements, and more.</p>
+    <div class="welcome-cards">
+      <div class="welcome-card" data-intent="admissions">
+        <div class="welcome-card__icon">🚪</div>
+        <div class="welcome-card__text">Admissions 2025</div>
+        <div class="welcome-card__sub">How to apply?</div>
+      </div>
+      <div class="welcome-card" data-intent="fees">
+        <div class="welcome-card__icon">💰</div>
+        <div class="welcome-card__text">Fee Structure</div>
+        <div class="welcome-card__sub">₹48,000/year</div>
+      </div>
+      <div class="welcome-card" data-intent="yuvamytra">
+        <div class="welcome-card__icon">🏆</div>
+        <div class="welcome-card__text">Yuvamytra</div>
+        <div class="welcome-card__sub">Online certified courses</div>
+      </div>
+      <div class="welcome-card" data-intent="placements">
+        <div class="welcome-card__icon">💼</div>
+        <div class="welcome-card__text">Placements</div>
+        <div class="welcome-card__sub">Career support</div>
+      </div>
+    </div>
+  `;
+
+  // Attach events to welcome cards
+  ws.querySelectorAll('.welcome-card').forEach(card => {
+    card.addEventListener('click', () => askIntent(card.dataset.intent));
+  });
+
+  chatBody.appendChild(ws);
+}
+
+// Init
+showWelcome();
+updateStats();
 </script>
-{% endblock %}  
+
+{% endblock %}
