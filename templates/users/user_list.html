@@ -1,27 +1,500 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content1 %}
 {% endblock %}
+
 {% block content %}
-<div class="container my-5">
-    <h2 class="mb-4">Start a Chat</h2>
-    <div class="row">
-        {% for u in users %}
-            <div class="col-md-4">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ u.get_full_name|default:u.username }}</h5> <!-- Fallback to username -->
-                        <p class="card-text text-muted">{{ u.email }}</p>
-                        <a href="{% url 'chat' user_id=u.id %}" class="btn btn-primary btn-sm">
-                            Start Chat
+
+<style>
+/* ========== MODERN CHAT DIRECTORY STYLES ========== */
+:root {
+    --chat-dir-bg: #f8fafc;
+    --chat-dir-card: #ffffff;
+    --chat-dir-text: #1e293b;
+    --chat-dir-text-light: #64748b;
+    --chat-dir-primary: #6366f1;
+    --chat-dir-primary-dark: #4f46e5;
+    --chat-dir-primary-light: #eef2ff;
+    --chat-dir-success: #10b981;
+    --chat-dir-warning: #f59e0b;
+    --chat-dir-border: #e2e8f0;
+    --chat-dir-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    --chat-dir-shadow-lg: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"],
+.dark-mode,
+body.dark {
+    --chat-dir-bg: #0f172a;
+    --chat-dir-card: #1e293b;
+    --chat-dir-text: #f1f5f9;
+    --chat-dir-text-light: #94a3b8;
+    --chat-dir-primary-light: #334155;
+    --chat-dir-border: #334155;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.chat-directory-wrapper {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+    background: var(--chat-dir-bg);
+}
+
+/* Header Section */
+.directory-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.directory-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--chat-dir-primary), #8b5cf6);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.directory-header p {
+    color: var(--chat-dir-text-light);
+    font-size: 0.9rem;
+}
+
+/* Search Bar */
+.search-section {
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.5s ease-out 0.1s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--chat-dir-text-light);
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.85rem 1rem 0.85rem 2.8rem;
+    border: 2px solid var(--chat-dir-border);
+    border-radius: 3rem;
+    font-size: 0.9rem;
+    background: var(--chat-dir-card);
+    color: var(--chat-dir-text);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--chat-dir-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.search-input::placeholder {
+    color: var(--chat-dir-text-light);
+}
+
+/* Stats Row */
+.stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 0.5rem 1.2rem;
+    background: var(--chat-dir-card);
+    border-radius: 2rem;
+    border: 1px solid var(--chat-dir-border);
+    box-shadow: var(--chat-dir-shadow);
+}
+
+.stat-number {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--chat-dir-primary);
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--chat-dir-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Users Grid */
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    animation: fadeInUp 0.5s ease-out 0.2s both;
+}
+
+/* User Card */
+.user-card {
+    background: var(--chat-dir-card);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    border: 1px solid var(--chat-dir-border);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--chat-dir-shadow-lg);
+    border-color: var(--chat-dir-primary);
+}
+
+/* Online Status Indicator */
+.status-indicator {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    border: 2px solid var(--chat-dir-card);
+}
+
+.status-indicator.online {
+    background: var(--chat-dir-success);
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.status-indicator.offline {
+    background: #94a3b8;
+}
+
+/* Card Content */
+.user-card-content {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+/* Avatar */
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--chat-dir-primary), #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 2rem;
+    color: white;
+    box-shadow: var(--chat-dir-shadow);
+}
+
+.user-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--chat-dir-text);
+    margin-bottom: 0.25rem;
+}
+
+.user-email {
+    font-size: 0.7rem;
+    color: var(--chat-dir-text-light);
+    margin-bottom: 0.5rem;
+    word-break: break-all;
+}
+
+.user-badge {
+    display: inline-block;
+    background: var(--chat-dir-primary-light);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--chat-dir-primary);
+    margin-bottom: 1rem;
+}
+
+/* Chat Button */
+.chat-btn {
+    background: linear-gradient(135deg, var(--chat-dir-primary), var(--chat-dir-primary-dark));
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chat-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    color: white;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: var(--chat-dir-card);
+    border-radius: 1.5rem;
+    border: 1px solid var(--chat-dir-border);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    opacity: 0.5;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.empty-state p {
+    color: var(--chat-dir-text-light);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .chat-directory-wrapper {
+        padding: 1rem 0;
+    }
+    
+    .directory-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .users-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1rem;
+    }
+    
+    .user-avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .user-name {
+        font-size: 1rem;
+    }
+    
+    .stats-row {
+        gap: 0.8rem;
+    }
+    
+    .stat-item {
+        padding: 0.3rem 0.8rem;
+    }
+    
+    .stat-number {
+        font-size: 1rem;
+    }
+}
+
+/* Animation for cards */
+.user-card {
+    animation: cardAppear 0.4s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Stagger animation for cards */
+.user-card:nth-child(1) { animation-delay: 0.05s; }
+.user-card:nth-child(2) { animation-delay: 0.1s; }
+.user-card:nth-child(3) { animation-delay: 0.15s; }
+.user-card:nth-child(4) { animation-delay: 0.2s; }
+.user-card:nth-child(5) { animation-delay: 0.25s; }
+.user-card:nth-child(6) { animation-delay: 0.3s; }
+</style>
+
+<div class="container">
+    <div class="chat-directory-wrapper">
+        
+        <!-- Header -->
+        <div class="directory-header">
+            <h1><i class="bi bi-people-fill"></i> Connect & Chat</h1>
+            <p>Start a conversation with fellow students and faculty members</p>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by name or email...">
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-item">
+                <span class="stat-number" id="totalCount">{{ users|length }}</span>
+                <span class="stat-label">Total Users</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="visibleCount">{{ users|length }}</span>
+                <span class="stat-label">Available</span>
+            </div>
+        </div>
+        
+        <!-- Users Grid -->
+        <div class="users-grid" id="usersGrid">
+            {% for u in users %}
+                <div class="user-card" data-name="{{ u.get_full_name|default:u.username|lower }}" data-email="{{ u.email|lower }}">
+                    <div class="status-indicator offline"></div>
+                    <div class="user-card-content">
+                        <div class="user-avatar">
+                            {{ u.get_full_name|default:u.username|slice:":1"|upper }}{{ u.get_full_name|default:u.username|slice:"1:2"|upper }}
+                        </div>
+                        <div class="user-name">{{ u.get_full_name|default:u.username }}</div>
+                        <div class="user-email">{{ u.email }}</div>
+                        <div class="user-badge">
+                            <i class="bi bi-person-badge"></i> Student
+                        </div>
+                        <a href="{% url 'chat' user_id=u.id %}" class="chat-btn">
+                            <i class="bi bi-chat-dots-fill"></i> Start Chat
                         </a>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            <div class="col-12">
-                <div class="alert alert-warning">No other users available to chat.</div>
-            </div>
-        {% endfor %}
+            {% empty %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="bi bi-people empty-icon"></i>
+                        <p>No other users available to chat.<br>Invite your friends to join!</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- No Results Message -->
+        <div id="noResults" class="empty-state" style="display: none;">
+            <i class="bi bi-search empty-icon"></i>
+            <p>No users found matching your search.<br>Try a different name or email.</p>
+        </div>
+        
     </div>
 </div>
+
+<script>
+// Search functionality
+const searchInput = document.getElementById('searchInput');
+const userCards = document.querySelectorAll('.user-card');
+const usersGrid = document.getElementById('usersGrid');
+const noResultsDiv = document.getElementById('noResults');
+const totalCountSpan = document.getElementById('totalCount');
+const visibleCountSpan = document.getElementById('visibleCount');
+
+function filterUsers() {
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    let visibleCount = 0;
+    
+    userCards.forEach(card => {
+        const name = card.getAttribute('data-name') || '';
+        const email = card.getAttribute('data-email') || '';
+        
+        if (name.includes(searchTerm) || email.includes(searchTerm)) {
+            card.style.display = '';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    // Update visible count
+    if (visibleCountSpan) {
+        visibleCountSpan.textContent = visibleCount;
+    }
+    
+    // Show/hide no results message
+    if (noResultsDiv) {
+        if (visibleCount === 0 && userCards.length > 0) {
+            usersGrid.style.display = 'none';
+            noResultsDiv.style.display = 'block';
+        } else {
+            usersGrid.style.display = 'grid';
+            noResultsDiv.style.display = 'none';
+        }
+    }
+}
+
+if (searchInput) {
+    searchInput.addEventListener('input', filterUsers);
+}
+
+// Theme sync with base template
+(function syncTheme() {
+    const root = document.documentElement;
+    const body = document.body;
+    
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+                   body.classList.contains('dark') ||
+                   body.classList.contains('dark-mode') ||
+                   localStorage.getItem('theme') === 'dark';
+    
+    if (isDark) {
+        root.setAttribute('data-theme', 'dark');
+        body.classList.add('dark');
+    }
+})();
+
+// Initialize visible count
+if (visibleCountSpan && totalCountSpan) {
+    visibleCountSpan.textContent = userCards.length;
+}
+</script>
+
 {% endblock %}

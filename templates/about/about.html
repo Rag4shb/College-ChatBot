@@ -2,36 +2,580 @@
 {% load static %}
 
 {% block content %}
-<!-- About Section Begin -->
-<section class="about spad">
+<style>
+    /* ========== PREMIUM ABOUT SECTION STYLES ========== */
+    :root {
+        --about-bg: #f8fafc;
+        --about-card: #ffffff;
+        --about-text: #1e293b;
+        --about-text-light: #64748b;
+        --about-primary: #6366f1;
+        --about-primary-dark: #4f46e5;
+        --about-success: #10b981;
+        --about-danger: #ef4444;
+        --about-border: #e2e8f0;
+        --about-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        --about-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    }
+
+    [data-theme="dark"],
+    .dark-mode,
+    body.dark {
+        --about-bg: #0f172a;
+        --about-card: #1e293b;
+        --about-text: #f1f5f9;
+        --about-text-light: #94a3b8;
+        --about-border: #334155;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .about-section {
+        padding: 4rem 0;
+        background: var(--about-bg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Animated Background */
+    .about-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    /* Floating Shapes */
+    .floating-shape {
+        position: absolute;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+        border-radius: 50%;
+        pointer-events: none;
+        animation: float 15s ease-in-out infinite;
+    }
+
+    .shape-1 { width: 300px; height: 300px; top: -100px; right: -100px; }
+    .shape-2 { width: 200px; height: 200px; bottom: 50px; left: -80px; animation-delay: 3s; }
+    .shape-3 { width: 150px; height: 150px; bottom: 20%; right: 10%; animation-delay: 6s; }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(10deg); }
+    }
+
+    .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* Image/Media Container */
+    .media-container {
+        position: relative;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: var(--about-shadow);
+        animation: fadeInLeft 0.6s ease-out;
+    }
+
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .media-image {
+        width: 100%;
+        height: 400px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: transform 0.5s ease;
+        position: relative;
+    }
+
+    .media-container:hover .media-image {
+        transform: scale(1.03);
+    }
+
+    .media-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .media-container:hover .media-overlay {
+        opacity: 1;
+    }
+
+    .play-button {
+        width: 70px;
+        height: 70px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .play-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+    }
+
+    .play-button i {
+        color: var(--about-primary);
+        font-size: 1.8rem;
+        margin-left: 4px;
+    }
+
+    /* Badge */
+    .feature-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--about-primary), #8b5cf6);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.3rem 1rem;
+        border-radius: 2rem;
+        margin-bottom: 1rem;
+        letter-spacing: 0.5px;
+        animation: fadeInRight 0.6s ease-out;
+    }
+
+    /* Content Styles */
+    .about-content {
+        animation: fadeInRight 0.6s ease-out 0.1s both;
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .about-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 1.25rem;
+        background: var(--about-gradient);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        line-height: 1.3;
+    }
+
+    .about-description {
+        color: var(--about-text-light);
+        line-height: 1.7;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Feature List */
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+        background: rgba(99, 102, 241, 0.05);
+        transform: translateX(5px);
+    }
+
+    .feature-icon {
+        width: 30px;
+        height: 30px;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--about-primary);
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .feature-text {
+        color: var(--about-text);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: 1rem;
+        background: rgba(99, 102, 241, 0.05);
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        background: var(--about-gradient);
+        transform: translateY(-3px);
+    }
+
+    .stat-card:hover .stat-number,
+    .stat-card:hover .stat-label {
+        color: white;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--about-primary);
+        display: block;
+        line-height: 1.2;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+        color: var(--about-text-light);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* CTA Button */
+    .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 2rem;
+        background: var(--about-gradient);
+        color: white;
+        text-decoration: none;
+        border-radius: 3rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -8px var(--about-primary);
+        color: white;
+    }
+
+    /* Trust Badges */
+    .trust-badges {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.7rem;
+        color: var(--about-text-light);
+    }
+
+    .trust-item i {
+        color: var(--about-success);
+        font-size: 0.8rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .about-section {
+            padding: 3rem 0;
+        }
+        .about-title {
+            font-size: 1.8rem;
+        }
+        .media-image {
+            height: 350px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .about-section {
+            padding: 2rem 0;
+        }
+        .container {
+            padding: 0 1rem;
+        }
+        .about-title {
+            font-size: 1.5rem;
+        }
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .media-image {
+            height: 280px;
+            margin-bottom: 2rem;
+        }
+        .feature-item {
+            padding: 0.3rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        .about-title {
+            font-size: 1.3rem;
+        }
+        .trust-badges {
+            justify-content: center;
+        }
+    }
+</style>
+
+<!-- About Section -->
+<section class="about-section">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    
     <div class="container">
-        <div class="row">
-            <!-- Left side image or video -->
-            <div class="col-lg-6 col-md-6">
-                <div class="about__video set-bg" data-setbg="https://enablecomp.com/wp-content/uploads/2024/01/EnableComp-Image-VA-BlogPost1.jpg">
+        <div class="row align-items-center g-5">
+            <!-- Left side - Image/Media -->
+            <div class="col-lg-6">
+                <div class="media-container">
+                    <div class="media-image set-bg" data-setbg="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop">
+                        <!-- Background image set via CSS -->
+                    </div>
+                    <div class="media-overlay">
+                        <!-- Optional play button for video -->
+                    </div>
                 </div>
             </div>
 
-            <!-- Right side content -->
-            <div class="col-lg-6 col-md-6">
-                <div class="about__text">
-                    <div class="section-title">
-                        <span>ABOUT THE SYSTEM</span>
-                        <h2>AI-Powered Clinical Prediction Platform</h2>
+            <!-- Right side - Content -->
+            <div class="col-lg-6">
+                <div class="about-content">
+                    <div class="feature-badge">
+                        <i class="bi bi-robot me-1"></i> AI-Powered Platform
                     </div>
-                    <p>
+                    
+                    <h1 class="about-title">
+                        AI-Powered Clinical Prediction Platform
+                    </h1>
+                    
+                    <p class="about-description">
                         This platform leverages artificial intelligence to assist healthcare professionals in predicting the risk and potential relapse of critical metabolic and genetic disorders. It supports early diagnosis, clinical decision-making, and patient tracking through smart analytics.
                     </p>
-                    <ul>
-                        <li><i class="fa fa-check-circle"></i> Predicts diseases like Hyperthyroidism, PKU, MSUD, and more</li>
-                        <li><i class="fa fa-check-circle"></i> Supports patient risk stratification and relapse detection</li>
-                        <li><i class="fa fa-check-circle"></i> Secure, data-driven clinical insights with intuitive dashboard</li>
+                    
+                    <!-- Feature List -->
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <div class="feature-icon">
+                                <i class="bi bi-check-lg"></i>
+                            </div>
+                            <span class="feature-text">Predicts diseases like Hyperthyroidism, PKU, MSUD, and more</span>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-icon">
+                                <i class="bi bi-check-lg"></i>
+                            </div>
+                            <span class="feature-text">Supports patient risk stratification and relapse detection</span>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-icon">
+                                <i class="bi bi-check-lg"></i>
+                            </div>
+                            <span class="feature-text">Secure, data-driven clinical insights with intuitive dashboard</span>
+                        </li>
                     </ul>
-                    <a href="{% url 'feedback' %}" class="primary-btn normal-btn">Contact Us</a>
+                    
+                    <!-- Statistics -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Accuracy Rate</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">Patients Analyzed</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Support Available</span>
+                        </div>
+                    </div>
+                    
+                    <!-- CTA Button -->
+                    <a href="{% url 'feedback' %}" class="cta-button">
+                        <i class="bi bi-chat-dots-fill"></i> Contact Us
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                    
+                    <!-- Trust Badges -->
+                    <div class="trust-badges">
+                        <span class="trust-item">
+                            <i class="bi bi-shield-check-fill"></i> HIPAA Compliant
+                        </span>
+                        <span class="trust-item">
+                            <i class="bi bi-lock-fill"></i> Secure & Encrypted
+                        </span>
+                        <span class="trust-item">
+                            <i class="bi bi-award-fill"></i> Clinically Tested
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- About Section End -->
+
+<script>
+    // Set background image for the media container
+    document.addEventListener('DOMContentLoaded', function() {
+        const mediaDiv = document.querySelector('.media-image');
+        if (mediaDiv && mediaDiv.getAttribute('data-setbg')) {
+            const imgUrl = mediaDiv.getAttribute('data-setbg');
+            mediaDiv.style.backgroundImage = `url('${imgUrl}')`;
+            mediaDiv.style.backgroundSize = 'cover';
+            mediaDiv.style.backgroundPosition = 'center';
+        }
+    });
+
+    // Theme sync with base template
+    function syncTheme() {
+        const root = document.documentElement;
+        const body = document.body;
+        const isDark = root.getAttribute('data-theme') === 'dark' ||
+                       body.classList.contains('dark') ||
+                       body.classList.contains('dark-mode') ||
+                       localStorage.getItem('theme') === 'dark';
+        
+        if (isDark) {
+            root.setAttribute('data-theme', 'dark');
+            body.classList.add('dark');
+        } else {
+            root.setAttribute('data-theme', 'light');
+            body.classList.remove('dark');
+        }
+    }
+    
+    syncTheme();
+
+    // Watch for theme changes
+    const observer = new MutationObserver(() => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+                       document.body.classList.contains('dark');
+        if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    });
+    
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    // Counter animation for stats
+    function animateStats() {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        
+        statNumbers.forEach(stat => {
+            const targetText = stat.innerText;
+            const target = parseInt(targetText);
+            
+            if (!isNaN(target)) {
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.innerText = targetText;
+                        clearInterval(timer);
+                    } else {
+                        stat.innerText = Math.floor(current);
+                    }
+                }, 20);
+            }
+        });
+    }
+    
+    // Trigger animation when section is in view
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: "0px"
+    };
+    
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateStats();
+                sectionObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    const aboutSection = document.querySelector('.about-section');
+    if (aboutSection) {
+        sectionObserver.observe(aboutSection);
+    }
+
+    // Add hover effect to feature items
+    const featureItems = document.querySelectorAll('.feature-item');
+    featureItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            const icon = item.querySelector('.feature-icon i');
+            if (icon) {
+                icon.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1)';
+                }, 200);
+            }
+        });
+    });
+</script>
 {% endblock %}

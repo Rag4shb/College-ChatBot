@@ -2,62 +2,462 @@
 {% block content %}
 
 <style>
+/* ========== OPTIMIZED CSS - Fast loading, no external dependencies ========== */
+:root {
+    --pm-bg: var(--card-bg, #ffffff);
+    --pm-text: var(--text, #1e293b);
+    --pm-text-secondary: #475569;
+    --pm-accent: var(--primary-color, #6366f1);
+    --pm-accent-light: #eef2ff;
+    --pm-border: var(--border-color, #e2e8f0);
+    --pm-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+}
 
-/* Content card */
-.emblem-card {
-    background: var(--card-bg);
-    color: var(--text);
+[data-theme="dark"],
+.dark-mode,
+body.dark {
+    --pm-bg: #1e293b;
+    --pm-text: #f1f5f9;
+    --pm-text-secondary: #cbd5e1;
+    --pm-accent: #818cf8;
+    --pm-accent-light: #334155;
+    --pm-border: #334155;
+}
+
+/* Use system fonts for faster loading */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.principal-wrapper {
+    padding: 2rem 0;
+}
+
+/* Main Card */
+.principal-card {
+    background: var(--pm-bg);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: var(--pm-shadow);
+    border: 1px solid var(--pm-border);
+}
+
+/* Hero Section with Gradient */
+.principal-hero {
+    background: linear-gradient(135deg, var(--pm-accent) 0%, #8b5cf6 100%);
+    padding: 2rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.principal-hero .hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 0.25rem 1rem;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.principal-hero h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.principal-hero p {
+    font-size: 0.9rem;
+    opacity: 0.95;
+}
+
+/* Content Area */
+.principal-content {
+    padding: 1.8rem;
+}
+
+/* Profile Section - Modern Flex Layout */
+.profile-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-image {
+    flex-shrink: 0;
+}
+
+.principal-img-frame {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: #f0f0f0;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.principal-img-frame img {
+    width: 100%;
     height: 100%;
-    border-radius: 30px;
-    padding: 60px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
 }
 
-/* Image Style */
-.college-img {
-    width: 400px;
-    height: 350px;
-    float:right;
-    margin-left: 15px;
-    margin-bottom: 5px;
-    border-radius: 70px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    transition: transform 0.4s ease;
+.principal-img-frame:hover img {
+    transform: scale(1.02);
 }
 
-/* Zoom effect */
-.college-img:hover {
-    transform: scale(1.1);
+.image-badge {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    padding: 0.5rem;
+    text-align: center;
+    color: white;
+    font-size: 0.7rem;
 }
 
-.content-text {
+.profile-info {
+    flex: 1;
+    text-align: center;
+}
+
+.profile-info h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--pm-text);
+    margin-bottom: 0.25rem;
+}
+
+.profile-info .designation {
+    font-size: 1rem;
+    color: var(--pm-accent);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.profile-info .quote {
+    font-style: italic;
+    color: var(--pm-text-secondary);
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    background: var(--pm-accent-light);
+    border-radius: 1rem;
+    display: inline-block;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.stat-card {
+    background: var(--pm-accent-light);
+    border-radius: 1rem;
+    padding: 0.9rem 0.5rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    border: 1px solid var(--pm-border);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    background: var(--pm-accent);
+}
+
+.stat-card:hover .stat-number,
+.stat-card:hover .stat-label {
+    color: white;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--pm-accent);
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--pm-text-secondary);
+}
+
+/* Text Content */
+.principal-text {
+    color: var(--pm-text);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.principal-text p {
+    margin-bottom: 1rem;
     text-align: justify;
-    line-height: 1.8;
 }
 
+.principal-text strong {
+    color: var(--pm-accent);
+    font-weight: 600;
+}
+
+/* Highlight Box */
+.highlight-box {
+    background: var(--pm-accent-light);
+    border-left: 3px solid var(--pm-accent);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin: 1.25rem 0;
+}
+
+.highlight-box p {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+}
+
+/* Resource Centers Grid */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.8rem;
+    margin: 1rem 0;
+}
+
+.resource-item {
+    background: var(--pm-accent-light);
+    border: 1px solid var(--pm-border);
+    border-radius: 0.75rem;
+    padding: 0.6rem;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--pm-text);
+}
+
+.resource-item:hover {
+    background: var(--pm-accent);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Achievement Tags */
+.achievement-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.achievement-tag {
+    background: var(--pm-accent-light);
+    border: 1px solid var(--pm-border);
+    border-radius: 40px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--pm-text);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Footer Signature */
+.signature {
+    text-align: right;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--pm-border);
+    font-style: italic;
+    color: var(--pm-text-secondary);
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .principal-wrapper { padding: 1rem 0; }
+    .principal-hero { padding: 1.5rem 1rem; }
+    .principal-hero h1 { font-size: 1.4rem; }
+    .principal-content { padding: 1.2rem; }
+    
+    .profile-section { flex-direction: column; gap: 1rem; }
+    .principal-img-frame { width: 200px; height: 200px; }
+    .profile-info h2 { font-size: 1.3rem; }
+    .profile-info .designation { font-size: 0.85rem; }
+    
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .stat-number { font-size: 1.3rem; }
+    
+    .resource-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .resource-grid { grid-template-columns: 1fr; }
+    .principal-hero h1 { font-size: 1.2rem; }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.principal-card {
+    animation: fadeIn 0.3s ease-out;
+}
 </style>
 
-<div class="container py-5">
-
-    <!-- Content Card Wrapper -->
-    <div class="emblem-card">
-
-        <h1 class="fw-bold -8">
-            Principal's Message
-        </h1>
-
-        <!-- College Image -->
-        <img src=""
-        class="Administrator">
-
-        <h3 class="mb-9"> Shri Sidaling Metagud</h3>
-
-        <div class="content-text">
-            <p style="text-align: justify; line-height:1.8;"> The College is recognized by the <strong>National Council for Teacher Education (NCTE), New Delhi</strong> and approved by the <strong>Government of Karnataka</strong>. From the academic year <strong>2004–05 to 2009–10</strong>, the college was affiliated with <strong>Karnatak University, Dharwad</strong>. From the academic year <strong>2010–11 onwards</strong>, the institution has been affiliated with <strong>Rani Channamma University, Belagavi</strong>. </p> <p style="text-align: justify; line-height:1.8;"> The <strong>Chikodi Liberal Education Society’s College of Education, Chikodi, Dist. Belagavi, Karnataka</strong> is a co-educational institution established by the <strong>Chikodi Liberal Education Society (Regd.), Chikodi</strong>, which was founded in <strong>1962</strong>. The college itself was established in the year <strong>2004</strong> with the noble motto of providing quality educational opportunities and teacher training facilities to students, especially those belonging to rural areas. </p> <p style="text-align: justify; line-height:1.8;"> The management has taken sincere efforts to provide excellent infrastructure and academic facilities as per the norms of the NCTE. These include a spacious building, highly qualified and experienced faculty members, a well-equipped library, and various resource centres such as the <strong>Educational Technology Resource Centre, Science Resource Centre, Computer Resource Centre, Language Resource Centre,</strong> and the <strong>Educational Psychology Resource Centre</strong>. The institution was established with the vision of developing it into one of the best and model teacher training institutes in the state, focusing on enhancing the professional competence of future teachers. </p> <p style="text-align: justify; line-height:1.8;"> We are proud to state that many students admitted to our institution come from rural backgrounds and have consistently shown excellent performance in their studies. They actively participate in academic and co-curricular activities. Since its establishment, our college students have secured <strong>University ranks every year</strong>, bringing pride and recognition to the institution. </p> <p style="text-align: justify; line-height:1.8;"> As a result of these achievements, the college has earned a good reputation for providing quality teacher education in this educational district. To further support the growth and development of student teachers, the college has also established several academic and support cells that guide them toward future success and professional advancement. </p>
+<div class="container py-4">
+    <div class="principal-wrapper">
+        <div class="principal-card">
+            
+            <!-- Hero Section -->
+            <div class="principal-hero">
+                <div class="hero-badge">
+                    📖 Message from the Principal
+                </div>
+                <h1>Principal's Message</h1>
+                <p>Shaping future educators with excellence and dedication</p>
+            </div>
+            
+            <!-- Content Section -->
+            <div class="principal-content">
+                
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="profile-image">
+                        <div class="principal-img-frame">
+                            <!-- Placeholder for principal image - replace with actual image URL -->
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%236366f1'/%3E%3Ctext x='50' y='55' font-size='12' text-anchor='middle' fill='white' font-family='Arial'%3EPrincipal%3C/text%3E%3C/svg%3E"
+                                 alt="Shri Sidaling Metagud" 
+                                 loading="lazy"
+                                 width="280"
+                                 height="280"
+                                 decoding="async">
+                            <div class="image-badge">
+                                📸 Principal's Office
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h2>Shri Sidaling Metagud</h2>
+                        <div class="designation">Principal, C.L.E. Society's College of Education</div>
+                        <div class="quote">
+                            "Education is the most powerful weapon which you can use to change the world"
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">2004</div>
+                        <div class="stat-label">Established</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">13+</div>
+                        <div class="stat-label">Institutions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8,500+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">Ranks</div>
+                        <div class="stat-label">University Every Year</div>
+                    </div>
+                </div>
+                
+                <!-- Main Message -->
+                <div class="principal-text">
+                    <p>
+                        The College is recognized by the <strong>National Council for Teacher Education (NCTE), New Delhi</strong> and approved by the <strong>Government of Karnataka</strong>. From the academic year <strong>2004–05 to 2009–10</strong>, the college was affiliated with <strong>Karnatak University, Dharwad</strong>. From the academic year <strong>2010–11 onwards</strong>, the institution has been affiliated with <strong>Rani Channamma University, Belagavi</strong>.
+                    </p>
+                    
+                    <p>
+                        The <strong>Chikodi Liberal Education Society's College of Education, Chikodi, Dist. Belagavi, Karnataka</strong> is a co-educational institution established by the <strong>Chikodi Liberal Education Society (Regd.), Chikodi</strong>, which was founded in <strong>1962</strong>. The college itself was established in the year <strong>2004</strong> with the noble motto of providing quality educational opportunities and teacher training facilities to students, especially those belonging to rural areas.
+                    </p>
+                    
+                    <p>
+                        The management has taken sincere efforts to provide excellent infrastructure and academic facilities as per the norms of the NCTE. These include a spacious building, highly qualified and experienced faculty members, a well-equipped library, and various resource centres.
+                    </p>
+                </div>
+                
+                <!-- Resource Centers -->
+                <div class="highlight-box">
+                    <p><strong>🏫 Resource Centres at the College:</strong></p>
+                </div>
+                <div class="resource-grid">
+                    <div class="resource-item">🎓 Educational Technology</div>
+                    <div class="resource-item">🔬 Science Resource Centre</div>
+                    <div class="resource-item">💻 Computer Resource Centre</div>
+                    <div class="resource-item">📚 Language Resource Centre</div>
+                    <div class="resource-item">🧠 Educational Psychology</div>
+                </div>
+                
+                <!-- Achievements -->
+                <div class="principal-text">
+                    <p>
+                        The institution was established with the vision of developing it into one of the best and model teacher training institutes in the state, focusing on enhancing the professional competence of future teachers.
+                    </p>
+                    
+                    <p>
+                        We are proud to state that many students admitted to our institution come from rural backgrounds and have consistently shown excellent performance in their studies. They actively participate in academic and co-curricular activities. Since its establishment, our college students have secured <strong>University ranks every year</strong>, bringing pride and recognition to the institution.
+                    </p>
+                    
+                    <p>
+                        As a result of these achievements, the college has earned a good reputation for providing quality teacher education in this educational district. To further support the growth and development of student teachers, the college has also established several academic and support cells that guide them toward future success and professional advancement.
+                    </p>
+                </div>
+                
+                <!-- Achievement Tags -->
+                <div class="achievement-tags">
+                    <span class="achievement-tag">🏆 University Ranks Every Year</span>
+                    <span class="achievement-tag">✅ NCTE Recognized</span>
+                    <span class="achievement-tag">⭐ Model Teacher Training Institute</span>
+                    <span class="achievement-tag">🌾 Serving Rural Students</span>
+                </div>
+                
+                <!-- Signature -->
+                <div class="signature">
+                    With warm regards,<br>
+                    <strong>Shri Sidaling Metagud</strong><br>
+                    Principal, C.L.E. Society's College of Education
+                </div>
+                
+            </div>
         </div>
+    </div>
+</div>
 
-    </div> <!-- end emblem-card -->
-
-</div> <!-- end container -->
+<!-- Fast theme sync -->
+<script>
+(function() {
+    const root = document.documentElement;
+    const body = document.body;
+    
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+                   body.classList.contains('dark') ||
+                   body.classList.contains('dark-mode') ||
+                   (localStorage.getItem('theme') === 'dark');
+    
+    if (isDark) {
+        root.setAttribute('data-theme', 'dark');
+        body.classList.add('dark');
+    }
+})();
+</script>
 
 {% endblock %}

@@ -2,94 +2,440 @@
 {% block content %}
 
 <style>
-
-.emblem-box{
-width:200px;
-height:200px;
-border-radius:30%;
-overflow:hidden;
-display:flex;
-align-items:center;
-justify-content:center;
-margin:auto;
+/* ========== OPTIMIZED CSS - Fast, Modern, Responsive ========== */
+:root {
+    --emblem-bg: var(--card-bg, #ffffff);
+    --emblem-text: var(--text, #1e293b);
+    --emblem-text-secondary: #475569;
+    --emblem-accent: var(--primary-color, #6366f1);
+    --emblem-accent-light: #eef2ff;
+    --emblem-border: var(--border-color, #e2e8f0);
+    --emblem-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+    --emblem-shadow-lg: 0 25px 40px -12px rgba(0, 0, 0, 0.15);
 }
 
-.emblem-img{
-width:40%;
-height:30%;
-border-radius:70%;
-object-fit:cover;
-}
-/* Zoom effect */
-.emblem-img:hover{
-transform:scale(1.08);
+[data-theme="dark"],
+.dark-mode,
+body.dark {
+    --emblem-bg: #1e293b;
+    --emblem-text: #f1f5f9;
+    --emblem-text-secondary: #cbd5e1;
+    --emblem-accent: #818cf8;
+    --emblem-accent-light: #334155;
+    --emblem-border: #334155;
 }
 
-/* Content card */
-.emblem-card{
-background:var(--card-bg);
-color:var(--text);
-border-radius:30px;
-padding:60px;
-box-shadow:0 8px 20px rgba(0,0,0,0.08);
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.emblem-wrapper {
+    padding: 2rem 0;
+}
+
+/* Main Card */
+.emblem-card {
+    background: var(--emblem-bg);
+    border-radius: 2rem;
+    overflow: hidden;
+    box-shadow: var(--emblem-shadow);
+    border: 1px solid var(--emblem-border);
+    transition: box-shadow 0.3s ease;
+}
+
+.emblem-card:hover {
+    box-shadow: var(--emblem-shadow-lg);
+}
+
+/* Hero Section */
+.emblem-hero {
+    background: linear-gradient(135deg, var(--emblem-accent) 0%, #8b5cf6 100%);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.emblem-hero .hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 0.25rem 1rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.emblem-hero h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+/* Content Area */
+.emblem-content {
+    padding: 2rem;
+}
+
+/* Emblem Section - Premium */
+.emblem-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--emblem-border);
+}
+
+.emblem-title {
+    flex: 1;
+}
+
+.emblem-title h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--emblem-accent), #a855f7);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 0.25rem;
+}
+
+.emblem-title p {
+    color: var(--emblem-text-secondary);
+    font-size: 0.85rem;
+}
+
+.emblem-logo {
+    flex-shrink: 0;
+}
+
+.emblem-frame {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--emblem-accent-light), var(--emblem-bg));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--emblem-accent);
+    box-shadow: var(--emblem-shadow);
+    transition: all 0.3s ease;
+}
+
+.emblem-frame:hover {
+    transform: scale(1.05);
+    border-color: #a855f7;
+}
+
+.emblem-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.emblem-frame:hover .emblem-img {
+    transform: scale(1.02);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.stat-card {
+    background: var(--emblem-accent-light);
+    border-radius: 1rem;
+    padding: 1rem 0.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid var(--emblem-border);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, var(--emblem-accent), #8b5cf6);
+}
+
+.stat-card:hover .stat-number,
+.stat-card:hover .stat-label {
+    color: white;
+}
+
+.stat-number {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--emblem-accent);
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--emblem-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Text Content */
+.emblem-text {
+    color: var(--emblem-text);
+    line-height: 1.8;
+    font-size: 0.96rem;
+}
+
+.emblem-text p {
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+
+.emblem-text strong {
+    color: var(--emblem-accent);
+    font-weight: 700;
+}
+
+/* Highlight Grid */
+.highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--emblem-accent-light);
+    border: 1px solid var(--emblem-border);
+    border-radius: 1rem;
+    padding: 0.8rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.highlight-item:hover {
+    transform: translateX(5px);
+    background: var(--emblem-accent);
+}
+
+.highlight-item:hover .highlight-icon,
+.highlight-item:hover .highlight-text {
+    color: white;
+}
+
+.highlight-icon {
+    font-size: 1.3rem;
+}
+
+.highlight-text {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--emblem-text);
+}
+
+.highlight-text strong {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: normal;
+    opacity: 0.8;
+}
+
+/* Accreditation Tags */
+.accreditation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.accreditation-tag {
+    background: var(--emblem-accent-light);
+    border: 1px solid var(--emblem-border);
+    border-radius: 40px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--emblem-text);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.accreditation-tag:hover {
+    background: var(--emblem-accent);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .emblem-img-box{
-        text-align: center !important; /* centers logo on mobile */
-        margin-top: 15px; /* optional spacing */
-    }
+    .emblem-wrapper { padding: 1rem 0; }
+    .emblem-hero { padding: 1rem 1rem; }
+    .emblem-hero h2 { font-size: 1.2rem; }
+    .emblem-content { padding: 1.2rem; }
+    
+    .emblem-section { flex-direction: column; text-align: center; gap: 1rem; }
+    .emblem-title h1 { font-size: 1.5rem; }
+    .emblem-frame { width: 110px; height: 110px; }
+    .emblem-img { width: 80px; height: 80px; }
+    
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .stat-number { font-size: 1.3rem; }
+    
+    .highlight-grid { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .emblem-title h1 { font-size: 1.3rem; }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.emblem-card {
+    animation: fadeInUp 0.4s ease-out;
+}
 </style>
 
 <div class="container py-4">
-
-<div class="emblem-card">
-
-<!-- Title + Image Row -->
-<div class="row align-items-center mb-4">
-
-<!-- Title -->
-<div class="col-lg-6">
-<h1 class="fw-bold display-5">
-Our College Emblem
-</h1>
+    <div class="emblem-wrapper">
+        <div class="emblem-card">
+            
+            <!-- Hero Section -->
+            <div class="emblem-hero">
+                <div class="hero-badge">
+                    🏛️ Since 1962
+                </div>
+                <h2>C.L.E. Society's College of Education</h2>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="emblem-content">
+                
+                <!-- Emblem Section -->
+                <div class="emblem-section">
+                    <div class="emblem-title">
+                        <h1>Our College Emblem</h1>
+                        <p>Symbol of knowledge, integrity, and excellence</p>
+                    </div>
+                    <div class="emblem-logo">
+                        <div class="emblem-frame">
+                            <img src="https://lh4.googleusercontent.com/proxy/U-nmjFhNDYKnjaNGw1LGcqhN-5snHZ_GdqS9iAaaDnMiP_LCscM4eLIFGAe4AlqFUde7m8Cfdy4kw6FIxGIcOOfVMvlyRfbKaeAEWlw"
+                                 alt="College Emblem" 
+                                 class="emblem-img"
+                                 loading="lazy"
+                                 decoding="async">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">1962</div>
+                        <div class="stat-label">Society Est.</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">13+</div>
+                        <div class="stat-label">Institutions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8,500+</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">2004</div>
+                        <div class="stat-label">College Est.</div>
+                    </div>
+                </div>
+                
+                <!-- Main Text -->
+                <div class="emblem-text">
+                    <p>
+                        The <strong>Chikodi Liberal Education Society</strong> has come up to this present state of glory and magnitude as a result of its immense stress on the education of the surrounding rural masses. The society was founded by the sincere efforts of the patrons of the locality in <strong>1962</strong>. Ever since it has been graced as the premier society of Chikodi and its surrounding region.
+                    </p>
+                    
+                    <p>
+                        Today the society through a single campus is providing education from <strong>pre-primary to graduation</strong> along with Teacher Training courses. At present, the society has <strong>thirteen educational institutions</strong> to its credit with more than <strong>8,500 students</strong> studying on the campus annually.
+                    </p>
+                    
+                    <p>
+                        The glorious institution <strong>C.L.E. Society's Shri B. C. Gangal College of Education (B.Ed.), Chikodi</strong> has been a source of inspiration for a bright future for students and has maintained reputation, quality, and academic standards.
+                    </p>
+                </div>
+                
+                <!-- Highlights -->
+                <div class="highlight-grid">
+                    <div class="highlight-item">
+                        <span class="highlight-icon">✅</span>
+                        <span class="highlight-text">NCTE Recognized<br><strong>National Council for Teacher Education</strong></span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">📜</span>
+                        <span class="highlight-text">UGC Section 2(f)<br><strong>Recognized by UGC Act, 1956</strong></span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">👥</span>
+                        <span class="highlight-text">Co-educational<br><strong>Equal opportunity institution</strong></span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🌾</span>
+                        <span class="highlight-text">Rural Focus<br><strong>Serving the rural masses</strong></span>
+                    </div>
+                </div>
+                
+                <!-- Affiliation Text -->
+                <div class="emblem-text">
+                    <p>
+                        The college is recognized by the <strong>National Council for Teacher Education (NCTE), New Delhi</strong> and was affiliated with <strong>Karnatak University, Dharwad</strong> from the academic year <strong>2004-05</strong>. From the academic year <strong>2010-11 onwards</strong>, the institution is affiliated with <strong>Rani Channamma University, Belagavi</strong>.
+                    </p>
+                    
+                    <p>
+                        The institution is also recognized under <strong>Section 2(f) of the UGC Act, 1956</strong>. It is a <strong>co-educational teacher training institution</strong> with the motto of providing educational training facilities to the rural masses.
+                    </p>
+                </div>
+                
+                <!-- Accreditation Tags -->
+                <div class="accreditation-tags">
+                    <span class="accreditation-tag">🏛️ NCTE Approved</span>
+                    <span class="accreditation-tag">📜 UGC Recognized</span>
+                    <span class="accreditation-tag">🎓 Karnatak University (2004-10)</span>
+                    <span class="accreditation-tag">🏢 Rani Channamma Univ. (2010+)</span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Image -->
-<div class="col-lg-4 emblem-img-box text-end">
-
-<img src="https://lh4.googleusercontent.com/proxy/U-nmjFhNDYKnjaNGw1LGcqhN-5snHZ_GdqS9iAaaDnMiP_LCscM4eLIFGAe4AlqFUde7m8Cfdy4kw6FIxGIcOOfVMvlyRfbKaeAEWlw"
-class="emblem-img">
-
-</div>
-
-</div>
-
-<!-- Full Width Content -->
-
-<p>
-The <strong>Chikodi Liberal Education Society</strong> has come up to this present state of glory and magnitude as a result of its immense stress on the education of the surrounding rural masses. The society was founded by the sincere efforts of the patrons of the locality in <strong>1962</strong>. Ever since it has been graced as the premier society of Chikodi and its surrounding region.
-</p>
-
-<p>
-Today the society through a single campus is providing education from <strong>pre-primary to graduation</strong> along with Teacher Training courses. At present, the society has <strong>thirteen educational institutions</strong> to its credit with more than <strong>8,500 students</strong> studying on the campus annually.
-</p>
-
-<p>
-The glorious institution <strong>C.L.E. Society's Shri B. C. Gangal College of Education (B.Ed.), Chikodi</strong> has been a source of inspiration for a bright future for students and has maintained reputation, quality, and academic standards.
-</p>
-
-<p>
-The college is recognized by the <strong>National Council for Teacher Education (NCTE), New Delhi</strong> and was affiliated with <strong>Karnatak University, Dharwad</strong> from the academic year <strong>2004-05</strong>. From the academic year <strong>2010-11 onwards</strong>, the institution is affiliated with <strong>Rani Channamma University, Belagavi</strong>.
-</p>
-
-<p>
-The institution is also recognized under <strong>Section 2(f) of the UGC Act, 1956</strong>. It is a <strong>co-educational teacher training institution</strong> with the motto of providing educational training facilities to the rural masses.
-</p>
-
-</div>
-
-</div>
+<!-- Fast theme sync -->
+<script>
+(function() {
+    const root = document.documentElement;
+    const body = document.body;
+    
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+                   body.classList.contains('dark') ||
+                   body.classList.contains('dark-mode') ||
+                   (localStorage.getItem('theme') === 'dark');
+    
+    if (isDark) {
+        root.setAttribute('data-theme', 'dark');
+        body.classList.add('dark');
+    }
+})();
+</script>
 
 {% endblock %}

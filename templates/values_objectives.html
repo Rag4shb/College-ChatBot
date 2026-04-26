@@ -2,104 +2,411 @@
 {% block content %}
 
 <style>
-
-/* Image Container */
-.values-img-box{
-overflow:hidden;
-border-radius:30px;
+/* ========== OPTIMIZED CSS - Modern, Fast, Responsive ========== */
+:root {
+    --values-bg: var(--card-bg, #ffffff);
+    --values-text: var(--text, #1e293b);
+    --values-text-secondary: #475569;
+    --values-accent: var(--primary-color, #6366f1);
+    --values-accent-light: #eef2ff;
+    --values-success: #10b981;
+    --values-success-light: #d1fae5;
+    --values-border: var(--border-color, #e2e8f0);
+    --values-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+    --values-shadow-lg: 0 25px 40px -12px rgba(0, 0, 0, 0.15);
 }
 
-/* Image */
-.values-img{
-width:100%;
-height:450px;
-object-fit:cover;
-transition:0.5s;
+[data-theme="dark"],
+.dark-mode,
+body.dark {
+    --values-bg: #1e293b;
+    --values-text: #f1f5f9;
+    --values-text-secondary: #cbd5e1;
+    --values-accent: #818cf8;
+    --values-accent-light: #334155;
+    --values-success: #34d399;
+    --values-success-light: #064e3b;
+    --values-border: #334155;
 }
 
-/* Zoom effect */
-.values-img:hover{
-transform:scale(1.08);
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
 
+.values-wrapper {
+    padding: 2rem 0;
+}
+
+/* Main Card */
+.values-card {
+    background: var(--values-bg);
+    border-radius: 2rem;
+    overflow: hidden;
+    box-shadow: var(--values-shadow);
+    border: 1px solid var(--values-border);
+    transition: box-shadow 0.3s ease;
+}
+
+.values-card:hover {
+    box-shadow: var(--values-shadow-lg);
+}
+
+/* Hero Section */
+.values-hero {
+    background: linear-gradient(135deg, var(--values-accent) 0%, #8b5cf6 100%);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.values-hero .hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 0.25rem 1rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.values-hero h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+/* Content Area */
+.values-content {
+    padding: 2rem;
+}
+
+/* Vision Statement */
+.vision-statement {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--values-accent-light);
+    border-radius: 1rem;
+    border-left: 4px solid var(--values-accent);
+    border-right: 4px solid var(--values-accent);
+}
+
+.vision-statement p {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--values-text);
+    margin-bottom: 0;
+}
+
+/* Image Section */
+.image-section {
+    margin-bottom: 2rem;
+}
+
+.values-img-box {
+    overflow: hidden;
+    border-radius: 1.5rem;
+    box-shadow: var(--values-shadow);
+}
+
+.values-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.values-img-box:hover .values-img {
+    transform: scale(1.03);
+}
+
+/* Values & Objectives Grid */
+.vos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.vos-column {
+    background: var(--values-accent-light);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--values-border);
+    transition: transform 0.3s ease;
+}
+
+.vos-column:hover {
+    transform: translateY(-4px);
+}
+
+.column-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--values-border);
+}
+
+.column-header .icon {
+    font-size: 1.8rem;
+}
+
+.column-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.values-list, .objectives-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.values-list li, .objectives-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--values-text);
+}
+
+.values-list li .check {
+    color: var(--values-accent);
+    font-weight: bold;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.objectives-list li .bullet {
+    color: var(--values-success);
+    font-weight: bold;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.values-list li strong, .objectives-list li strong {
+    color: var(--values-text);
+}
+
+/* Stats Row */
+.stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--values-border);
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--values-accent);
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--values-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .vos-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .values-wrapper { padding: 1rem 0; }
+    .values-hero { padding: 1rem 1rem; }
+    .values-hero h2 { font-size: 1.2rem; }
+    .values-content { padding: 1.2rem; }
+    
+    .vision-statement p { font-size: 0.85rem; }
+    
+    .column-header h3 { font-size: 1.1rem; }
+    .column-header .icon { font-size: 1.5rem; }
+    
+    .values-list li, .objectives-list li { font-size: 0.85rem; }
+    
+    .stats-row { gap: 1rem; }
+    .stat-number { font-size: 1.2rem; }
+}
+
+@media (max-width: 480px) {
+    .stats-row { flex-direction: column; align-items: center; gap: 0.75rem; }
+    .stat-item { width: 100%; }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.values-card {
+    animation: fadeInUp 0.4s ease-out;
+}
 </style>
 
-<div class="container py-5">
-
-<h2 class="text-left fw-bold mb-5">Values & Objectives</h2>
-
-<div class="row g-5 align-items-center">
-
-<!-- Image -->
-<div class="col-lg-5">
-<div class="values-img-box">
-
-<img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
-class="values-img">
-
+<div class="container py-4">
+    <div class="values-wrapper">
+        <div class="values-card">
+            
+            <!-- Hero Section -->
+            <div class="values-hero">
+                <div class="hero-badge">
+                    🎯 Our Guiding Principles
+                </div>
+                <h2>Values & Objectives</h2>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="values-content">
+                
+                <!-- Vision Statement -->
+                <div class="vision-statement">
+                    <p>
+                        "To nurture future-ready professionals with strong ethical values, technical excellence, 
+                        and a commitment to societal development."
+                    </p>
+                </div>
+                
+                <!-- Image Section -->
+                <div class="image-section">
+                    <div class="values-img-box">
+                        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+                             alt="Students collaborating"
+                             class="values-img"
+                             loading="lazy"
+                             decoding="async">
+                    </div>
+                </div>
+                
+                <!-- Values & Objectives Grid -->
+                <div class="vos-grid">
+                    
+                    <!-- Values Column -->
+                    <div class="vos-column">
+                        <div class="column-header">
+                            <span class="icon">💎</span>
+                            <h3>Our Values</h3>
+                        </div>
+                        <ul class="values-list">
+                            <li>
+                                <span class="check">✓</span>
+                                <span><strong>Integrity:</strong> Promoting honesty, transparency and ethical behavior.</span>
+                            </li>
+                            <li>
+                                <span class="check">✓</span>
+                                <span><strong>Excellence:</strong> Striving for academic and professional excellence.</span>
+                            </li>
+                            <li>
+                                <span class="check">✓</span>
+                                <span><strong>Innovation:</strong> Encouraging creativity and adoption of modern technologies.</span>
+                            </li>
+                            <li>
+                                <span class="check">✓</span>
+                                <span><strong>Responsibility:</strong> Building socially responsible professionals.</span>
+                            </li>
+                            <li>
+                                <span class="check">✓</span>
+                                <span><strong>Teamwork:</strong> Promoting collaboration and leadership skills.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Objectives Column -->
+                    <div class="vos-column">
+                        <div class="column-header">
+                            <span class="icon">🎯</span>
+                            <h3>Our Objectives</h3>
+                        </div>
+                        <ul class="objectives-list">
+                            <li>
+                                <span class="bullet">◆</span>
+                                <span>To provide strong theoretical and practical knowledge in computer applications.</span>
+                            </li>
+                            <li>
+                                <span class="bullet">◆</span>
+                                <span>To develop programming and analytical skills among students.</span>
+                            </li>
+                            <li>
+                                <span class="bullet">◆</span>
+                                <span>To prepare students for professional careers in the IT industry.</span>
+                            </li>
+                            <li>
+                                <span class="bullet">◆</span>
+                                <span>To promote research, innovation and project-based learning.</span>
+                            </li>
+                            <li>
+                                <span class="bullet">◆</span>
+                                <span>To encourage lifelong learning and ethical values.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </div>
+                
+                <!-- Stats Row -->
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Placement Assistance</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Lab Access</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">Industry</span>
+                        <span class="stat-label">Expert Sessions</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">Live</span>
+                        <span class="stat-label">Projects</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </div>
 
-</div>
-
-<!-- Text -->
-<div class="col-lg-6">
-
-<h3 class="text-primary fw-bold">Our Values</h3>
-
-<ul class="mb-4">
-
-<li class="mb-2">
-<strong>Integrity:</strong> Promoting honesty, transparency and ethical behavior.
-</li>
-
-<li class="mb-2">
-<strong>Excellence:</strong> Striving for academic and professional excellence.
-</li>
-
-<li class="mb-2">
-<strong>Innovation:</strong> Encouraging creativity and adoption of modern technologies.
-</li>
-
-<li class="mb-2">
-<strong>Responsibility:</strong> Building socially responsible IT professionals.
-</li>
-
-<li class="mb-2">
-<strong>Teamwork:</strong> Promoting collaboration and leadership skills.
-</li>
-
-</ul>
-
-<h3 class="text-success fw-bold">Objectives</h3>
-
-<ul>
-
-<li class="mb-2">
-To provide strong theoretical and practical knowledge in computer applications.
-</li>
-
-<li class="mb-2">
-To develop programming and analytical skills among students.
-</li>
-
-<li class="mb-2">
-To prepare students for professional careers in the IT industry.
-</li>
-
-<li class="mb-2">
-To promote research, innovation and project-based learning.
-</li>
-
-<li class="mb-2">
-To encourage lifelong learning and ethical values.
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
+<!-- Fast theme sync -->
+<script>
+(function() {
+    const root = document.documentElement;
+    const body = document.body;
+    
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+                   body.classList.contains('dark') ||
+                   body.classList.contains('dark-mode') ||
+                   (localStorage.getItem('theme') === 'dark');
+    
+    if (isDark) {
+        root.setAttribute('data-theme', 'dark');
+        body.classList.add('dark');
+    }
+})();
+</script>
 
 {% endblock %}

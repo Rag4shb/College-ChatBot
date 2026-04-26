@@ -2,87 +2,398 @@
 {% block content %}
 
 <style>
-
-/* Image Container */
-.vision-img-box{
-overflow:hidden;
-border-radius:30px;
+/* ========== OPTIMIZED CSS - Modern, Fast, Responsive ========== */
+:root {
+    --vm-bg: var(--card-bg, #ffffff);
+    --vm-text: var(--text, #1e293b);
+    --vm-text-secondary: #475569;
+    --vm-accent: var(--primary-color, #6366f1);
+    --vm-accent-light: #eef2ff;
+    --vm-success: #10b981;
+    --vm-success-light: #d1fae5;
+    --vm-border: var(--border-color, #e2e8f0);
+    --vm-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+    --vm-shadow-lg: 0 25px 40px -12px rgba(0, 0, 0, 0.15);
 }
 
-/* Image Style */
-.vision-img{
-width:100%;
-height:350px;
-object-fit:cover;
-transition:0.5s;
+[data-theme="dark"],
+.dark-mode,
+body.dark {
+    --vm-bg: #1e293b;
+    --vm-text: #f1f5f9;
+    --vm-text-secondary: #cbd5e1;
+    --vm-accent: #818cf8;
+    --vm-accent-light: #334155;
+    --vm-success: #34d399;
+    --vm-success-light: #064e3b;
+    --vm-border: #334155;
 }
 
-/* Zoom Effect */
-.vision-img:hover{
-transform:scale(1.08);
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
 
+.vm-wrapper {
+    padding: 2rem 0;
+}
+
+/* Main Card */
+.vm-card {
+    background: var(--vm-bg);
+    border-radius: 2rem;
+    overflow: hidden;
+    box-shadow: var(--vm-shadow);
+    border: 1px solid var(--vm-border);
+    transition: box-shadow 0.3s ease;
+}
+
+.vm-card:hover {
+    box-shadow: var(--vm-shadow-lg);
+}
+
+/* Hero Section */
+.vm-hero {
+    background: linear-gradient(135deg, var(--vm-accent) 0%, #8b5cf6 100%);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.vm-hero .hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 0.25rem 1rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.vm-hero h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+/* Content Area */
+.vm-content {
+    padding: 2rem;
+}
+
+/* Vision & Mission Grid */
+.vm-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+/* Vision Card */
+.vision-card {
+    background: var(--vm-accent-light);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--vm-border);
+    transition: transform 0.3s ease;
+}
+
+.vision-card:hover {
+    transform: translateY(-4px);
+}
+
+.vision-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--vm-border);
+}
+
+.vision-icon {
+    font-size: 2rem;
+}
+
+.vision-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--vm-accent);
+}
+
+.vision-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--vm-text);
+    text-align: justify;
+}
+
+/* Mission Card */
+.mission-card {
+    background: var(--vm-success-light);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--vm-border);
+    transition: transform 0.3s ease;
+}
+
+.mission-card:hover {
+    transform: translateY(-4px);
+}
+
+.mission-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--vm-border);
+}
+
+.mission-icon {
+    font-size: 2rem;
+}
+
+.mission-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--vm-success);
+}
+
+.mission-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mission-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--vm-text);
+}
+
+.mission-list li .check {
+    color: var(--vm-success);
+    font-weight: bold;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* Image Section */
+.image-section {
+    margin: 2rem 0;
+}
+
+.vm-img-box {
+    overflow: hidden;
+    border-radius: 1.5rem;
+    box-shadow: var(--vm-shadow);
+}
+
+.vm-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.vm-img-box:hover .vm-img {
+    transform: scale(1.03);
+}
+
+/* Core Values Row */
+.core-values {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--vm-border);
+}
+
+.core-values h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--vm-text);
+}
+
+.values-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.value-chip {
+    background: var(--vm-accent-light);
+    border: 1px solid var(--vm-border);
+    border-radius: 40px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--vm-text);
+    transition: all 0.3s ease;
+}
+
+.value-chip:hover {
+    background: var(--vm-accent);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .vm-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .vm-wrapper { padding: 1rem 0; }
+    .vm-hero { padding: 1rem 1rem; }
+    .vm-hero h2 { font-size: 1.2rem; }
+    .vm-content { padding: 1.2rem; }
+    
+    .vision-header h3, .mission-header h3 { font-size: 1.1rem; }
+    .vision-icon, .mission-icon { font-size: 1.6rem; }
+    
+    .vision-text { font-size: 0.85rem; }
+    .mission-list li { font-size: 0.85rem; }
+    
+    .values-row { gap: 0.6rem; }
+    .value-chip { padding: 0.3rem 1rem; font-size: 0.7rem; }
+}
+
+@media (max-width: 480px) {
+    .vision-card, .mission-card { padding: 1rem; }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.vm-card {
+    animation: fadeInUp 0.4s ease-out;
+}
 </style>
 
-<div class="container py-5">
-
-<h2 class="text-left fw-bold mb-5">Vision & Mission</h2>
-
-<div class="row g-5 align-items-center">
-
-<!-- Image -->
-<div class="col-lg-6">
-
-<div class="vision-img-box">
-
-<img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b"
-class="vision-img">
-
+<div class="container py-4">
+    <div class="vm-wrapper">
+        <div class="vm-card">
+            
+            <!-- Hero Section -->
+            <div class="vm-hero">
+                <div class="hero-badge">
+                    🚀 Guiding Our Path Forward
+                </div>
+                <h2>Vision & Mission</h2>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="vm-content">
+                
+                <!-- Image Section -->
+                <div class="image-section">
+                    <div class="vm-img-box">
+                        <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b"
+                             alt="Vision & Mission"
+                             class="vm-img"
+                             loading="lazy"
+                             decoding="async">
+                    </div>
+                </div>
+                
+                <!-- Vision & Mission Grid -->
+                <div class="vm-grid">
+                    
+                    <!-- Vision Card -->
+                    <div class="vision-card">
+                        <div class="vision-header">
+                            <span class="vision-icon">👁️</span>
+                            <h3>Our Vision</h3>
+                        </div>
+                        <p class="vision-text">
+                            To become a center of excellence in computer education by nurturing skilled,
+                            innovative and ethical IT professionals who contribute to technological
+                            advancement and societal development.
+                        </p>
+                    </div>
+                    
+                    <!-- Mission Card -->
+                    <div class="mission-card">
+                        <div class="mission-header">
+                            <span class="mission-icon">🎯</span>
+                            <h3>Our Mission</h3>
+                        </div>
+                        <ul class="mission-list">
+                            <li>
+                                <span class="check">✓</span>
+                                <span>Provide quality education in Computer Applications using modern teaching methods.</span>
+                            </li>
+                            <li>
+                                <span class="check">✓</span>
+                                <span>Develop strong programming, analytical and technical skills among students.</span>
+                            </li>
+                            <li>
+                                <span class="check">✓</span>
+                                <span>Encourage innovation, research and project-based learning.</span>
+                            </li>
+                            <li>
+                                <span class="check">✓</span>
+                                <span>Prepare students for successful careers in the IT industry.</span>
+                            </li>
+                            <li>
+                                <span class="check">✓</span>
+                                <span>Promote ethical values, leadership and social responsibility.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </div>
+                
+                <!-- Core Values -->
+                <div class="core-values">
+                    <h4>📌 Core Focus Areas</h4>
+                    <div class="values-row">
+                        <span class="value-chip">💡 Innovation</span>
+                        <span class="value-chip">🎓 Excellence</span>
+                        <span class="value-chip">🤝 Integrity</span>
+                        <span class="value-chip">🌍 Social Responsibility</span>
+                        <span class="value-chip">🚀 Leadership</span>
+                        <span class="value-chip">🔬 Research</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </div>
 
-</div>
-
-<!-- Text -->
-<div class="col-lg-6">
-
-<h3 class="text-primary fw-bold">Our Vision</h3>
-
-<p class="mb-4">
-To become a center of excellence in computer education by nurturing skilled,
-innovative and ethical IT professionals who contribute to technological
-advancement and societal development.
-</p>
-
-<h3 class="text-success fw-bold">Our Mission</h3>
-
-<ul>
-
-<li class="mb-2">
-Provide quality education in Computer Applications using modern teaching methods.
-</li>
-
-<li class="mb-2">
-Develop strong programming, analytical and technical skills among students.
-</li>
-
-<li class="mb-2">
-Encourage innovation, research and project-based learning.
-</li>
-
-<li class="mb-2">
-Prepare students for successful careers in the IT industry.
-</li>
-
-<li class="mb-2">
-Promote ethical values, leadership and social responsibility.
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
+<!-- Fast theme sync -->
+<script>
+(function() {
+    const root = document.documentElement;
+    const body = document.body;
+    
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+                   body.classList.contains('dark') ||
+                   body.classList.contains('dark-mode') ||
+                   (localStorage.getItem('theme') === 'dark');
+    
+    if (isDark) {
+        root.setAttribute('data-theme', 'dark');
+        body.classList.add('dark');
+    }
+})();
+</script>
 
 {% endblock %}

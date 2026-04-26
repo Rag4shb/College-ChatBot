@@ -2,114 +2,459 @@
 {% load static %}
 
 {% block content %}
-<form method="POST" action="{% url 'delete_selected_messages' %}">
-{% csrf_token %}
 
-<div class="mb-3">
-<button type="submit" id="deleteBtn" class="btn btn-danger" style="display:none;">
-🗑 Delete Selected
-</button>
-</div>
-
-<div class="table-responsive">
-<table class="table table-bordered table-hover align-middle">
-
-<thead class="table-dark text-center">
-<tr>
-<th>
-<input type="checkbox" id="selectAll">
-</th>
-<th>👤 Name</th>
-<th>📧 Email</th>
-<th>📝 Message</th>
-<th>📅 Date</th>
-<th>⚙ Action</th>
-</tr>
-</thead>
-
-<tbody>
-{% for msg in messages %}
-<tr>
-
-<td class="text-center">
-<input type="checkbox" name="selected_messages" value="{{ msg.id }}">
-</td>
-
-<td>{{ msg.name }}</td>
-<td>{{ msg.email }}</td>
-<td style="max-width:300px; word-wrap:break-word; white-space:normal;">
-    {{ msg.message }}
-</td>
-<td>{{ msg.created_at|date:"d M Y, h:i A" }}</td>
-
-<td>
-<a href="{% url 'delete_message' msg.id %}"
-class="btn btn-danger btn-sm">
-🗑 Delete
-</a>
-</td>
-
-</tr>
-
-{% empty %}
-<tr>
-<td colspan="6" class="text-center text-muted py-4">
-🚫 No messages received yet.
-</td>
-</tr>
-{% endfor %}
-</tbody>
-
-</table>
-</div>
-<script>
-
-// Select All checkbox
-document.getElementById("selectAll").onclick = function() {
-
-let checkboxes = document.getElementsByName("selected_messages");
-
-for (let checkbox of checkboxes) {
-checkbox.checked = this.checked;
+<style>
+/* ========== MODERN ADMIN MESSAGES STYLES ========== */
+:root {
+    --msg-bg: var(--card-bg, #ffffff);
+    --msg-text: var(--text, #1e293b);
+    --msg-text-secondary: #475569;
+    --msg-accent: var(--primary-color, #6366f1);
+    --msg-accent-light: #eef2ff;
+    --msg-danger: #ef4444;
+    --msg-danger-light: #fee2e2;
+    --msg-warning: #f59e0b;
+    --msg-border: var(--border-color, #e2e8f0);
+    --msg-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
 }
 
-toggleDeleteButton();
-};
-
-
-// Show / Hide delete button
-function toggleDeleteButton() {
-
-let checkboxes = document.getElementsByName("selected_messages");
-let deleteBtn = document.getElementById("deleteBtn");
-
-let checked = false;
-
-for (let checkbox of checkboxes) {
-if (checkbox.checked) {
-checked = true;
-break;
-}
+[data-theme="dark"],
+.dark-mode,
+body.dark {
+    --msg-bg: #1e293b;
+    --msg-text: #f1f5f9;
+    --msg-text-secondary: #cbd5e1;
+    --msg-accent: #818cf8;
+    --msg-accent-light: #334155;
+    --msg-danger: #f87171;
+    --msg-danger-light: #7f1d1d;
+    --msg-warning: #fbbf24;
+    --msg-border: #334155;
 }
 
-deleteBtn.style.display = checked ? "inline-block" : "none";
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
 
-
-// Listen for checkbox changes
-let checkboxes = document.getElementsByName("selected_messages");
-
-for (let checkbox of checkboxes) {
-checkbox.addEventListener("change", toggleDeleteButton);
+/* Main Container */
+.messages-container {
+    padding: 1.5rem 0;
 }
 
-</script>
-</form>
+/* Header Card */
+.messages-header {
+    background: var(--msg-bg);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--msg-border);
+    box-shadow: var(--msg-shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 
-    <div class="card-footer text-center text-muted small">
-      Showing {{ messages|length }} messages
+.header-title h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-title p {
+    font-size: 0.75rem;
+    color: var(--msg-text-secondary);
+    margin: 0.25rem 0 0;
+}
+
+.header-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-badge {
+    background: var(--msg-accent-light);
+    border-radius: 2rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--msg-text);
+}
+
+.stat-badge i {
+    margin-right: 0.25rem;
+}
+
+/* Delete Button */
+.delete-btn-wrapper {
+    margin-bottom: 1rem;
+}
+
+.btn-delete {
+    background: var(--msg-danger);
+    border: none;
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    color: white;
+}
+
+/* Table Styles */
+.table-wrapper {
+    background: var(--msg-bg);
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--msg-border);
+    box-shadow: var(--msg-shadow);
+}
+
+.messages-table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.messages-table thead th {
+    background: var(--msg-accent-light);
+    color: var(--msg-text);
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 2px solid var(--msg-border);
+    vertical-align: middle;
+}
+
+.messages-table tbody td {
+    padding: 1rem;
+    font-size: 0.85rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--msg-border);
+    color: var(--msg-text);
+}
+
+.messages-table tbody tr:hover {
+    background: var(--msg-accent-light);
+    transition: background 0.2s ease;
+}
+
+/* Message Cell */
+.message-cell {
+    max-width: 320px;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.5;
+}
+
+/* Checkbox Style */
+.checkbox-cell {
+    text-align: center;
+    width: 40px;
+}
+
+.custom-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--msg-accent);
+}
+
+/* Badge for Date */
+.date-badge {
+    font-size: 0.7rem;
+    background: var(--msg-accent-light);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2rem;
+    display: inline-block;
+}
+
+/* Action Button */
+.btn-sm-delete {
+    background: var(--msg-danger-light);
+    border: none;
+    color: var(--msg-danger);
+    padding: 0.3rem 0.8rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.btn-sm-delete:hover {
+    background: var(--msg-danger);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 2.5rem;
+    background: var(--msg-bg);
+    border-radius: 1rem;
+    border: 1px solid var(--msg-border);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.empty-state p {
+    color: var(--msg-text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Footer */
+.table-footer {
+    background: var(--msg-bg);
+    border-top: 1px solid var(--msg-border);
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--msg-text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .messages-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .header-title h2 {
+        font-size: 1.1rem;
+    }
+    
+    .messages-table thead {
+        display: none;
+    }
+    
+    .messages-table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid var(--msg-border);
+        border-radius: 0.75rem;
+        padding: 0.75rem;
+    }
+    
+    .messages-table tbody td {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.5rem;
+        border: none;
+        flex-wrap: wrap;
+    }
+    
+    .messages-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        min-width: 80px;
+        font-size: 0.7rem;
+        color: var(--msg-accent);
+    }
+    
+    .checkbox-cell::before {
+        display: none;
+    }
+    
+    .message-cell {
+        max-width: 100%;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.messages-container {
+    animation: fadeIn 0.3s ease-out;
+}
+</style>
+
+<div class="container py-3">
+    <div class="messages-container">
+        
+        <!-- Header -->
+        <div class="messages-header">
+            <div class="header-title">
+                <h2>
+                    <span>📬</span> Contact Messages
+                </h2>
+                <p>Manage and respond to inquiries from students and visitors</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge">
+                    <i class="fas fa-envelope"></i> Total: {{ messages|length }}
+                </div>
+            </div>
+        </div>
+        
+        <form method="POST" action="{% url 'delete_selected_messages' %}" id="messageForm">
+            {% csrf_token %}
+            
+            <!-- Delete Button -->
+            <div class="delete-btn-wrapper">
+                <button type="submit" id="deleteBtn" class="btn-delete" style="display: none;">
+                    <span>🗑️</span> Delete Selected
+                </button>
+            </div>
+            
+            <!-- Table -->
+            <div class="table-wrapper">
+                <table class="messages-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">
+                                <input type="checkbox" id="selectAll" class="custom-checkbox">
+                            </th>
+                            <th>👤 Name</th>
+                            <th>📧 Email</th>
+                            <th>📝 Message</th>
+                            <th>📅 Date</th>
+                            <th style="width: 100px;">⚙ Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for msg in messages %}
+                        <tr>
+                            <td class="checkbox-cell" data-label="Select">
+                                <input type="checkbox" name="selected_messages" value="{{ msg.id }}" class="row-checkbox custom-checkbox">
+                            </td>
+                            <td data-label="Name">
+                                <strong>{{ msg.name }}</strong>
+                            </td>
+                            <td data-label="Email">
+                                <a href="mailto:{{ msg.email }}" style="color: var(--msg-accent); text-decoration: none;">
+                                    {{ msg.email }}
+                                </a>
+                            </td>
+                            <td data-label="Message" class="message-cell">
+                                {{ msg.message|truncatechars:150 }}
+                            </td>
+                            <td data-label="Date">
+                                <span class="date-badge">{{ msg.created_at|date:"d M Y, h:i A" }}</span>
+                            </td>
+                            <td data-label="Action">
+                                <a href="{% url 'delete_message' msg.id %}" 
+                                   class="btn-sm-delete"
+                                   onclick="return confirm('Are you sure you want to delete this message?')">
+                                    🗑️ Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="padding: 0;">
+                                <div class="empty-state">
+                                    <i>📭</i>
+                                    <p>No messages received yet.<br>When visitors contact you, they will appear here.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if messages %}
+                <div class="table-footer">
+                    Showing {{ messages|length }} message{{ messages|length|pluralize:"s" }}
+                </div>
+                {% endif %}
+            </div>
+        </form>
     </div>
-
-  </div>
 </div>
+
+<script>
+// Select All functionality
+const selectAllCheckbox = document.getElementById('selectAll');
+const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+const deleteBtn = document.getElementById('deleteBtn');
+
+function toggleDeleteButton() {
+    let anyChecked = false;
+    rowCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            anyChecked = true;
+        }
+    });
+    deleteBtn.style.display = anyChecked ? 'inline-flex' : 'none';
+}
+
+if (selectAllCheckbox) {
+    selectAllCheckbox.addEventListener('change', function() {
+        rowCheckboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+        toggleDeleteButton();
+    });
+}
+
+rowCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        toggleDeleteButton();
+        
+        // Update selectAll checkbox state
+        if (selectAllCheckbox) {
+            const allChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
+            const someChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked;
+            selectAllCheckbox.indeterminate = someChecked && !allChecked;
+        }
+    });
+});
+
+// Confirm before delete selected
+if (deleteBtn) {
+    deleteBtn.addEventListener('click', function(e) {
+        const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
+        if (checkedCount > 0) {
+            if (!confirm(`Are you sure you want to delete ${checkedCount} selected message(s)? This action cannot be undone.`)) {
+                e.preventDefault();
+            }
+        }
+    });
+}
+
+// Theme sync with base
+(function() {
+    const root = document.documentElement;
+    const body = document.body;
+    
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+                   body.classList.contains('dark') ||
+                   body.classList.contains('dark-mode') ||
+                   (localStorage.getItem('theme') === 'dark');
+    
+    if (isDark) {
+        root.setAttribute('data-theme', 'dark');
+        body.classList.add('dark');
+    }
+})();
+</script>
+
 {% endblock %}

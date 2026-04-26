@@ -1,79 +1,93 @@
+# ================================================================
+#  CLE BCA College — forms.py
+# ================================================================
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import *
+from django.contrib.auth import get_user_model
+from .models import Feedback
 
-class BootstrapFormMixin:
-    """Mixin to add Bootstrap classes automatically."""
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            existing_class = field.widget.attrs.get('class', '')
-            field.widget.attrs['class'] = existing_class + ' form-control'
+CustomUser = get_user_model()
 
+# Shared widget style helper
+def _ctrl(placeholder='', input_type='text', extra=''):
+    return {'class': f'form-control {extra}', 'placeholder': placeholder}
+
+
+# ================================================================
+#  SIGNUP FORM
+# ================================================================
 class CustomUserCreationForm(UserCreationForm):
+
+    name = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs=_ctrl('Full Name'))
+    )
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs=_ctrl('Email Address'))
+    )
     password1 = forms.CharField(
-        label="Password",
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+        label='Password',
+        widget=forms.PasswordInput(attrs=_ctrl('Create a password'))
     )
     password2 = forms.CharField(
-        label="Confirm Password",
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+        label='Confirm Password',
+        widget=forms.PasswordInput(attrs=_ctrl('Confirm your password'))
     )
 
     class Meta:
-        model = CustomUser
+        model  = CustomUser
         fields = ('name', 'email', 'password1', 'password2')
 
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Name'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter Email'}),
-        }
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '').strip().lower()
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already registered.")
+        return email
 
     def save(self, commit=True):
-        user = super().save(commit=False)
-        user.username = self.cleaned_data['email']  # email = username
+        user          = super().save(commit=False)
+        user.email    = self.cleaned_data['email']
+        user.name     = self.cleaned_data['name']
+        user.username = self.cleaned_data['email']   # keep username = email
         if commit:
             user.save()
         return user
 
+
+# ================================================================
+#  PROFILE FORM
+# ================================================================
 class ProfileForm(forms.ModelForm):
+
     class Meta:
-        model = CustomUser
-        fields = ['name', 'email', 'contact', 'age', 'gender']  # adjust fields as per your model
+        model  = CustomUser
+        fields = ['name', 'email', 'contact', 'age', 'gender']
         widgets = {
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'contact': forms.TextInput(attrs={'class': 'form-control'}),
-            'age': forms.NumberInput(attrs={'class': 'form-control'}),
-            'gender': forms.Select(attrs={'class': 'form-control'}),
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'name':    forms.TextInput(attrs=_ctrl('Full Name')),
+            'email':   forms.EmailInput(attrs={**_ctrl('Email'), 'readonly': 'readonly'}),
+            'contact': forms.TextInput(attrs=_ctrl('Phone / WhatsApp')),
+            'age':     forms.NumberInput(attrs=_ctrl('Age')),
+            'gender':  forms.Select(attrs={'class': 'form-select'}),
         }
 
 
-
-
-# feedback
-
-from django import forms
-from .models import Feedback
-
-from django import forms
-from .models import Feedback
-
+# ================================================================
+#  FEEDBACK FORM
+# ================================================================
 class FeedbackForm(forms.ModelForm):
+
     class Meta:
-        model = Feedback
+        model  = Feedback
         fields = ['message']
         widgets = {
             'message': forms.Textarea(attrs={
-                'rows': 4,
-                'placeholder': 'Write your feedback here...',
-                'class': 'form-control shadow-sm rounded-3 border-primary',
-                'style': 'resize:none; background: rgba(255, 255, 255, 0.8);',
+                'rows':        4,
+                'placeholder': 'Write your feedback here…',
+                'class':       'form-control shadow-sm rounded-3',
+                'style':       'resize:none;',
             }),
         }
-        labels = {
-            'message': '',
-        }
-
-# mainApplicationFunctionality20240625
-# forms.py
+        labels = {'message': ''}

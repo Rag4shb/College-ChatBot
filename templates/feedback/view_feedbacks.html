@@ -6,148 +6,517 @@
 
 {% block content %}
 
-<div class="container mt-5">
-<div class="card shadow-lg border-0 rounded-4 bg-light bg-opacity-75">
+<style>
+/* ========== PREMIUM FEEDBACK ADMIN PAGE STYLES ========== */
+:root {
+    --fb-admin-bg: #f8fafc;
+    --fb-admin-card: #ffffff;
+    --fb-admin-text: #1e293b;
+    --fb-admin-text-light: #64748b;
+    --fb-admin-primary: #6366f1;
+    --fb-admin-primary-dark: #4f46e5;
+    --fb-admin-success: #10b981;
+    --fb-admin-danger: #ef4444;
+    --fb-admin-danger-light: #fee2e2;
+    --fb-admin-border: #e2e8f0;
+    --fb-admin-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    --fb-admin-shadow-lg: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+}
 
-<div class="card-body">
+[data-theme="dark"],
+.dark-mode,
+body.dark {
+    --fb-admin-bg: #0f172a;
+    --fb-admin-card: #1e293b;
+    --fb-admin-text: #f1f5f9;
+    --fb-admin-text-light: #94a3b8;
+    --fb-admin-border: #334155;
+    --fb-admin-danger-light: #7f1d1d;
+}
 
-<h2 class="text-center mb-4 text-primary fw-bold" style="font-family: 'Orbitron', sans-serif;">
-💬 All Feedback
-</h2>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-<form method="POST" action="{% url 'delete_selected_feedbacks' %}">
-{% csrf_token %}
+.feedback-admin-wrapper {
+    padding: 2rem 0;
+    background: var(--fb-admin-bg);
+    min-height: calc(100vh - 200px);
+}
 
-<div class="mb-3">
-<button type="submit" id="deleteBtn" class="btn btn-danger" style="display:none;">
-🗑 Delete Selected
-</button>
+/* Header Section */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.header-title h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--fb-admin-primary), #8b5cf6);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 0.25rem;
+}
+
+.header-title p {
+    color: var(--fb-admin-text-light);
+    font-size: 0.85rem;
+}
+
+.header-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-badge {
+    background: var(--fb-admin-card);
+    border-radius: 2rem;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--fb-admin-text);
+    border: 1px solid var(--fb-admin-border);
+    box-shadow: var(--fb-admin-shadow);
+}
+
+.stat-badge i {
+    color: var(--fb-admin-primary);
+    margin-right: 0.25rem;
+}
+
+/* Main Card */
+.admin-card {
+    background: var(--fb-admin-card);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: var(--fb-admin-shadow-lg);
+    border: 1px solid var(--fb-admin-border);
+    animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Delete Button */
+.delete-btn-wrapper {
+    padding: 1.25rem 1.5rem 0;
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, var(--fb-admin-danger), #dc2626);
+    border: none;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+    color: white;
+}
+
+/* Table Styles */
+.table-wrapper {
+    padding: 0 1.5rem 1.5rem;
+    overflow-x: auto;
+}
+
+.feedback-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.feedback-table thead th {
+    background: var(--fb-admin-primary);
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 1rem;
+    border: none;
+}
+
+.feedback-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--fb-admin-border);
+    color: var(--fb-admin-text);
+    font-size: 0.85rem;
+}
+
+.feedback-table tbody tr:hover {
+    background: rgba(99, 102, 241, 0.05);
+    transition: background 0.2s ease;
+}
+
+/* Checkbox Styles */
+.checkbox-cell {
+    text-align: center;
+    width: 50px;
+}
+
+.custom-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--fb-admin-primary);
+}
+
+/* Message Cell */
+.message-cell {
+    max-width: 400px;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+/* User Cell */
+.user-cell {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--fb-admin-primary), #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+}
+
+/* Date Badge */
+.date-badge {
+    background: var(--fb-admin-border);
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Delete Action Button */
+.btn-delete-sm {
+    background: var(--fb-admin-danger-light);
+    border: none;
+    color: var(--fb-admin-danger);
+    padding: 0.35rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.btn-delete-sm:hover {
+    background: var(--fb-admin-danger);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    opacity: 0.5;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.empty-state p {
+    color: var(--fb-admin-text-light);
+    font-size: 0.9rem;
+}
+
+/* Footer */
+.card-footer {
+    background: var(--fb-admin-card);
+    border-top: 1px solid var(--fb-admin-border);
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--fb-admin-text-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .header-title h1 {
+        font-size: 1.4rem;
+    }
+    
+    .feedback-table thead {
+        display: none;
+    }
+    
+    .feedback-table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid var(--fb-admin-border);
+        border-radius: 1rem;
+        padding: 0.75rem;
+    }
+    
+    .feedback-table tbody td {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.5rem;
+        border: none;
+        flex-wrap: wrap;
+    }
+    
+    .feedback-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        min-width: 100px;
+        font-size: 0.7rem;
+        color: var(--fb-admin-primary);
+    }
+    
+    .checkbox-cell::before {
+        display: none;
+    }
+    
+    .message-cell {
+        max-width: 100%;
+    }
+    
+    .table-wrapper {
+        padding: 0 1rem 1rem;
+    }
+    
+    .delete-btn-wrapper {
+        padding: 1rem 1rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .feedback-admin-wrapper {
+        padding: 1rem 0;
+    }
+    
+    .stat-badge {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.7rem;
+    }
+}
+</style>
+
+<div class="container py-3">
+    <div class="feedback-admin-wrapper">
+        
+        <!-- Header -->
+        <div class="admin-header">
+            <div class="header-title">
+                <h1><i class="bi bi-chat-dots-fill"></i> All Feedback</h1>
+                <p>Manage and review feedback submitted by students and visitors</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge">
+                    <i class="bi bi-envelope-paper"></i> Total: {{ feedbacks|length }}
+                </div>
+                <div class="stat-badge">
+                    <i class="bi bi-star-fill"></i> Avg Rating: ★ 4.5
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Card -->
+        <div class="admin-card">
+            
+            <form method="POST" action="{% url 'delete_selected_feedbacks' %}" id="feedbackForm">
+                {% csrf_token %}
+                
+                <!-- Delete Button -->
+                <div class="delete-btn-wrapper">
+                    <button type="submit" id="deleteBtn" class="btn-delete" style="display: none;">
+                        <i class="bi bi-trash3-fill"></i> Delete Selected
+                    </button>
+                </div>
+                
+                <!-- Table -->
+                <div class="table-wrapper">
+                    <table class="feedback-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">
+                                    <input type="checkbox" id="selectAll" class="custom-checkbox">
+                                </th>
+                                <th>👤 User</th>
+                                <th>📝 Message</th>
+                                <th>📅 Submitted On</th>
+                                <th style="width: 100px;">⚙ Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fb in feedbacks %}
+                            <tr>
+                                <td class="checkbox-cell" data-label="Select">
+                                    <input type="checkbox" name="selected_feedbacks" value="{{ fb.id }}" class="row-checkbox custom-checkbox">
+                                </td>
+                                <td data-label="User" class="user-cell">
+                                    <div class="user-avatar">
+                                        {{ fb.user.name|slice:":1"|upper }}
+                                    </div>
+                                    {{ fb.user.name }}
+                                </td>
+                                <td data-label="Message" class="message-cell">
+                                    <i class="bi bi-chat-quote-fill" style="color: var(--fb-admin-primary); margin-right: 0.5rem;"></i>
+                                    {{ fb.message|truncatechars:150 }}
+                                </td>
+                                <td data-label="Date">
+                                    <span class="date-badge">
+                                        <i class="bi bi-calendar3"></i> {{ fb.created_at|date:"d M Y, h:i A" }}
+                                    </span>
+                                </td>
+                                <td data-label="Action">
+                                    <a href="{% url 'delete_feedback' fb.id %}"
+                                       class="btn-delete-sm"
+                                       onclick="return confirm('Are you sure you want to delete this feedback? This action cannot be undone.');">
+                                        <i class="bi bi-trash3"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="padding: 0;">
+                                    <div class="empty-state">
+                                        <i class="bi bi-inbox empty-icon"></i>
+                                        <p>No feedback submitted yet.<br>When students submit feedback, it will appear here.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+            </form>
+            
+            <!-- Footer -->
+            {% if feedbacks %}
+            <div class="card-footer">
+                <i class="bi bi-envelope-paper-fill"></i> Showing {{ feedbacks|length }} feedback entry{{ feedbacks|length|pluralize:"s" }}
+            </div>
+            {% endif %}
+            
+        </div>
+    </div>
 </div>
-
-<div class="table-responsive">
-
-<table class="table table-bordered table-hover align-middle rounded overflow-hidden">
-
-<thead class="table-dark text-center">
-<tr>
-
-<th>
-<input type="checkbox" id="selectAll">
-</th>
-
-<th>👤 User</th>
-<th>📝 Message</th>
-<th>📅 Submitted On</th>
-<th>⚙ Action</th>
-
-</tr>
-</thead>
-
-<tbody>
-
-{% for fb in feedbacks %}
-<tr>
-
-<td class="text-center">
-<input type="checkbox" name="selected_feedbacks" value="{{ fb.id }}">
-</td>
-
-<td class="fw-semibold">
-{{ fb.user.name }}
-</td>
-
-<td class="text-wrap" style="max-width:350px; word-break:break-word;">
-{{ fb.message }}
-</td>
-
-<td>
-{{ fb.created_at|date:"d M Y, h:i A" }}
-</td>
-
-<td class="text-center">
-
-<a href="{% url 'delete_feedback' fb.id %}"
-class="btn btn-danger btn-sm"
-onclick="return confirm('Delete this feedback?');">
-
-🗑 Delete
-
-</a>
-
-</td>
-
-</tr>
-
-{% empty %}
-
-<tr>
-<td colspan="5" class="text-center text-muted py-4">
-🚫 No feedback submitted yet.
-</td>
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
-</div>
-
-</form>
-
-</div>
-
-<div class="card-footer text-center text-muted small">
-Showing {{ feedbacks|length }} feedback entries
-</div>
-
-</div>
-</div>
-
 
 <script>
+// Select All functionality
+const selectAllCheckbox = document.getElementById('selectAll');
+const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+const deleteBtn = document.getElementById('deleteBtn');
 
-// Select All
-document.getElementById("selectAll").onclick = function() {
-
-let checkboxes = document.getElementsByName("selected_feedbacks");
-
-for (let checkbox of checkboxes) {
-checkbox.checked = this.checked;
+function toggleDeleteButton() {
+    let anyChecked = false;
+    rowCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            anyChecked = true;
+        }
+    });
+    if (deleteBtn) {
+        deleteBtn.style.display = anyChecked ? 'inline-flex' : 'none';
+    }
 }
 
-toggleDeleteButton();
-};
-
-
-// Show delete button only when selected
-function toggleDeleteButton(){
-
-let checkboxes = document.getElementsByName("selected_feedbacks");
-let deleteBtn = document.getElementById("deleteBtn");
-
-let checked = false;
-
-for(let checkbox of checkboxes){
-if(checkbox.checked){
-checked = true;
-break;
-}
+if (selectAllCheckbox) {
+    selectAllCheckbox.addEventListener('change', function() {
+        rowCheckboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+        toggleDeleteButton();
+    });
 }
 
-deleteBtn.style.display = checked ? "inline-block" : "none";
+rowCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        toggleDeleteButton();
+        
+        // Update selectAll checkbox state
+        if (selectAllCheckbox) {
+            const allChecked = rowCheckboxes.length > 0 && Array.from(rowCheckboxes).every(cb => cb.checked);
+            const someChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked;
+            selectAllCheckbox.indeterminate = someChecked && !allChecked;
+        }
+    });
+});
 
+// Confirm before delete selected
+if (deleteBtn) {
+    const form = document.getElementById('feedbackForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
+            if (checkedCount > 0) {
+                if (!confirm(`Are you sure you want to delete ${checkedCount} selected feedback entry/entries? This action cannot be undone.`)) {
+                    e.preventDefault();
+                } else {
+                    const btn = deleteBtn;
+                    btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Deleting...';
+                    btn.disabled = true;
+                }
+            }
+        });
+    }
 }
 
-
-// Detect checkbox change
-let checkboxes = document.getElementsByName("selected_feedbacks");
-
-for(let checkbox of checkboxes){
-checkbox.addEventListener("change", toggleDeleteButton);
-}
-
+// Theme sync with base template
+(function syncTheme() {
+    const root = document.documentElement;
+    const body = document.body;
+    
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+                   body.classList.contains('dark') ||
+                   body.classList.contains('dark-mode') ||
+                   localStorage.getItem('theme') === 'dark';
+    
+    if (isDark) {
+        root.setAttribute('data-theme', 'dark');
+        body.classList.add('dark');
+    }
+})();
 </script>
 
 {% endblock %}

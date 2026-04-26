@@ -1,32 +1,454 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+
 {% block content1 %}
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow-lg rounded-4 border-0">
-        <div class="card-header  text-primary text-center rounded-top-4">
-          <div class="card shadow-lg border-0 rounded-4 p-4 bg-light">
+<style>
+/* ========== PREMIUM FEEDBACK PAGE STYLES ========== */
+:root {
+    --fb-bg: #f0f4ff;
+    --fb-card: #ffffff;
+    --fb-text: #1e293b;
+    --fb-text-light: #64748b;
+    --fb-primary: #6366f1;
+    --fb-primary-dark: #4f46e5;
+    --fb-border: #e2e8f0;
+    --fb-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"],
+.dark-mode,
+body.dark {
+    --fb-bg: #0f172a;
+    --fb-card: #1e293b;
+    --fb-text: #f1f5f9;
+    --fb-text-light: #94a3b8;
+    --fb-border: #334155;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.feedback-wrapper {
+    min-height: calc(100vh - 300px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--fb-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Floating Shapes */
+.floating-shape {
+    position: absolute;
+    background: linear-gradient(135deg, var(--fb-primary), #a855f7);
+    border-radius: 50%;
+    opacity: 0.08;
+    pointer-events: none;
+    animation: float 8s ease-in-out infinite;
+}
+
+.shape-1 { width: 300px; height: 300px; top: -100px; right: -100px; animation-delay: 0s; }
+.shape-2 { width: 200px; height: 200px; bottom: -50px; left: -50px; animation-delay: 2s; }
+.shape-3 { width: 150px; height: 150px; top: 50%; left: 20%; animation-delay: 4s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+/* Main Card */
+.feedback-card {
+    background: var(--fb-card);
+    border-radius: 2rem;
+    overflow: hidden;
+    box-shadow: var(--fb-shadow);
+    border: 1px solid var(--fb-border);
+    position: relative;
+    z-index: 10;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card Header */
+.feedback-header {
+    background: linear-gradient(135deg, var(--fb-primary), #8b5cf6);
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.feedback-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.header-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.feedback-header h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.feedback-header p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+/* Form Section */
+.form-section {
+    padding: 2rem;
+}
+
+/* Submit Button */
+.btn-submit {
+    background: linear-gradient(135deg, var(--fb-primary), var(--fb-primary-dark));
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 3rem;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: white;
+}
+
+.btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px -8px var(--fb-primary);
+    filter: brightness(1.05);
+    color: white;
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Quick Feedback Options */
+.quick-feedback {
+    padding: 1rem 2rem 2rem;
+    border-top: 1px solid var(--fb-border);
+}
+
+.quick-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--fb-text-light);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quick-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.quick-btn {
+    background: transparent;
+    border: 1px solid var(--fb-border);
+    border-radius: 2rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+    color: var(--fb-text);
+    cursor: pointer;
+}
+
+.quick-btn:hover {
+    background: var(--fb-primary);
+    border-color: var(--fb-primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Character Counter */
+.char-counter {
+    font-size: 0.7rem;
+    text-align: right;
+    margin-top: 0.25rem;
+    color: var(--fb-text-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .feedback-wrapper {
+        padding: 1rem;
+    }
+    
+    .feedback-header h2 {
+        font-size: 1.4rem;
+    }
+    
+    .form-section {
+        padding: 1.5rem;
+    }
+    
+    .quick-feedback {
+        padding: 1rem 1.5rem 1.5rem;
+    }
+    
+    .quick-buttons {
+        justify-content: center;
+    }
+}
+
+/* Crispy Forms Override */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.asteriskField {
+    color: #ef4444;
+    margin-left: 4px;
+}
+
+.control-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--fb-text);
+}
+
+input, select, textarea {
+    background: var(--fb-card) !important;
+    border: 2px solid var(--fb-border) !important;
+    border-radius: 0.75rem !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9rem !important;
+    color: var(--fb-text) !important;
+    transition: all 0.3s ease !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--fb-primary) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+    outline: none !important;
+}
+
+.help-block, .help-text {
+    font-size: 0.7rem;
+    color: var(--fb-text-light);
+    margin-top: 0.25rem;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+</style>
+
+<div class="feedback-wrapper">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    
+    <div class="col-md-8 col-lg-7 col-xl-6">
+        <div class="feedback-card">
             
-            <h2 class="text-center mb-4 text-primary fw-bold">
-               Feedback
-            </h2>
-
-            <form method="post">
-              {% csrf_token %}
-              {{ form|crispy }}
-
-              <div class="d-grid mt-3">
-                <button type="submit" class="btn btn-primary">Submit Feedback</button>
-              </div>
-            </form>
-          </div>
+            <!-- Header -->
+            <div class="feedback-header">
+                <div class="header-icon">📝</div>
+                <h2>Share Your Feedback</h2>
+                <p>Your opinion helps us improve and serve you better</p>
+            </div>
+            
+            <!-- Form Section -->
+            <div class="form-section">
+                <form method="post" id="feedbackForm">
+                    {% csrf_token %}
+                    
+                    {{ form|crispy }}
+                    
+                    <!-- Submit Button -->
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn-submit">
+                            <i class="bi bi-send-fill"></i> Submit Feedback
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Quick Feedback Options -->
+            <div class="quick-feedback">
+                <div class="quick-title">
+                    <i class="bi bi-lightbulb"></i> Quick Feedback Templates
+                </div>
+                <div class="quick-buttons">
+                    <button type="button" class="quick-btn" data-template="Great experience! The faculty is very supportive and the infrastructure is excellent.">
+                        👍 Great Experience
+                    </button>
+                    <button type="button" class="quick-btn" data-template="The teaching quality is good, but lab facilities need improvement.">
+                        💡 Suggestion
+                    </button>
+                    <button type="button" class="quick-btn" data-template="Overall satisfied with the course curriculum and placements.">
+                        ⭐ Satisfied
+                    </button>
+                    <button type="button" class="quick-btn" data-template="The college provides good opportunities for skill development.">
+                        🎯 Skill Development
+                    </button>
+                </div>
+            </div>
+            
         </div>
-      </div>
     </div>
-  </div>
 </div>
+
+<script>
+// Character counter for message field
+function setupCharacterCounter() {
+    const messageTextarea = document.querySelector('textarea[name="message"]');
+    
+    if (messageTextarea && !document.getElementById('charCounterAdded')) {
+        const charCounterDiv = document.createElement('div');
+        charCounterDiv.className = 'char-counter';
+        charCounterDiv.innerHTML = '<span id="charCount">0</span> characters';
+        messageTextarea.parentNode.appendChild(charCounterDiv);
+        
+        function updateCharCount() {
+            const count = messageTextarea.value.length;
+            const charSpan = document.getElementById('charCount');
+            if (charSpan) charSpan.textContent = count;
+        }
+        
+        messageTextarea.addEventListener('input', updateCharCount);
+        updateCharCount();
+        
+        // Mark as added
+        const marker = document.createElement('div');
+        marker.id = 'charCounterAdded';
+        marker.style.display = 'none';
+        document.body.appendChild(marker);
+    }
+}
+
+// Quick feedback template buttons
+function setupQuickButtons() {
+    const quickBtns = document.querySelectorAll('.quick-btn');
+    const messageTextarea = document.querySelector('textarea[name="message"]');
+    
+    quickBtns.forEach(btn => {
+        btn.removeEventListener('click', handleQuickClick);
+        btn.addEventListener('click', handleQuickClick);
+    });
+    
+    function handleQuickClick() {
+        const template = this.getAttribute('data-template');
+        if (messageTextarea && template) {
+            const currentMessage = messageTextarea.value || '';
+            if (currentMessage.trim() === '') {
+                messageTextarea.value = template;
+            } else {
+                messageTextarea.value = currentMessage + '\n\n' + template;
+            }
+            messageTextarea.focus();
+            
+            // Trigger input event for character counter
+            const event = new Event('input', { bubbles: true });
+            messageTextarea.dispatchEvent(event);
+            
+            // Add animation effect
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        }
+    }
+}
+
+// Form submission animation
+function setupFormSubmit() {
+    const form = document.getElementById('feedbackForm');
+    if (form) {
+        form.removeEventListener('submit', handleSubmit);
+        form.addEventListener('submit', handleSubmit);
+    }
+    
+    function handleSubmit() {
+        const submitBtn = this.querySelector('.btn-submit');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Submitting...';
+            submitBtn.disabled = true;
+        }
+    }
+}
+
+// Theme sync with base
+function syncTheme() {
+    const root = document.documentElement;
+    const body = document.body;
+    
+    const isDark = root.getAttribute('data-theme') === 'dark' ||
+                   body.classList.contains('dark') ||
+                   body.classList.contains('dark-mode') ||
+                   localStorage.getItem('theme') === 'dark';
+    
+    if (isDark) {
+        root.setAttribute('data-theme', 'dark');
+        body.classList.add('dark');
+    }
+}
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    syncTheme();
+    
+    // Small delay to ensure crispy forms has rendered
+    setTimeout(() => {
+        setupCharacterCounter();
+        setupQuickButtons();
+        setupFormSubmit();
+    }, 100);
+    
+    // Watch for dynamic form changes (in case of HTMX or similar)
+    const observer = new MutationObserver(function() {
+        setupCharacterCounter();
+        setupQuickButtons();
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+
 {% endblock %}

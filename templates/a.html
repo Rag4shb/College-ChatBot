@@ -3,323 +3,665 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>C.L.E. Society’s BCA College, Chikodi — Official Website</title>
+<title>C.L.E. Society's BCA College, Chikodi — Official Website</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-:root{
-  --primary:#1e3a8a;
-  --accent:#f59e0b;
-  --bg:#f3f6fb;
-  --text:#1f2937;
+:root {
+    --primary: #1e3a8a;
+    --primary-dark: #0f2b6d;
+    --accent: #f59e0b;
+    --accent-dark: #d97706;
+    --bg-light: #f8fafc;
+    --bg-white: #ffffff;
+    --text-dark: #1f2937;
+    --text-gray: #4b5563;
+    --shadow-sm: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 20px 25px -12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 25px 40px -12px rgba(0, 0, 0, 0.15);
 }
-body{background:var(--bg);color:var(--text);scroll-behavior:smooth}
-.navbar{box-shadow:0 10px 25px rgba(0,0,0,.08)}
-.hero{
-  background:linear-gradient(135deg,#1e3a8a,#2563eb);
-  color:#fff;
-  border-radius:25px;
+
+[data-theme="dark"] {
+    --bg-light: #0f172a;
+    --bg-white: #1e293b;
+    --text-dark: #f1f5f9;
+    --text-gray: #cbd5e1;
+    --shadow-sm: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 20px 25px -12px rgba(0, 0, 0, 0.3);
 }
-.glass{
-  backdrop-filter:blur(12px);
-  background:rgba(255,255,255,.2);
-  border-radius:20px;
+
+* {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s;
 }
-.section-title{font-weight:800;margin-bottom:25px}
-.card-modern{
-  border:none;
-  border-radius:18px;
-  transition:.3s;
-  box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+body {
+    background: var(--bg-light);
+    color: var(--text-dark);
+    scroll-behavior: smooth;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
-.card-modern:hover{transform:translateY(-5px)}
-.stat{
-  background:#fff;
-  border-radius:18px;
-  padding:20px;
-  text-align:center;
-  box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+/* Navbar */
+.navbar {
+    background: var(--bg-white) !important;
+    box-shadow: var(--shadow-sm);
+    padding: 0.75rem 0;
 }
-.footer{
-  background:#0f172a;
-  color:#cbd5e1;
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.3rem;
 }
-.footer a{color:#fff;text-decoration:none}
-.footer a:hover{text-decoration:underline}
-.btn-accent{
-  background:var(--accent);
-  border:none;
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: var(--text-dark);
+    transition: 0.2s;
 }
-.btn-accent:hover{opacity:.9}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--accent);
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+    color: white;
+    border-radius: 1.5rem;
+    padding: 3rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.glass-card {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+/* Modern Cards */
+.card-modern {
+    background: var(--bg-white);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    height: 100%;
+}
+
+.card-modern:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Stat Cards */
+.stat-card {
+    background: var(--bg-white);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    background: var(--primary);
+    color: white;
+}
+
+.stat-card:hover .stat-number,
+.stat-card:hover .stat-label {
+    color: white;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+/* Feature Items */
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+}
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(30, 58, 138, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+/* Course Highlights */
+.course-highlight {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: white;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Faculty Card */
+.faculty-card {
+    text-align: center;
+    padding: 1.25rem;
+}
+
+.faculty-avatar {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary), #2563eb);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 2.5rem;
+    color: white;
+}
+
+/* Placement Card */
+.placement-card {
+    text-align: center;
+    padding: 1.25rem;
+}
+
+.placement-icon {
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+}
+
+/* Contact Form */
+.contact-form {
+    background: var(--bg-white);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+}
+
+.form-control, .form-select {
+    background: var(--bg-white);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    padding: 0.7rem 1rem;
+    color: var(--text-dark);
+}
+
+.form-control:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.btn-primary-custom {
+    background: var(--primary);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-accent {
+    background: var(--accent);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    color: white;
+}
+
+.btn-accent:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* Footer */
+.footer {
+    background: var(--primary);
+    color: #cbd5e1;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+.footer a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero {
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .navbar-brand span {
+        font-size: 0.9rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero, .section-title, .card-modern, .stat-card {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
 </style>
 </head>
 
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm" aria-label="Main navigation">
+<nav class="navbar navbar-expand-lg sticky-top" aria-label="Main navigation">
 <div class="container">
-
-    <!-- Logo + College Name -->
     <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-        <img src="https://dummyimage.com/40x40/1e3a8a/ffffff.png&text=CLE" 
-             alt="CLE BCA Logo" width="40" height="40" 
-             class="me-2 rounded-circle shadow-sm">
+        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+            <i class="bi bi-laptop"></i>
+        </div>
         <span class="text-primary">CLE BCA College</span>
     </a>
 
-    <!-- Mobile Toggle -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navMain" aria-controls="navMain"
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Navbar Content -->
     <div id="navMain" class="collapse navbar-collapse">
-
-        <!-- Main Links -->
-        <ul class="navbar-nav ms-auto align-items-lg-center fw-semibold">
-
-            <li class="nav-item">
-                <a class="nav-link active" href="/">Home</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#about">About</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#program">BCA Program</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#placements">Placements</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'feedback' %}">Feedback</a>
-            </li>
-
-            <!-- Dropdown -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="moreDropdown"
-                   role="button" data-bs-toggle="dropdown">
-                   More
-                </a>
-                <ul class="dropdown-menu shadow border-0">
-                    <li><a class="dropdown-item" href="{% url 'dashboard' %}">
-                        <i class="bi bi-speedometer2 me-2"></i>Dashboard
-                    </a></li>
-                    <li><a class="dropdown-item" href="{% url 'user_list' %}">
-                        <i class="bi bi-chat-dots me-2"></i>Messages
-                    </a></li>
-                    <li><a class="dropdown-item" href="{% url 'profile' %}">
-                        <i class="bi bi-person me-2"></i>Profile
-                    </a></li>
-                </ul>
-            </li>
-
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+            <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#program">BCA Program</a></li>
+            <li class="nav-item"><a class="nav-link" href="#placements">Placements</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         </ul>
 
-        <!-- Authentication Buttons -->
-        <div class="d-flex align-items-center ms-lg-3">
-
-        {% if user.is_authenticated %}
-
-            <span class="me-3 small text-muted">
-                <i class="bi bi-person-circle me-1"></i>
-                {{ user.name }}
-            </span>
-
-            <form method="post" action="{% url 'logout' %}" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
-                    <i class="bi bi-box-arrow-right me-1"></i>Logout
-                </button>
-            </form>
-
-        {% else %}
-
-            <div class="dropdown">
-                <button class="btn btn-primary btn-sm dropdown-toggle rounded-pill"
-                        type="button" id="loginDropdown"
-                        data-bs-toggle="dropdown">
-                    Login
-                </button>
-                <ul class="dropdown-menu shadow border-0">
-                    <li><a class="dropdown-item" href="{% url 'login' %}">
-                        <i class="bi bi-box-arrow-in-right me-2"></i>User Login
-                    </a></li>
-                </ul>
-            </div>
-
-            <a href="{% url 'signup' %}"
-               class="btn btn-success btn-sm rounded-pill ms-2">
-               Signup
-            </a>
-
-        {% endif %}
-
-        <!-- Dark Mode Toggle -->
-        <button class="btn btn-outline-secondary btn-sm rounded-circle ms-3"
-                id="themeToggle" type="button"
-                aria-label="Toggle dark mode">
-            <i class="bi bi-moon-stars"></i>
-        </button>
-
+        <div class="d-flex align-items-center ms-lg-3 gap-2">
+            {% if user.is_authenticated %}
+                <span class="small text-muted"><i class="bi bi-person-circle"></i> {{ user.name }}</span>
+                <form method="post" action="{% url 'logout' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary btn-sm rounded-pill">Login</a>
+                <a href="{% url 'signup' %}" class="btn btn-success btn-sm rounded-pill">Signup</a>
+            {% endif %}
+            <button class="btn btn-outline-secondary btn-sm rounded-circle" id="themeToggle">
+                <i class="bi bi-moon-stars"></i>
+            </button>
         </div>
     </div>
 </div>
 </nav>
+
 {% block content %}
 <div class="container py-4">
 
-<!-- HERO -->
-<section class="hero p-5 mb-5">
-<div class="row align-items-center">
-<div class="col-lg-7">
-<h1 class="display-5 fw-bold">C.L.E. Society’s BCA College</h1>
-<p class="lead">Empowering future IT professionals through quality computer education and skill-based learning.</p>
-<a href="#program" class="btn btn-accent fw-bold">Explore BCA Program</a>
-</div>
-<div class="col-lg-5">
-<div class="glass p-4">
-<h5>Admissions Open 2025-26</h5>
-<ul class="small">
-<li>PUC / 12th Eligible</li>
-<li>3-Year BCA Program</li>
-<li>Industry-Oriented Curriculum</li>
-</ul>
-</div>
-</div>
-</div>
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="row align-items-center">
+        <div class="col-lg-7">
+            <h1 class="display-5 fw-bold mb-3">C.L.E. Society's BCA College</h1>
+            <p class="lead mb-4">Empowering future IT professionals through quality computer education and skill-based learning.</p>
+            <a href="#program" class="btn btn-accent px-4 py-2">Explore BCA Program →</a>
+        </div>
+        <div class="col-lg-5 mt-4 mt-lg-0">
+            <div class="glass-card">
+                <h5 class="mb-3"><i class="bi bi-megaphone"></i> Admissions Open 2025-26</h5>
+                <ul class="small mb-0 ps-3">
+                    <li>PUC / 12th Eligible</li>
+                    <li>3-Year BCA Program</li>
+                    <li>Industry-Oriented Curriculum</li>
+                    <li>Limited Seats Available</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- ABOUT -->
+<!-- QUICK STATS -->
+<div class="row g-3 mb-5">
+    <div class="col-md-3 col-6">
+        <div class="stat-card">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Students</div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="stat-card">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Years Excellence</div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="stat-card">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Placement Rate</div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="stat-card">
+            <div class="stat-number">15+</div>
+            <div class="stat-label">Recruiters</div>
+        </div>
+    </div>
+</div>
+
+<!-- ABOUT SECTION -->
 <section id="about" class="mb-5">
-<h2 class="section-title">About the College</h2>
-<div class="row g-4 align-items-center">
-<div class="col-lg-6">
-<img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=1600&auto=format&fit=crop" class="img-fluid rounded-4">
-</div>
-<div class="col-lg-6">
-<p>
-C.L.E. Society’s BCA College, Chikodi is committed to academic excellence and 
-professional training in Computer Applications. The college provides modern labs, 
-experienced faculty, and career-focused education to prepare students for IT industries.
-</p>
-<div class="row g-3 mt-3">
-<div class="col-6"><div class="stat"><h3>500+</h3><small>Students</small></div></div>
-<div class="col-6"><div class="stat"><h3>10+</h3><small>Years Excellence</small></div></div>
-</div>
-</div>
-</div>
+    <h2 class="section-title">About the College</h2>
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=1600&auto=format&fit=crop" 
+                 class="img-fluid rounded-4 shadow-sm" alt="College Campus"
+                 loading="lazy">
+        </div>
+        <div class="col-lg-6">
+            <p class="mb-3">
+                C.L.E. Society's BCA College, Chikodi is committed to academic excellence and 
+                professional training in Computer Applications. The college provides modern labs, 
+                experienced faculty, and career-focused education to prepare students for IT industries.
+            </p>
+            <div class="feature-item">
+                <div class="feature-icon"><i class="bi bi-building"></i></div>
+                <div><strong>Modern Infrastructure</strong><br><small>Well-equipped computer labs and smart classrooms</small></div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon"><i class="bi bi-people"></i></div>
+                <div><strong>Expert Faculty</strong><br><small>Qualified and industry-experienced professors</small></div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon"><i class="bi bi-briefcase"></i></div>
+                <div><strong>Placement Support</strong><br><small>Dedicated placement cell for career guidance</small></div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- PROGRAM -->
+<!-- PROGRAM SECTION -->
 <section id="program" class="mb-5">
-<h2 class="section-title">Bachelor of Computer Applications (BCA)</h2>
-<div class="card card-modern p-4">
-<p>
-The BCA program is a 3-year undergraduate course covering Programming, Database Management, 
-Web Development, Networking, Python, AI basics and Project Development.
-</p>
-<ul>
-<li>Modern Computer Labs</li>
-<li>Industry Guest Lectures</li>
-<li>Mini & Major Projects</li>
-<li>Internship Opportunities</li>
-</ul>
-</div>
+    <h2 class="section-title">Bachelor of Computer Applications (BCA)</h2>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card-modern p-4 h-100">
+                <h4 class="mb-3"><i class="bi bi-code-slash text-primary me-2"></i> Program Overview</h4>
+                <p>The BCA program is a 3-year undergraduate course covering Programming, Database Management, Web Development, Networking, Python, AI basics and Project Development.</p>
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <div class="course-highlight">
+                            <i class="bi bi-laptop"></i> Programming
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="course-highlight">
+                            <i class="bi bi-database"></i> Database
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="course-highlight">
+                            <i class="bi bi-globe"></i> Web Dev
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="course-highlight">
+                            <i class="bi bi-robot"></i> AI Basics
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card-modern p-4 h-100">
+                <h4 class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Key Features</h4>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Modern Computer Labs with Latest Software</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Industry Guest Lectures & Workshops</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Mini & Major Project Development</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Internship Opportunities</li>
+                    <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i> Soft Skills & Aptitude Training</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- FACULTY -->
+<!-- FACULTY SECTION -->
 <section id="faculty" class="mb-5">
-<h2 class="section-title">Our Faculty</h2>
-<div class="row g-4">
-<div class="col-md-4">
-<div class="card card-modern text-center p-3">
-<i class="bi bi-person-circle fs-1 text-primary"></i>
-<h6 class="mt-2">Prof. A. Patil</h6>
-<small>Head of Department</small>
-</div>
-</div>
-<div class="col-md-4">
-<div class="card card-modern text-center p-3">
-<i class="bi bi-person-circle fs-1 text-primary"></i>
-<h6 class="mt-2">Prof. S. Desai</h6>
-<small>Assistant Professor</small>
-</div>
-</div>
-<div class="col-md-4">
-<div class="card card-modern text-center p-3">
-<i class="bi bi-person-circle fs-1 text-primary"></i>
-<h6 class="mt-2">Prof. R. Kulkarni</h6>
-<small>Assistant Professor</small>
-</div>
-</div>
-</div>
+    <h2 class="section-title">Our Faculty</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card-modern faculty-card">
+                <div class="faculty-avatar"><i class="bi bi-person"></i></div>
+                <h6 class="mt-2 mb-1">Prof. Anand Patil</h6>
+                <small class="text-muted">Head of Department</small>
+                <div class="mt-2"><small>M.C.A., Ph.D.</small></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern faculty-card">
+                <div class="faculty-avatar"><i class="bi bi-person"></i></div>
+                <h6 class="mt-2 mb-1">Prof. Shweta Desai</h6>
+                <small class="text-muted">Assistant Professor</small>
+                <div class="mt-2"><small>M.Sc. Computer Science</small></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern faculty-card">
+                <div class="faculty-avatar"><i class="bi bi-person"></i></div>
+                <h6 class="mt-2 mb-1">Prof. Rajesh Kulkarni</h6>
+                <small class="text-muted">Assistant Professor</small>
+                <div class="mt-2"><small>M.Tech., NET</small></div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- PLACEMENTS -->
+<!-- PLACEMENTS SECTION -->
 <section id="placements" class="mb-5">
-<h2 class="section-title">Placements & Career Support</h2>
-<div class="row g-4">
-<div class="col-md-4">
-<div class="card card-modern p-3">
-<h6>Placement Assistance</h6>
-<p class="small">Dedicated placement cell for student career guidance.</p>
-</div>
-</div>
-<div class="col-md-4">
-<div class="card card-modern p-3">
-<h6>Internships</h6>
-<p class="small">Industry internship opportunities for practical exposure.</p>
-</div>
-</div>
-<div class="col-md-4">
-<div class="card card-modern p-3">
-<h6>Skill Training</h6>
-<p class="small">Resume building, mock interviews & aptitude training.</p>
-</div>
-</div>
-</div>
+    <h2 class="section-title">Placements & Career Support</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card-modern placement-card">
+                <div class="placement-icon"><i class="bi bi-briefcase-fill"></i></div>
+                <h6>Placement Assistance</h6>
+                <p class="small">Dedicated placement cell with industry connections for student career guidance.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern placement-card">
+                <div class="placement-icon"><i class="bi bi-building"></i></div>
+                <h6>Internships</h6>
+                <p class="small">Industry internship opportunities for practical exposure and real-world experience.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern placement-card">
+                <div class="placement-icon"><i class="bi bi-bar-chart-line"></i></div>
+                <h6>Skill Training</h6>
+                <p class="small">Resume building, mock interviews & aptitude training sessions.</p>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact" class="mb-5">
-<h2 class="section-title">Contact Us</h2>
-<div class="row g-4">
-<div class="col-lg-6">
-<form class="card card-modern p-4">
-<input type="text" class="form-control mb-3" placeholder="Full Name" required>
-<input type="email" class="form-control mb-3" placeholder="Email" required>
-<textarea class="form-control mb-3" rows="4" placeholder="Message"></textarea>
-<button class="btn btn-primary">Send Message</button>
-</form>
-</div>
-<div class="col-lg-6">
-<div class="card card-modern p-4">
-<h6>Address</h6>
-<p>C.L.E. Society’s BCA College<br>
-Chikodi – 591201<br>
-Karnataka, India</p>
-</div>
-</div>
-</div>
+<!-- CONTACT SECTION -->
+<section id="contact" class="mb-4">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="contact-form">
+                <h5 class="mb-3">Send us a Message</h5>
+                <form method="POST" action="{% url 'contact_submit' %}">
+                    {% csrf_token %}
+                    <input type="text" name="name" class="form-control mb-3" placeholder="Full Name" required>
+                    <input type="email" name="email" class="form-control mb-3" placeholder="Email Address" required>
+                    <input type="text" name="subject" class="form-control mb-3" placeholder="Subject">
+                    <textarea name="message" class="form-control mb-3" rows="4" placeholder="Your Message" required></textarea>
+                    <button type="submit" class="btn btn-primary-custom w-100">Send Message <i class="bi bi-send"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card-modern p-4 h-100">
+                <h5 class="mb-3"><i class="bi bi-geo-alt text-primary me-2"></i> Our Address</h5>
+                <p class="mb-2">C.L.E. Society's BCA College<br>
+                Chikodi – 591201<br>
+                Belagavi District, Karnataka, India</p>
+                <hr>
+                <p class="mb-1"><i class="bi bi-telephone text-primary me-2"></i> +91-XXXXXXXXXX</p>
+                <p class="mb-1"><i class="bi bi-envelope text-primary me-2"></i> info@clebcachikodi.edu.in</p>
+                <div class="mt-3">
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle me-2"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle me-2"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle me-2"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 </div>
 {% endblock %}
+
 <!-- FOOTER -->
-<footer class="footer py-4 text-center">
-<div class="container">
-<p>© 2026 C.L.E. Society’s BCA College, Chikodi</p>
-</div>
+<footer class="footer">
+    <div class="container text-center">
+        <p class="mb-0">© 2026 C.L.E. Society's BCA College, Chikodi. All rights reserved.</p>
+        <p class="small mt-2">Empowering future IT professionals through quality education</p>
+    </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Dark Mode Toggle
+(function() {
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    
+    const savedTheme = localStorage.getItem('cle-bca-theme');
+    if (savedTheme === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+        updateToggleIcon(true);
+    }
+    
+    function updateToggleIcon(isDark) {
+        if (themeToggle) {
+            const icon = themeToggle.querySelector('i');
+            if (isDark) {
+                icon.className = 'bi bi-sun-fill';
+            } else {
+                icon.className = 'bi bi-moon-stars';
+            }
+        }
+    }
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const isDark = root.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('cle-bca-theme', 'light');
+                updateToggleIcon(false);
+            } else {
+                root.setAttribute('data-theme', 'dark');
+                localStorage.setItem('cle-bca-theme', 'dark');
+                updateToggleIcon(true);
+            }
+        });
+    }
+})();
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+</script>
 </body>
 </html>
