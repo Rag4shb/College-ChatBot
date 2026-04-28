@@ -1179,6 +1179,66 @@ img { max-width: 100%; height: auto; }
 }
 
 /* ================================================================
+   CHATBOT FLOAT - MOBILE FIXED POSITION
+================================================================ */
+.chatbot-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(145deg, #2563eb, #1d4ed8);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 8px 32px rgba(26, 86, 219, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.2),
+    inset 0 4px 8px rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: float3D 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+  perspective: 100px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 📱 MOBILE ADJUSTMENTS - MOVED UP AND LEFT */
+@media (max-width: 768px) {
+  .chatbot-float {
+    bottom: 90px;      /* Moved UP from 28px to 90px */
+    right: 25px;       /* Moved LEFT slightly */
+    width: 60px;        /* Slightly smaller for mobile */
+    height: 60px;
+  }
+}
+
+/* 📱 SMALL MOBILE DEVICES */
+@media (max-width: 480px) {
+  .chatbot-float {
+    bottom: 100px;     /* Even higher for very small screens */
+    right: 20px;        /* More left */
+    width: 55px;
+    height: 55px;
+  }
+}
+
+/* 📱 VERY SMALL SCREENS */
+@media (max-width: 360px) {
+  .chatbot-float {
+    bottom: 110px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* ================================================================
    PASSWORD TOGGLE
 ================================================================ */
 .pw-wrap { position: relative; }
