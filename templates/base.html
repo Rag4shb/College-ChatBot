@@ -822,41 +822,361 @@ img { max-width: 100%; height: auto; }
 .footer-social a:hover { background: var(--primary); color: #fff; }
 
 /* ================================================================
-   CHATBOT FLOAT
+   CHATBOT FLOAT - 3D ENHANCED
 ================================================================ */
 .chatbot-float {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 62px; height: 62px;
-  background: var(--primary); color: white;
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(145deg, #2563eb, #1d4ed8);
+  color: white;
   border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(26,86,219,0.4);
-  text-decoration: none; z-index: 1000;
-  transition: transform 0.2s, box-shadow 0.2s;
-  animation: chatpulse 2.5s infinite;
-}
-.chatbot-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 28px rgba(26,86,219,0.5);
-}
-@keyframes chatpulse {
-  0%   { box-shadow: 0 0 0 0 rgba(26,86,219,0.5); }
-  70%  { box-shadow: 0 0 0 14px rgba(26,86,219,0); }
-  100% { box-shadow: 0 0 0 0 rgba(26,86,219,0); }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 8px 32px rgba(26, 86, 219, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.2),
+    inset 0 4px 8px rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: float3D 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+  perspective: 100px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Robot */
-.robot { position: relative; width: 42px; height: 46px; display: flex; flex-direction: column; align-items: center; }
-.robot-head { width: 32px; height: 20px; background: white; border-radius: 7px; display: flex; align-items: center; justify-content: center; margin-bottom: 3px; }
-.robot-eyes { display: flex; gap: 6px; }
-.robot-eyes span { width: 6px; height: 8px; background: var(--primary); border-radius: 2px; animation: blink 1.2s infinite; }
-@keyframes blink { 0%,90%,100%{height:8px;} 93%{height:2px;} }
-.robot-body { position: relative; width: 22px; height: 14px; background: white; border-radius: 5px; }
-.arm { position: absolute; width: 5px; height: 14px; background: white; border-radius: 8px; top: 0; }
-.arm-left { left: -6px; }
-.arm-right { right: -6px; }
-.legs { position: absolute; bottom: -7px; display: flex; gap: 6px; left: 50%; transform: translateX(-50%); }
-.leg { width: 6px; height: 12px; background: white; border-radius: 3px; }
+.chatbot-float::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+
+.chatbot-float::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 12px;
+  background: radial-gradient(ellipse, rgba(26, 86, 219, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: shadowFloat 3s ease-in-out infinite;
+}
+
+.chatbot-float:hover {
+  transform: scale(1.15) translateY(-5px) rotateY(10deg) rotateX(-10deg);
+  box-shadow: 
+    0 16px 48px rgba(26, 86, 219, 0.7),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 -6px 12px rgba(0, 0, 0, 0.3),
+    inset 0 6px 12px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(145deg, #3b82f6, #2563eb);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.chatbot-float:active {
+  transform: scale(0.95) translateY(2px);
+  box-shadow: 
+    0 4px 16px rgba(26, 86, 219, 0.4),
+    inset 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+}
+
+@keyframes float3D {
+  0%, 100% { 
+    transform: translateY(0px) rotateX(5deg) rotateY(0deg);
+  }
+  25% { 
+    transform: translateY(-15px) rotateX(10deg) rotateY(-5deg);
+  }
+  50% { 
+    transform: translateY(-8px) rotateX(8deg) rotateY(3deg);
+  }
+  75% { 
+    transform: translateY(-12px) rotateX(12deg) rotateY(-2deg);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6)) 
+            drop-shadow(0 0 20px rgba(59, 130, 246, 0.4));
+  }
+  50% { 
+    filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.8)) 
+            drop-shadow(0 0 30px rgba(59, 130, 246, 0.6));
+  }
+}
+
+@keyframes shadowFloat {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateX(-50%) scale(0.7);
+    opacity: 0.2;
+  }
+}
+
+/* Enhanced 3D Robot */
+.robot {
+  position: relative;
+  width: 48px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-style: preserve-3d;
+  animation: robotIdle 4s ease-in-out infinite;
+}
+
+.robot-head {
+  width: 36px;
+  height: 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+  border-radius: 12px 12px 8px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8);
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.robot-head::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+}
+
+.robot-head::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 1px;
+  background: var(--primary);
+  border-radius: 1px;
+  opacity: 0.5;
+}
+
+.robot-eyes {
+  display: flex;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.robot-eyes span {
+  width: 7px;
+  height: 10px;
+  background: linear-gradient(180deg, #1e40af 0%, #1d4ed8 100%);
+  border-radius: 3px;
+  animation: blink3D 2.5s infinite;
+  box-shadow: 
+    0 0 8px rgba(29, 78, 216, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+
+.robot-eyes span::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 1px;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+@keyframes blink3D {
+  0%, 45%, 55%, 100% { 
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+  50% { 
+    transform: scaleY(0.1);
+    filter: brightness(0.5);
+  }
+}
+
+.robot-body {
+  position: relative;
+  width: 26px;
+  height: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+  border-radius: 8px 8px 6px 6px;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.robot-body::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 50%;
+  animation: heartBeat 1.5s ease-in-out infinite;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.3); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.2); }
+  60% { transform: scale(1); }
+}
+
+.arm {
+  position: absolute;
+  width: 6px;
+  height: 16px;
+  background: linear-gradient(90deg, #f0f4ff 0%, #e2e8f0 100%);
+  border-radius: 8px;
+  top: 2px;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  transform-origin: top center;
+  animation: armSwing 3s ease-in-out infinite;
+}
+
+.arm-left {
+  left: -7px;
+  animation-delay: -1.5s;
+}
+
+.arm-right {
+  right: -7px;
+}
+
+@keyframes armSwing {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+.legs {
+  position: absolute;
+  bottom: -8px;
+  display: flex;
+  gap: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.leg {
+  width: 7px;
+  height: 14px;
+  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
+  border-radius: 4px 4px 3px 3px;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  animation: legKick 2s ease-in-out infinite;
+}
+
+.leg:nth-child(2) {
+  animation-delay: -1s;
+}
+
+@keyframes legKick {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+}
+
+@keyframes robotIdle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-2px); }
+}
+
+/* Antenna */
+.robot-head::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 8px;
+  background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%);
+  border-radius: 1px;
+}
+
+.robot-head::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #60a5fa 0%, #2563eb 100%);
+  border-radius: 50%;
+  animation: antennaGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes antennaGlow {
+  0%, 100% { 
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
+    opacity: 0.8;
+  }
+  50% { 
+    box-shadow: 0 0 16px rgba(59, 130, 246, 1);
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chatbot-float {
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .robot {
+    width: 42px;
+    height: 46px;
+  }
+}
 
 /* ================================================================
    PASSWORD TOGGLE
